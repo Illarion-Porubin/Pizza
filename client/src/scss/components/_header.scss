@@ -3,6 +3,20 @@
 .header {
   border-bottom: 1px solid $gray-line;
   padding: 40px 0;
+  &__cart{
+    position: relative;
+  }
+  &__user-wrapp{
+    max-width: 55px;
+    height: auto;
+    position: absolute;
+    left: -70px;
+    top: -2px;
+    cursor: pointer;
+  }
+  &__user{
+    width: 100%;
+  }
 
   .container {
     display: flex;

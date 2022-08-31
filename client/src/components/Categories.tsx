@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
-import "../scss/components/_categories.scss";
 import { useDispatch } from "react-redux";
 import { pizzaSlice } from "../store/slices/pizzaSlice";
+import "../scss/components/_categories.scss";
 
 
 export const Categories: FC = () => {
@@ -17,9 +17,6 @@ export const Categories: FC = () => {
   ];
 
   const dispatch = useDispatch();
-
-
-
   const menu = (e: React.BaseSyntheticEvent<MouseEvent, EventTarget,  InnerHTML>, index: number) => {
     dispatch(pizzaSlice.actions.filterMenu({menu: e.target.innerHTML}))
     setActiveIndex(index)

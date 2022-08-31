@@ -1,17 +1,6 @@
 import React, { FC, useState } from "react";
-// import "../scss/components/_pizza-block.scss";
+import { PizzaTypes } from "../../types/types";
 
-
-type PizzaTypes = {
-  id: number;
-  imageUrl: string;
-  name: string;
-  types: string[];
-  sizes: number[];
-  price: number;
-  category: string;
-  rating: number;
-}
 
 
 interface Props {
@@ -22,6 +11,7 @@ interface Props {
 export const PizzaCards: FC<Props> = ({data}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   
+  console.log(data)
   
     return (
         <div className="pizza-block">

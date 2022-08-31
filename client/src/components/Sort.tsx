@@ -13,7 +13,7 @@ interface Props {}
 export const Sort: FC <Props> = () => {
   const dispath = useDispatch()
 
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const [activeSort, setActiveSort] = useState<number>(0);
   const sortArray = ["популярности", "цене", "алфавиту"];
 

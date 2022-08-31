@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import PizzaModel from "./models/PizzaModel.js";
 import UserModel from "./models/UserModel.js";
 import bcrypt from "bcrypt";
+import cors from "cors"
 import {
   pizzaValidation,
   registValidation,
@@ -20,13 +21,16 @@ mongoose
 
 const app = express();
 app.use(express.json());
-
+app.use(cors())
 app.listen(4400, (err) => {
   if (err) {
     return console.log(err);
   }
   console.log(`Port start`);
 });
+
+
+
 
 app.post("/pizza", pizzaValidation, async (req, res) => {
   try {
@@ -55,6 +59,22 @@ app.post("/pizza", pizzaValidation, async (req, res) => {
     return res.status(500).json(`Не удалось создать пиццу`);
   }
 });
+
+
+
+app.get("/pizzas", async (req, res) => {
+    try {
+        const pizzas = await PizzaModel.find()
+        if(!pizzas){
+            return res.status(400).json('ошибка получения данных')
+        }
+        res.json(pizzas)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(`Не удалось получить данные из БД`);
+    }
+})
+
 
 app.post("/auth/register", registValidation, async (req, res) => {
   try {
