@@ -2,10 +2,20 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { PizzaTypes } from "../../types/types";
 import axios from "../../services/axios";
 
-export const fetchPizzas: any = createAsyncThunk('pizzas/fetchPizzas', async () => {
-  const { data } = await axios.get('/pizzas');
+export const fetchPizzas: any = createAsyncThunk('pizzas/fetchPizzas', async (categoryId: any) => {
+  // console.log(categoryId)
+  const {data} = categoryId ? await axios.get('/pizzas/' + categoryId) : await axios.get('/pizzas')
   return data;
 });
+
+// export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', async (sort: string) => {
+//   const {data} = await axios.get('/pizzas/sort/' + sort) 
+//   return data;
+// });
+
+
+
+
 
 type PizzaState = {
   pizza: {
@@ -14,7 +24,6 @@ type PizzaState = {
   };
   isLoading: boolean;
   response: Response;
-  filterMenu: string;
 };
 
 type Response = {
@@ -23,13 +32,12 @@ type Response = {
 };
 
 //popular new
-// 2:24:34
+
 const initialState: PizzaState = {
   pizza: {
     items: [],
     status: "loading"
   },
-  filterMenu: 'Все',
   isLoading: false,
   response: {
     status: 0,
@@ -44,13 +52,6 @@ export const pizzaSlice = createSlice({
     changeIsLoading(state) {
       state.isLoading = true;
     },
-    filterMenu(state, action) { 
-      console.log(action)   
-      state.filterMenu = action.payload.menu
-    },
-    pizzaSort(state, action) {
-      console.log(action.payload.sort)
-    }
   },
   extraReducers: {
     [fetchPizzas.pending]: (state) => {
@@ -65,6 +66,18 @@ export const pizzaSlice = createSlice({
       state.pizza.items = [];
       state.pizza.status = 'error'
     },
+    // [fetchSortPizzas.pending]: (state) => {
+    //   state.pizza.items = [];
+    //   state.pizza.status = 'loading'
+    // },
+    // [fetchSortPizzas.fulfilled]: (state, action) => {
+    //   state.pizza.items = action.payload;
+    //   state.pizza.status = 'loaded'
+    // },
+    // [fetchSortPizzas.rejected]: (state) => {
+    //   state.pizza.items = [];
+    //   state.pizza.status = 'error'
+    // },
   },
 });
 

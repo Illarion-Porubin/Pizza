@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import "../scss/components/_sort.scss";
-import { pizzaSlice } from "../store/slices/pizzaSlice";
+// import { fetchSortPizzas } from "../store/slices/pizzaSlice";
 
 
 
@@ -11,14 +11,21 @@ interface Props {}
 
 
 export const Sort: FC <Props> = () => {
-  const dispath = useDispatch()
-
+  // const dispatch = useDispatch();
   const [open, setOpen] = useState(false)
   const [activeSort, setActiveSort] = useState<number>(0);
-  const sortArray = ["популярности", "цене", "алфавиту"];
 
-  const selectSort = (index: number) => {
-    dispath(pizzaSlice.actions.pizzaSort({sort: sortArray[index]}))
+  const sortArray = [
+    {name: `популярность`, sort: "rating" },
+    {name: `цена`, sort: "price" },
+    {name: `алфавит`, sort: "name" },
+  ];
+
+
+
+  const selectSort = (index: number, sort: string) => {
+    console.log(sort)
+    // dispatch(fetchSortPizzas(sortArray[index]))
     setActiveSort(index)
     setOpen(false)
   }
@@ -39,12 +46,12 @@ export const Sort: FC <Props> = () => {
             />
           </svg>
           <b>Сортировка по:</b>
-          <span onClick={() => setOpen(!open)}>{sortArray[activeSort]}</span>
+          <span onClick={() => setOpen(!open)}>{sortArray[activeSort].name}</span>
         </div>
         <div className={open ? "sort__popup" : "sort__popup-dizable"}>
           <ul>
-            {sortArray.map((sort, index: number) => (
-              <li className={index === activeSort ? "active" : " "} key={sort} onClick={() => selectSort(index)}>{sort}</li>
+            {sortArray.map((value, index: number) => (
+              <li className={index === activeSort ? "active" : " "} key={index} onClick={() => selectSort(index, value.sort)}>{value.name}</li>
             ))}
           </ul>
         </div>

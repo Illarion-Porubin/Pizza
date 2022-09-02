@@ -11,7 +11,6 @@ interface Props {
 export const PizzaCards: FC<Props> = ({data}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   
-  console.log(data)
   
     return (
         <div className="pizza-block">
