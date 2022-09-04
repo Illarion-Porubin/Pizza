@@ -9,7 +9,9 @@ interface Props {
 
 
 export const PizzaCards: FC<Props> = ({data}) => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeVariant, setActiveVariant] = useState<number>(0);
+  const [activeSize, setActiveSize] = useState<number>(0);
+
   
   
     return (
@@ -23,12 +25,12 @@ export const PizzaCards: FC<Props> = ({data}) => {
         <div className="pizza-block__selector">
           <ul>
           {data.types.map((types, index) => (
-            <li onClick={() => setActiveIndex(index)} className={activeIndex === index ? "active" : "" }key={index}>{types}</li>
+            <li onClick={() => setActiveVariant(index)} className={activeVariant === index ? "active" : "" } key={index}>{types}</li>
           ))}
           </ul>
           <ul>
             {data.sizes.map((sizes, index) => (
-              <li className="active" key={index}>{sizes}</li>
+              <li onClick={() => setActiveSize(index)} className={activeSize === index ? "active" : "" } key={index}>{sizes}</li>
             ))}
           </ul>
         </div>

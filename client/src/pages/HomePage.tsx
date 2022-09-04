@@ -11,10 +11,9 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 
 export const HomePage: FC = () => {
     const pizzaState = useCustomSelector(selectCurrentData);
-    const [sortType, setSortType] = React.useState(0);
     const dispatch = useDispatch();
 
-  
+    console.log(pizzaState)
 
     React.useEffect(() => {
       dispatch(fetchPizzas())

@@ -3,15 +3,19 @@ import { PizzaTypes } from "../../types/types";
 import axios from "../../services/axios";
 
 export const fetchPizzas: any = createAsyncThunk('pizzas/fetchPizzas', async (categoryId: any) => {
-  // console.log(categoryId)
   const {data} = categoryId ? await axios.get('/pizzas/' + categoryId) : await axios.get('/pizzas')
   return data;
 });
 
-// export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', async (sort: string) => {
-//   const {data} = await axios.get('/pizzas/sort/' + sort) 
-//   return data;
-// });
+export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', async (value: string) => {
+  const {data} = await axios.get('/sort/' + value)
+  return data;
+});
+
+export const fetchSearchPizzas: any = createAsyncThunk('pizzas/fetchSearchPizzas', async (value: string) => {
+  const {data} = await axios.get('/search/' + value)
+  return data;
+});
 
 
 
@@ -66,18 +70,30 @@ export const pizzaSlice = createSlice({
       state.pizza.items = [];
       state.pizza.status = 'error'
     },
-    // [fetchSortPizzas.pending]: (state) => {
-    //   state.pizza.items = [];
-    //   state.pizza.status = 'loading'
-    // },
-    // [fetchSortPizzas.fulfilled]: (state, action) => {
-    //   state.pizza.items = action.payload;
-    //   state.pizza.status = 'loaded'
-    // },
-    // [fetchSortPizzas.rejected]: (state) => {
-    //   state.pizza.items = [];
-    //   state.pizza.status = 'error'
-    // },
+    [fetchSortPizzas.pending]: (state) => {
+      state.pizza.items = [];
+      state.pizza.status = 'loading'
+    },
+    [fetchSortPizzas.fulfilled]: (state, action) => {
+      state.pizza.items = action.payload;
+      state.pizza.status = 'loaded'
+    },
+    [fetchSortPizzas.rejected]: (state) => {
+      state.pizza.items = [];
+      state.pizza.status = 'error'
+    },
+    [fetchSearchPizzas.pending]: (state) => {
+      state.pizza.items = [];
+      state.pizza.status = 'loading'
+    },
+    [fetchSearchPizzas.fulfilled]: (state, action) => {
+      state.pizza.items = action.payload;
+      state.pizza.status = 'loaded'
+    },
+    [fetchSearchPizzas.rejected]: (state) => {
+      state.pizza.items = [];
+      state.pizza.status = 'error'
+    },
   },
 });
 

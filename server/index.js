@@ -57,6 +57,7 @@ app.post("/pizza", pizzaValidation, async (req, res) => {
   }
 });
 
+//////////////////////////////////////////////////////
 app.get("/pizzas", async (req, res) => {
   try {
     const pizzas = await PizzaModel.find();
@@ -84,20 +85,36 @@ app.get("/pizzas/:id", async (req, res) => {
   }
 });
 
-// app.get("/pizzas/sort/:id", async (req, res) => {
-//   console.log(params.id)
-//   try {
-//     const category = req.params.id;
-//     const pizzas = await PizzaModel.find({ category });
-//     if (!pizzas) {
-//       return res.status(400).json("ошибка получения данных");
-//     }
-//     res.json(pizzas);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json(`Не удалось получить данные из БД`);
-//   }
-// });
+app.get("/sort/:value", async (req, res) => {
+  try {
+    const sort = req.params.value.slice(-4) === `less` ? -1 : 1;
+    const filt = req.params.value.replace(req.params.value.slice(-4), "");
+    const value = {[filt]: sort};
+    const pizzas = await PizzaModel.find().sort(value);
+    if (!pizzas) {
+      return res.status(400).json("ошибка получения данных");
+    }
+    res.json(pizzas);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(`Не удалось получить данные из БД`);
+  }
+});
+
+app.get("/search/:value", async (req, res) => {
+  try {
+    const value = req.params.value
+    const pizzas = await PizzaModel.find({ "name": { "$regex": value, "$options": "i" }});
+    if (!pizzas) {
+      return res.status(400).json("ошибка получения данных");
+    }
+    res.json(pizzas);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(`Не удалось получить данные из БД`);
+  }
+});
+////////////////////////////////////
 
 app.post("/auth/register", registValidation, async (req, res) => {
   try {

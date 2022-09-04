@@ -1,0 +1,24 @@
+.search_wrap{
+    position: relative;
+}
+
+.search{
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 12px 20px;
+    padding-left: 40px;
+    width: 200px;
+    border-radius: 10px;
+    font-size: 16px;
+    &:focus {
+        border:  1px solid rgba(0,0,0,0.5);
+    }
+}
+
+.icon{
+    width: 24px;
+    height: 24px;
+    opacity: 0.5;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}

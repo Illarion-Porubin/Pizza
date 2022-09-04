@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import "../scss/components/_sort.scss";
-// import { fetchSortPizzas } from "../store/slices/pizzaSlice";
+import { fetchSortPizzas } from "../store/slices/pizzaSlice";
 
 
 
@@ -11,21 +11,21 @@ interface Props {}
 
 
 export const Sort: FC <Props> = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false)
   const [activeSort, setActiveSort] = useState<number>(0);
 
   const sortArray = [
-    {name: `популярность`, sort: "rating" },
-    {name: `цена`, sort: "price" },
-    {name: `алфавит`, sort: "name" },
+    {name: `популярность (MORE)`, sort: "ratingmore" },
+    {name: `популярность (LESS)`, sort: "ratingless" },
+    {name: `цена (MORE)` , sort: "pricemore" },
+    {name: `цена (LESS)`, sort: "priceless" },
+    {name: `алфавит (MORE)`, sort: "namemore" },
+    {name: `алфавит (LESS)`, sort: "nameless" },
   ];
 
-
-
   const selectSort = (index: number, sort: string) => {
-    console.log(sort)
-    // dispatch(fetchSortPizzas(sortArray[index]))
+    dispatch(fetchSortPizzas(sort))
     setActiveSort(index)
     setOpen(false)
   }
