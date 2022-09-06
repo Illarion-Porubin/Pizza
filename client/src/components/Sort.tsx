@@ -7,9 +7,6 @@ import { fetchSortPizzas } from "../store/slices/pizzaSlice";
 
 interface Props {}
 
-
-
-
 export const Sort: FC <Props> = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false)

@@ -5,20 +5,24 @@ import { Sort } from "../components/Sort";
 import { useCustomSelector } from "../hooks/store";
 import { selectCurrentData } from "../store/selectors";
 import { useDispatch } from "react-redux";
-import { fetchPizzas, } from "../store/slices/pizzaSlice";
+import { fetchPaginationPizzas, fetchPizzas, } from "../store/slices/pizzaSlice";
 import { PizzaTypes } from "../types/types";
+import { Pagination } from "../components/Pagination/Pagination";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 
 export const HomePage: FC = () => {
     const pizzaState = useCustomSelector(selectCurrentData);
     const dispatch = useDispatch();
 
-    console.log(pizzaState)
+
 
     React.useEffect(() => {
       dispatch(fetchPizzas())
       window.scrollTo(0, 0)
     }, [dispatch])
+
+
+    console.log(pizzaState.pizza.items.pages)
 
     
     return (
@@ -32,10 +36,11 @@ export const HomePage: FC = () => {
               {
                 pizzaState.pizza.status === `loading` 
                 ? [...new Array(6)].map((_, index) => <Skeleton key={index}/>) 
-                : pizzaState.pizza.items.map((data: PizzaTypes) => (
+                : pizzaState.pizza.items.pizzas.map((data: PizzaTypes) => (
                   <PizzaCards data={data} key={data._id}/>))
               }
             </div>
+            <Pagination/>
         </>
     )
 }
