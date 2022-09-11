@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { PizzaTypes } from "../../types/types";
-import axios from "../../services/axios";
+import axios from "../../axios";
 
 export const fetchPizzas: any = createAsyncThunk('pizzas/fetchPizzas', async (categoryId: string) => {
   const {data} = categoryId ? await axios.get('/pizzas/' + categoryId) : await axios.get('/pizzas')
@@ -13,14 +13,18 @@ export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', a
 });
 
 export const fetchSearchPizzas: any = createAsyncThunk('pizzas/fetchSearchPizzas', async (value: string) => {
-  console.log(value, 'juahsd')
   const {data} = value ? await axios.get('/search/' + value) : await axios.get('/pizzas')
   return data;
 });
 
 export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginationPizzas', async (page: number) => {
-  console.log(page, 'aaaaaaaa')
   const {data} = await axios.get('/pizzas?p='+page)
+  return data;
+});
+
+export const fetchAddPizzas: any = createAsyncThunk('pizzas/fetchAddPizzas', async (value: object) => {
+  console.log(value)
+  const {data} = await axios.post('/add', value={value})
   return data;
 });
 

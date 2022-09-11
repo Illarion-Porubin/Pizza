@@ -224,3 +224,20 @@ app.post("/auth/login", loginValidation, async (req, res) => {
     res.status(500).json(`не удалось авторизироваться`);
   }
 });
+
+
+////////////////////cart/////////////
+
+app.post("/add", async (req, res) => {
+  try {
+    const order = req.body.value
+
+    
+    if (!order) {
+      return res.status(400).json("ошибка получения данных");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(`Не удалось получить данные из БД`);
+  }
+});

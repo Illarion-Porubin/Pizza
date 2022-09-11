@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { fetchPizzas, } from "../store/slices/pizzaSlice";
+import { fetchPizzas, } from "../redux/slices/pizzaSlice";
 
 import { useDispatch } from "react-redux";
 import "../scss/components/_categories.scss";

@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import "../scss/components/_sort.scss";
-import { fetchSortPizzas } from "../store/slices/pizzaSlice";
+import { fetchSortPizzas } from "../redux/slices/pizzaSlice";
 
 
 

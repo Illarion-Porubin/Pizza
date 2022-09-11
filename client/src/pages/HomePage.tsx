@@ -3,9 +3,9 @@ import { PizzaCards } from "../components/PizzaBlock/PizzaCard";
 import { Categories } from "../components/Categories";
 import { Sort } from "../components/Sort";
 import { useCustomSelector } from "../hooks/store";
-import { selectCurrentData } from "../store/selectors";
+import { selectCurrentData } from "../redux/selectors";
 import { useDispatch } from "react-redux";
-import { fetchPaginationPizzas, fetchPizzas, } from "../store/slices/pizzaSlice";
+import { fetchPizzas, } from "../redux/slices/pizzaSlice";
 import { PizzaTypes } from "../types/types";
 import { Pagination } from "../components/Pagination/Pagination";
 import Skeleton from "../components/PizzaBlock/Skeleton";
@@ -22,7 +22,7 @@ export const HomePage: FC = () => {
     }, [dispatch])
 
 
-    console.log(pizzaState.pizza.items.pages)
+ 
 
     
     return (

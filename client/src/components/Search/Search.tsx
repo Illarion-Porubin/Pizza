@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchSearchPizzas } from "../../store/slices/pizzaSlice";
+import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
 
 import s from "./Search.module.scss";
 
