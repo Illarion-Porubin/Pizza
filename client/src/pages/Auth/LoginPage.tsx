@@ -4,30 +4,44 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./AuthPage.module.scss";
-import "../scss/components/_all.scss";
+import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
-import { fetchRegister, selectIsAuth } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useCustomSelector } from "../../hooks/store";
 
-export const AuthPage: FC = () => {
-  const isAuth = useSelector(selectIsAuth);
+
+import "./AuthPage.module.scss";
+import { selectAuthData } from "../../redux/selectors";
+import { fetchLogin } from "../../redux/slices/authSlice";
+
+
+
+export const LoginPage: FC = () => {
+  const auth = useCustomSelector(selectAuthData)
+
+  console.log(auth, 'login')
+
+  
+  const isAuth = auth.data
+
+
+
+
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      email: "user@mail1.ru",
-      password: "12345",
+      email: 'vasya@test.ru',
+      password: '12345'
     },
     mode: "onChange",
   });
 
   const onSubmit = async (values: any) => {
-    const data = await dispatch(fetchRegister(values));
+    const data = await dispatch(fetchLogin(values));
 
     if (!data.payload) {
       alert("Не удалось авторизоваться");
@@ -38,16 +52,19 @@ export const AuthPage: FC = () => {
     }
   };
 
-  // if (isAuth) {
-  //   return <Navigate to="/" />;
-  // }
+  console.log(isAuth)
+  if (!isAuth) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Paper classes={{ root: styles.root }}>
       <Typography classes={{ root: styles.title }} variant="h5">
         Вход в аккаунт
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form 
+      onSubmit={handleSubmit(onSubmit)}
+      >
         <TextField
           className={styles.field}
           label="E-Mail"

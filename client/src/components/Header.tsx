@@ -1,8 +1,8 @@
 import pizaLogo from "../assets/img/pizza-logo.svg";
 import user from "../assets/img/user.png";
 import { Link } from "react-router-dom";
-import "../scss/components/_header.scss";
 import { Search } from "./Search/Search";
+import "../scss/components/_header.scss";
 
 export const Header = () => {
   return (
@@ -20,9 +20,9 @@ export const Header = () => {
           </Link>
           <Search/>
           <div className="header__cart">
-            <div className="header__user-wrapp">
+            <Link to="/regist" className="header__user-wrapp">
               <img className="header__user" src={user} alt="user" />
-            </div>
+            </Link>
             <Link to="/cart">
               <div className="button button--cart">
                 <span>520 ₽</span>

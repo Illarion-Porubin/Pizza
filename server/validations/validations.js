@@ -1,10 +1,10 @@
 import { body } from "express-validator";
 
 export const loginValidation = [
-    body('name', 'Длинна должна быть больше 4 символов').isString().isLength({ min: 4 }),
+    // body('name', 'Длинна должна быть больше 4 символов').isString().isLength({ min: 4 }),
     body('email', 'Длинна должна быть больше 4 символов').isEmail(),
     body('password', 'Длинна должна быть больше 4 символов').isString(),
-    body('admin', "true или fasle").isBoolean().optional()
+    // body('admin', "true или fasle").isBoolean().optional()
 ];
 
 export const registValidation = [

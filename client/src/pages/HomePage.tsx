@@ -3,27 +3,30 @@ import { PizzaCards } from "../components/PizzaBlock/PizzaCard";
 import { Categories } from "../components/Categories";
 import { Sort } from "../components/Sort";
 import { useCustomSelector } from "../hooks/store";
-import { selectCurrentData } from "../redux/selectors";
+import { selectAuthData, selectCurrentData } from "../redux/selectors";
 import { useDispatch } from "react-redux";
 import { fetchPizzas, } from "../redux/slices/pizzaSlice";
+
 import { PizzaTypes } from "../types/types";
 import { Pagination } from "../components/Pagination/Pagination";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 
 export const HomePage: FC = () => {
     const pizzaState = useCustomSelector(selectCurrentData);
+
+    const authState = useCustomSelector(selectAuthData);
+
     const dispatch = useDispatch();
 
+    console.log(pizzaState, `pizzaState`)
+    console.log(authState, 'authState')
 
 
     React.useEffect(() => {
       dispatch(fetchPizzas())
+      
       window.scrollTo(0, 0)
     }, [dispatch])
-
-
- 
-
     
     return (
         <>

@@ -190,7 +190,7 @@ app.post("/auth/login", loginValidation, async (req, res) => {
     const user = await UserModel.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(400).res.json(`Пользователь не существует`);
+      return res.status(404).json({message: `Пользователь не существует`});
     }
 
     const isValidPass = await bcrypt.compare(
@@ -239,5 +239,26 @@ app.post("/add", async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json(`Не удалось получить данные из БД`);
+  }
+});
+
+app.post("/auth/me", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId)
+    if(!user) {
+      return res.status(404).json({
+        message: `пользователь не найден`
+      })
+    }
+
+    const { passwordHash, ...userData } = user._doc;
+
+    res.json({
+      ...userData
+    })
+
+  } catch (err) {
+    console.log('Не смог найти пользователя')
+    res.status(500).json(err)
   }
 });

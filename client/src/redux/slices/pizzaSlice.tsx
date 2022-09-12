@@ -23,7 +23,6 @@ export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginati
 });
 
 export const fetchAddPizzas: any = createAsyncThunk('pizzas/fetchAddPizzas', async (value: object) => {
-  console.log(value)
   const {data} = await axios.post('/add', value={value})
   return data;
 });
@@ -38,13 +37,8 @@ type PizzaState = {
     status: string
   };
   isLoading: boolean;
-  response: Response;
 };
 
-type Response = {
-  status: number;
-  message: string;
-};
 
 //popular new
 
@@ -57,10 +51,6 @@ const initialState: PizzaState = {
     status: "loading"
   },
   isLoading: false,
-  response: {
-    status: 0,
-    message: "",
-  },
 };
 
 export const pizzaSlice = createSlice({
@@ -122,5 +112,7 @@ export const pizzaSlice = createSlice({
     },
   },
 });
+
+
 
 export default pizzaSlice.reducer;
