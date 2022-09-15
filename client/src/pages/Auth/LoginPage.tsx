@@ -3,29 +3,18 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import styles from "./AuthPage.module.scss";
-import { Navigate } from "react-router-dom";
-import { useForm } from "react-hook-form"
+import s from "./AuthPage.module.scss";
+import { Navigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
-
 
 import "./AuthPage.module.scss";
 import { selectAuthData } from "../../redux/selectors";
 import { fetchLogin } from "../../redux/slices/authSlice";
 
-
-
 export const LoginPage: FC = () => {
-  const auth = useCustomSelector(selectAuthData)
-
-  console.log(auth, 'login')
-
-  
-  const isAuth = auth.data
-
-
-
+  const isAuth = Boolean(useCustomSelector(selectAuthData).data);
 
   const dispatch = useDispatch();
   const {
@@ -34,15 +23,15 @@ export const LoginPage: FC = () => {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      email: 'vasya@test.ru',
-      password: '12345'
+      email: "vasya@test.ru",
+      password: "12345",
     },
     mode: "onChange",
   });
 
   const onSubmit = async (values: any) => {
     const data = await dispatch(fetchLogin(values));
-
+    
     if (!data.payload) {
       alert("Не удалось авторизоваться");
     }
@@ -52,21 +41,18 @@ export const LoginPage: FC = () => {
     }
   };
 
-  console.log(isAuth)
-  if (!isAuth) {
+  if (isAuth) {
     return <Navigate to="/" />;
   }
 
   return (
-    <Paper classes={{ root: styles.root }}>
-      <Typography classes={{ root: styles.title }} variant="h5">
+    <Paper classes={{ root: s.root }}>
+      <Typography classes={{ root: s.title }} variant="h5">
         Вход в аккаунт
       </Typography>
-      <form 
-      onSubmit={handleSubmit(onSubmit)}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
-          className={styles.field}
+          className={s.field}
           label="E-Mail"
           type="email"
           error={Boolean(errors.email?.message)}
@@ -75,7 +61,7 @@ export const LoginPage: FC = () => {
           fullWidth
         />
         <TextField
-          className={styles.field}
+          className={s.field}
           label="password"
           type="password"
           error={Boolean(errors.password?.message)}
@@ -93,6 +79,12 @@ export const LoginPage: FC = () => {
           Войти
         </Button>
       </form>
+      <p className={s.account}>Нет аккаунта?</p>
+      <Link to="/regist">
+        <Button type="submit" size="large" variant="contained" fullWidth>
+          Создать
+        </Button>
+      </Link>
     </Paper>
   );
 };

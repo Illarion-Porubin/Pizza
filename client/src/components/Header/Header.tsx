@@ -1,10 +1,26 @@
-import pizaLogo from "../assets/img/pizza-logo.svg";
-import user from "../assets/img/user.png";
+import pizaLogo from "../../assets/img/pizza-logo.svg";
+import user from "../../assets/img/user.png";
 import { Link } from "react-router-dom";
-import { Search } from "./Search/Search";
-import "../scss/components/_header.scss";
-
+import { Search } from "../Search/Search";
+import { useCustomSelector } from "../../hooks/store";
+import { selectAuthData } from "../../redux/selectors";
+import "../../scss/components/_header.scss";
+import s from "./Header.module.scss";
+import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { authSlice } from "../../redux/slices/authSlice";
+// 3:04:00
 export const Header = () => {
+  const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+
+  const dispatch = useDispatch()
+
+  const userLogout = () => {
+    if(window.confirm(`Вы точно хотите выйти?`)){
+      dispatch(authSlice.actions.logout())
+    }
+  }
+
   return (
     <div className="wrapper">
       <div className="header">
@@ -18,10 +34,14 @@ export const Header = () => {
               </div>
             </div>
           </Link>
-          <Search/>
+          <Search />
           <div className="header__cart">
-            <Link to="/regist" className="header__user-wrapp">
-              <img className="header__user" src={user} alt="user" />
+            <Link to="/login" className="header__user-wrapp">
+              {isAuth ? (
+                <Button onClick={() => userLogout()} className={s.userEnter}>Выйти</Button>
+              ) : (
+                <Button className={s.userEnter}>Войти</Button>
+              )}
             </Link>
             <Link to="/cart">
               <div className="button button--cart">

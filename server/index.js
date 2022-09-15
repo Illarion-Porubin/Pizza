@@ -64,8 +64,8 @@ app.get("/pizzas", async (req, res) => {
     const page = req.query.p || 0;
     const perPage = 4;
     const pizzas = await PizzaModel.find()
-    .skip(page * perPage)
-    .limit(perPage);
+      .skip(page * perPage)
+      .limit(perPage);
     if (!pizzas) {
       return res.status(400).json("ошибка получения данных");
     }
@@ -80,7 +80,6 @@ app.get("/pizzas", async (req, res) => {
     return res.status(500).json(`Не удалось получить данные из БД`);
   }
 });
-
 
 app.get("/pizzas/:id", async (req, res) => {
   try {
@@ -190,7 +189,7 @@ app.post("/auth/login", loginValidation, async (req, res) => {
     const user = await UserModel.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(404).json({message: `Пользователь не существует`});
+      return res.status(404).json({ message: `Пользователь не существует` });
     }
 
     const isValidPass = await bcrypt.compare(
@@ -225,14 +224,11 @@ app.post("/auth/login", loginValidation, async (req, res) => {
   }
 });
 
-
 ////////////////////cart/////////////
 
 app.post("/add", async (req, res) => {
   try {
-    const order = req.body.value
-
-    
+    const order = req.body.value;
     if (!order) {
       return res.status(400).json("ошибка получения данных");
     }
@@ -242,23 +238,23 @@ app.post("/add", async (req, res) => {
   }
 });
 
-app.post("/auth/me", async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.userId)
-    if(!user) {
-      return res.status(404).json({
-        message: `пользователь не найден`
-      })
-    }
+app.get("/auth/me/:value", async (req, res) => {
+  console.log(req.params.value, "/me/");
+  // try {
+  //   const user = await UserModel.findById(req.params.userId);
+  //   if (!user) {
+  //     return res.status(404).json({
+  //       message: `пользователь не найден`,
+  //     });
+  //   }
 
-    const { passwordHash, ...userData } = user._doc;
+  //   const { password, ...userData } = user._doc;
 
-    res.json({
-      ...userData
-    })
-
-  } catch (err) {
-    console.log('Не смог найти пользователя')
-    res.status(500).json(err)
-  }
+  //   res.json({
+  //     ...userData,
+  //   });
+  // } catch (err) {
+  //   console.log("Не смог найти пользователя");
+  //   res.status(500).json(err);
+  // }
 });

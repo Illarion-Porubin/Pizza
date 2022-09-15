@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Header } from "./components/Header";
+import { Header } from "./components/Header/Header";
 import { CartPage } from "./pages/CartPage";
 import { HomePage } from "./pages/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -9,14 +9,20 @@ import { LoginPage } from "./pages/Auth/LoginPage";
 import "./scss/components/_all.scss";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchLogin } from "./redux/slices/authSlice";
+import { fetchAuthMe } from "./redux/slices/authSlice";
+import { useCustomSelector } from "./hooks/store";
+import { selectAuthData } from "./redux/selectors";
 
 function App() {
   const dispatch = useDispatch()
+  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+  const isAuth = useCustomSelector(selectAuthData);
 
-  // useEffect(() => {
-  //   dispatch(fetchLogin())
-  // }, [])
+  console.log(isAuth.data)
+
+  useEffect(() => {
+    dispatch(fetchAuthMe(JSON.stringify({userId: isAuth.data?._id})))
+  }, [])
 
   return (
     <>

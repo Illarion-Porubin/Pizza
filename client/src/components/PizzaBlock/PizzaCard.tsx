@@ -18,7 +18,6 @@ export const PizzaCards: FC<Props> = ({ data }) => {
 
   const orderPizza = (data: PizzaTypes) => {
     const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount}
-    console.log(newOrder)
     dispatch(fetchAddPizzas(newOrder))
   }
 

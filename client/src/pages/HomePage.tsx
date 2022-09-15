@@ -13,14 +13,9 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 
 export const HomePage: FC = () => {
     const pizzaState = useCustomSelector(selectCurrentData);
-
-    const authState = useCustomSelector(selectAuthData);
-
     const dispatch = useDispatch();
 
-    console.log(pizzaState, `pizzaState`)
-    console.log(authState, 'authState')
-
+  
 
     React.useEffect(() => {
       dispatch(fetchPizzas())
