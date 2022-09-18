@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header/Header";
-import { CartPage } from "./pages/CartPage";
+import { CartPage } from "./pages/Cart/CartPage";
 import { HomePage } from "./pages/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { RegistrationPage } from "./pages/Auth/RegistrationPage";
@@ -20,8 +20,12 @@ function App() {
 
   console.log(isAuth.data)
 
+  // useEffect(() => {
+  //   dispatch(fetchAuthMe(JSON.stringify({userId: isAuth.data?._id})))
+  // }, [])
+  
   useEffect(() => {
-    dispatch(fetchAuthMe(JSON.stringify({userId: isAuth.data?._id})))
+    dispatch(fetchAuthMe())
   }, [])
 
   return (

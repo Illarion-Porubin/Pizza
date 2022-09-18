@@ -17,13 +17,19 @@ export const fetchLogin: any = createAsyncThunk(
   }
 );
 
-export const fetchAuthMe: any = createAsyncThunk(
-  "auth/fetchAuthMe",
-  async (value: any) => {
-    const { data } = await axios.get("/auth/me/" + value);
-    return data;
-  }
-);
+// export const fetchAuthMe: any = createAsyncThunk(
+//   "auth/fetchAuthMe",
+//   async (value: any) => {
+//     const { data } = await axios.get("/auth/me/" + value);
+//     return data;
+//   }
+// );
+
+export const fetchAuthMe: any = createAsyncThunk('auth/fetchAuthMe', async () => {
+  const { data } = await axios.get('/auth/me')
+  return data;
+})
+
 
 type DataType = {
   admin: false;

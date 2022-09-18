@@ -1,6 +1,9 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchAddPizzas,  } from "../../redux/slices/pizzaSlice";
+import { useCustomSelector } from "../../hooks/store";
+import { selectCartData } from "../../redux/selectors";
+import { cartSlice } from "../../redux/slices/cartSlice";
+// import { fetchAddPizzas,  } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
 import s from "./PizzaCard.module.scss";
 
@@ -9,18 +12,23 @@ interface Props {
 }
 
 export const PizzaCards: FC<Props> = ({ data }) => {
+  const cart = useCustomSelector(selectCartData);
   const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
   const [pizzaCount, setPizzaCount] = useState<number>(0);
   const dispatch = useDispatch()
 
 
-
   const orderPizza = (data: PizzaTypes) => {
-    const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount}
-    dispatch(fetchAddPizzas(newOrder))
+    if(pizzaCount) {
+      const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount}
+      dispatch(cartSlice.actions.addItem(newOrder))
+    }
   }
 
+  useEffect(() => {
+    console.log(cart.items, 'cart')
+  }, [cart])
 
   return (
     <div className="pizza-block">

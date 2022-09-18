@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSliceReducer from "./slices/authSlice";
 import pizzaSliceReducer from "./slices/pizzaSlice";
+import cartSliceReducer from "./slices/cartSlice"
 
 const rootReducer = combineReducers({
     pizzaSliceReducer, 
-    authSliceReducer
+    authSliceReducer,
+    cartSliceReducer
 });
 
 export const store = configureStore({

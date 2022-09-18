@@ -29,6 +29,8 @@ app.listen(4400, (err) => {
   console.log(`Port start`);
 });
 
+//////////////////////Pizzas////////////////////////////////
+
 app.post("/pizza", pizzaValidation, async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -56,8 +58,6 @@ app.post("/pizza", pizzaValidation, async (req, res) => {
     return res.status(500).json(`Не удалось создать пиццу`);
   }
 });
-
-//////////////////////////////////////////////////////
 
 app.get("/pizzas", async (req, res) => {
   try {
@@ -100,6 +100,8 @@ app.get("/pizzas/:id", async (req, res) => {
   }
 });
 
+//////////////////sort-search//////////////////////////////
+
 app.get("/sort/:value", async (req, res) => {
   try {
     const sort = req.params.value.slice(-4) === `less` ? -1 : 1;
@@ -141,7 +143,7 @@ app.get("/search/:value", async (req, res) => {
     return res.status(500).json(`Не удалось получить данные из БД`);
   }
 });
-////////////////////////////////////
+///////////////AuthUser/////////////////////
 
 app.post("/auth/register", registValidation, async (req, res) => {
   try {
@@ -224,7 +226,7 @@ app.post("/auth/login", loginValidation, async (req, res) => {
   }
 });
 
-////////////////////cart/////////////
+////////////////////cart/////////////////////////
 
 app.post("/add", async (req, res) => {
   try {
@@ -238,10 +240,29 @@ app.post("/add", async (req, res) => {
   }
 });
 
-app.get("/auth/me/:value", async (req, res) => {
-  console.log(req.params.value, "/me/");
+app.get("/auth/me", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId);
+    console.log(user, "<<<<");
+    if (!user) {
+      return res.status(404).json({
+        message: `пользователь не найден`,
+      });
+    }
+
+    const { passwordHash, ...userData } = user._doc;
+
+    res.json({
+      ...userData,
+    });
+  } catch (err) {
+    console.log("Не смог найти пользователя");
+    res.status(500).json(err);
+  }
+
+  // console.log(req.params.value, "/me/");
   // try {
-  //   const user = await UserModel.findById(req.params.userId);
+  //   const user = await UserModel.findById(req.params.value);
   //   if (!user) {
   //     return res.status(404).json({
   //       message: `пользователь не найден`,

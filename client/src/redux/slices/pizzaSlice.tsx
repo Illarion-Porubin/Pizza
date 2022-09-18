@@ -22,10 +22,7 @@ export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginati
   return data;
 });
 
-export const fetchAddPizzas: any = createAsyncThunk('pizzas/fetchAddPizzas', async (value: object) => {
-  const {data} = await axios.post('/add', value={value})
-  return data;
-});
+
 
 
 type PizzaState = {
