@@ -3,22 +3,22 @@ import { PizzaTypes } from "../../types/types";
 import axios from "../../axios";
 
 export const fetchPizzas: any = createAsyncThunk('pizzas/fetchPizzas', async (categoryId: string) => {
-  const {data} = categoryId ? await axios.get('/pizzas/' + categoryId) : await axios.get('/pizzas')
+  const {data} = categoryId ? await axios.get('/api/pizzas/' + categoryId) : await axios.get('/api/pizzas')
   return data;
 });
 
 export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', async (value: string) => {
-  const {data} = await axios.get('/sort/' + value)
+  const {data} = await axios.get('/api/sort/' + value)
   return data;
 });
 
 export const fetchSearchPizzas: any = createAsyncThunk('pizzas/fetchSearchPizzas', async (value: string) => {
-  const {data} = value ? await axios.get('/search/' + value) : await axios.get('/pizzas')
+  const {data} = value ? await axios.get('/api/search/' + value) : await axios.get('/api/pizzas')
   return data;
 });
 
 export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginationPizzas', async (page: number) => {
-  const {data} = await axios.get('/pizzas?p='+page)
+  const {data} = await axios.get('/api/pizzas?p='+page)
   return data;
 });
 
