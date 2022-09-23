@@ -1,281 +1,35 @@
-import express from "express";
-import mongoose from "mongoose";
-import PizzaModel from "./models/PizzaModel.js";
-import UserModel from "./models/UserModel.js";
-import bcrypt from "bcrypt";
-import cors from "cors";
-import {
-  pizzaValidation,
-  registValidation,
-  loginValidation,
-} from "./validations/validations.js";
-import { validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
+require('dotenv').config()
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser')
+const mongoose = require('mongoose');
+const router = require('./router/index')
+const errorMiddleware = require('./middlewares/error-middleware');
 
-mongoose
-  .connect(
-    `mongodb+srv://Admin:Admin123@cluster0.j0w4mvi.mongodb.net/PizzaBD?retryWrites=true&w=majority`
-  )
-  .then(() => console.log(`DB ok`))
-  .catch((err) => console.log(`DB error`, err));
+const PORT = process.env.PORT || 4400;
+const app = express()
 
-const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
+app.use('/api', router);
+app.use(errorMiddleware);
 app.listen(4400, (err) => {
-  if (err) {
-    return console.log(err);
-  }
-  console.log(`Port start`);
-});
-
-//////////////////////Pizzas////////////////////////////////
-
-app.post("/pizza", pizzaValidation, async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(400).json(errors.array());
+    if (err) {
+      return console.log(err);
     }
+    console.log(`Port start ${PORT}`);
+  });
 
-    const doc = new PizzaModel({
-      imageUrl: req.body.imageUrl,
-      name: req.body.name,
-      types: req.body.types,
-      sizes: req.body.sizes,
-      price: req.body.price,
-      category: req.body.category,
-      rating: req.body.rating,
-      new: req.body.new,
-      popular: req.body.popular,
-    });
-
-    const pizza = await doc.save();
-
-    res.json(pizza);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(`Не удалось создать пиццу`);
-  }
-});
-
-app.get("/pizzas", async (req, res) => {
-  try {
-    const page = req.query.p || 0;
-    const perPage = 4;
-    const pizzas = await PizzaModel.find()
-      .skip(page * perPage)
-      .limit(perPage);
-    if (!pizzas) {
-      return res.status(400).json("ошибка получения данных");
+const start = async () => {
+    try {
+        mongoose
+        .connect(process.env.DB_URL)
+        .then(() => console.log(`DB ok`))
+        .catch((err) => console.log(`DB error`, err));
+    } catch (e) {
+        console.log(e);
     }
-    const data = await PizzaModel.find();
-    const pages = Math.ceil(data.length / 4);
-    res.json({
-      pages,
-      pizzas,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(`Не удалось получить данные из БД`);
-  }
-});
+}
 
-app.get("/pizzas/:id", async (req, res) => {
-  try {
-    const category = req.params.id;
-    const pizzas = await PizzaModel.find({ category });
-    if (!pizzas) {
-      return res.status(400).json("ошибка получения данных");
-    }
-    const data = await PizzaModel.find();
-    const pages = Math.ceil(data.length / 4);
-    res.json({
-      pages,
-      pizzas,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(`Не удалось получить данные из БД`);
-  }
-});
-
-//////////////////sort-search//////////////////////////////
-
-app.get("/sort/:value", async (req, res) => {
-  try {
-    const sort = req.params.value.slice(-4) === `less` ? -1 : 1;
-    const filt = req.params.value.replace(req.params.value.slice(-4), "");
-    const value = { [filt]: sort };
-    const pizzas = await PizzaModel.find().sort(value);
-    if (!pizzas) {
-      return res.status(400).json("ошибка получения данных");
-    }
-    const data = await PizzaModel.find();
-    const pages = Math.ceil(data.length / 4);
-    res.json({
-      pages,
-      pizzas,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(`Не удалось получить данные из БД`);
-  }
-});
-
-app.get("/search/:value", async (req, res) => {
-  try {
-    const value = req.params.value;
-    const pizzas = await PizzaModel.find({
-      name: { $regex: value, $options: "i" },
-    });
-    if (!pizzas) {
-      return res.status(400).json("ошибка получения данных");
-    }
-    const data = await PizzaModel.find();
-    const pages = Math.ceil(data.length / 4);
-    res.json({
-      pages,
-      pizzas,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(`Не удалось получить данные из БД`);
-  }
-});
-///////////////AuthUser/////////////////////
-
-app.post("/auth/register", registValidation, async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty) {
-      return res.status(400).json(errors.array());
-    }
-    const pass = req.body.password;
-    const salt = await bcrypt.genSalt(8);
-    const hash = await bcrypt.hash(pass, salt);
-
-    const doc = new UserModel({
-      name: req.body.name,
-      email: req.body.email,
-      password: hash,
-    });
-
-    const user = await doc.save();
-
-    const { password, ...userData } = user._doc;
-
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      "secret123",
-      {
-        expiresIn: "30d",
-      }
-    );
-    res.json({
-      token,
-      ...userData,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      message: `Ошибка регистрации`,
-    });
-  }
-});
-
-app.post("/auth/login", loginValidation, async (req, res) => {
-  try {
-    const user = await UserModel.findOne({ email: req.body.email });
-
-    if (!user) {
-      return res.status(404).json({ message: `Пользователь не существует` });
-    }
-
-    const isValidPass = await bcrypt.compare(
-      req.body.password,
-      user._doc.password
-    ); // сравниваем пароли
-
-    if (!isValidPass) {
-      return res.status(400).json({
-        message: `Неверный логин или пароль`,
-      });
-    }
-
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      "secret123",
-      {
-        expiresIn: "30d",
-      }
-    );
-    const { password, ...userData } = user._doc;
-
-    return res.json({
-      ...userData,
-      token,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(`не удалось авторизироваться`);
-  }
-});
-
-////////////////////cart/////////////////////////
-
-app.post("/add", async (req, res) => {
-  try {
-    const order = req.body.value;
-    if (!order) {
-      return res.status(400).json("ошибка получения данных");
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(`Не удалось получить данные из БД`);
-  }
-});
-
-app.get("/auth/me", async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.userId);
-    console.log(user, "<<<<");
-    if (!user) {
-      return res.status(404).json({
-        message: `пользователь не найден`,
-      });
-    }
-
-    const { passwordHash, ...userData } = user._doc;
-
-    res.json({
-      ...userData,
-    });
-  } catch (err) {
-    console.log("Не смог найти пользователя");
-    res.status(500).json(err);
-  }
-
-  // console.log(req.params.value, "/me/");
-  // try {
-  //   const user = await UserModel.findById(req.params.value);
-  //   if (!user) {
-  //     return res.status(404).json({
-  //       message: `пользователь не найден`,
-  //     });
-  //   }
-
-  //   const { password, ...userData } = user._doc;
-
-  //   res.json({
-  //     ...userData,
-  //   });
-  // } catch (err) {
-  //   console.log("Не смог найти пользователя");
-  //   res.status(500).json(err);
-  // }
-});
+start()
