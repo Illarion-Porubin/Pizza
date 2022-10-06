@@ -17,6 +17,14 @@ export const fetchLogin: any = createAsyncThunk(
   }
 );
 
+export const fetchGoogle: any = createAsyncThunk(
+  "api/fetchGoogle",
+  async () => {
+    const { data } = await axios.post("/api/google");
+    return data;
+  }
+);
+
 // export const fetchAuthMe: any = createAsyncThunk(
 //   "auth/fetchAuthMe",
 //   async (value: any) => {
@@ -100,6 +108,18 @@ export const authSlice = createSlice({
       state.status = "error";
     },
     //////
+    // [fetchGoogle.pending]: (state) => {
+    //   state.data = null;
+    //   state.status = "loading";
+    // },
+    // [fetchGoogle.fulfilled]: (state, action) => {
+    //   state.data = action.payload;
+    //   state.status = "loaded";
+    // },
+    // [fetchGoogle.rejected]: (state) => {
+    //   state.data = null;
+    //   state.status = "error";
+    // },
   },
 });
 

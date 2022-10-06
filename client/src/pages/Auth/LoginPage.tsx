@@ -11,7 +11,7 @@ import { useCustomSelector } from "../../hooks/store";
 
 import "./AuthPage.module.scss";
 import { selectAuthData } from "../../redux/selectors";
-import { fetchLogin } from "../../redux/slices/authSlice";
+import { fetchGoogle, fetchLogin } from "../../redux/slices/authSlice";
 
 export const LoginPage: FC = () => {
   const isAuth = Boolean(useCustomSelector(selectAuthData).data);
@@ -43,6 +43,11 @@ export const LoginPage: FC = () => {
 
   if (isAuth) {
     return <Navigate to="/" />;
+  }
+
+  const google = async () => {
+    // return await dispatch(fetchGoogle());
+    window.open("http://localhost:4400/api/google", "_self")
   }
 
   return (
@@ -85,6 +90,7 @@ export const LoginPage: FC = () => {
           Создать
         </Button>
       </Link>
+      <Button onClick={google}>google</Button>
     </Paper>
   );
 };
