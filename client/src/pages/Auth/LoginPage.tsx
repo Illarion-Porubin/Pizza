@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
@@ -15,7 +15,6 @@ import { fetchGoogle, fetchLogin } from "../../redux/slices/authSlice";
 
 export const LoginPage: FC = () => {
   const isAuth = Boolean(useCustomSelector(selectAuthData).data);
-
   const dispatch = useDispatch();
   const {
     register,
@@ -31,13 +30,13 @@ export const LoginPage: FC = () => {
 
   const onSubmit = async (values: any) => {
     const data = await dispatch(fetchLogin(values));
-    
+    console.log(data)
     if (!data.payload) {
       alert("Не удалось авторизоваться");
     }
 
-    if ("token" in data.payload) {
-      window.localStorage.setItem("token", data.payload.token);
+    if ("accessToken" in data.payload) {
+      window.localStorage.setItem("token", data.payload.accessToken);
     }
   };
 
@@ -45,10 +44,18 @@ export const LoginPage: FC = () => {
     return <Navigate to="/" />;
   }
 
+  // useEffect(() => {
+
+  // }, [])
+
+
+
   const google = async () => {
     // return await dispatch(fetchGoogle());
     window.open("http://localhost:4400/api/google", "_self")
   }
+
+  
 
   return (
     <Paper classes={{ root: s.root }}>

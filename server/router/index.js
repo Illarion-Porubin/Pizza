@@ -54,6 +54,7 @@ router.post("/register", userController.registration);
 router.get("/activate/:link", userController.activate);
 router.get("/refresh", userController.refresh);
 router.get("/users", authMiddleware, userController.getUsers);
+router.get('/auth/me', userController.getMe);
 ///////////////pizza/////////////
 router.get("/pizzas", pizzaController.getPizzas);
 router.get("/pizzas/:id", pizzaController.categoryPizzas);

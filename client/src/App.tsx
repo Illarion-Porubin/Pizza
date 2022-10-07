@@ -7,26 +7,27 @@ import { RegistrationPage } from "./pages/Auth/RegistrationPage";
 import { LoginPage } from "./pages/Auth/LoginPage";
 
 import "./scss/components/_all.scss";
-// import { useDispatch } from "react-redux";
-// import { useEffect } from "react";
-// import { fetchAuthMe } from "./redux/slices/authSlice";
-import { useCustomSelector } from "./hooks/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchAuthMe } from "./redux/slices/authSlice";
+// import { useCustomSelector } from "./hooks/store";
 import { selectAuthData } from "./redux/selectors";
 
-function App() {
-  // const dispatch = useDispatch()
-  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
-  const isAuth = useCustomSelector(selectAuthData);
 
-  console.log(isAuth.data)
+function App() {
+  const dispatch = useDispatch()
+  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+  const isAuth = useSelector(selectAuthData).data;
+
+  console.log(isAuth, 'isAuth')
 
   // useEffect(() => {
   //   dispatch(fetchAuthMe(JSON.stringify({userId: isAuth.data?._id})))
   // }, [])
   
-  // useEffect(() => {
-  //   dispatch(fetchAuthMe())
-  // }, [])
+  useEffect(() => {
+    dispatch(fetchAuthMe())
+  }, [])
 
   return (
     <>
