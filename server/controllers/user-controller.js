@@ -24,6 +24,7 @@ class UserController {
   }
 
   async login(req, res, next) {
+    console.log(req.body)
     try {
       const { email, password } = req.body;
       const userData = await userService.login(email, password);
@@ -83,7 +84,8 @@ class UserController {
 
   async getMe(req, res, next) {
     try {
-      const me = await userService.getMe(req, res);
+      const me = await userService.me(req, res);
+      console.log(me, 'getMe')
       return res.json(me);
     } catch (e) {
       next(e);

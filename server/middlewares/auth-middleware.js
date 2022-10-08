@@ -9,11 +9,14 @@ module.exports = function (req, res, next) {
         }
 
         const accessToken = authorizationHeader.split(' ')[1];
+
         if (!accessToken) {
             return next(ApiError.UnauthorizedError());
         }
 
         const userData = tokenService.validateAccessToken(accessToken);
+        console.log(userData, 'userData')
+
         if (!userData) {
             return next(ApiError.UnauthorizedError());
         }

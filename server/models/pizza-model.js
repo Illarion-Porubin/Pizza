@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const PizzaModel = new Schema(
+const PizzaSchema= new Schema(
   {
     imageUrl: {
       type: String,
@@ -46,4 +46,4 @@ const PizzaModel = new Schema(
   }
 );
 
-module.exports = model("Pizza", PizzaModel);
+module.exports = model("Pizza", PizzaSchema);

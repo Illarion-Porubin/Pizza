@@ -49,6 +49,7 @@ class UserService {
     if (!user) {
       throw ApiError.BadRequest("Пользователь с таким email не найден");
     }
+
     const isPassEquals = await bcrypt.compare(password, user.password);
     if (!isPassEquals) {
       throw ApiError.BadRequest("Неверный пароль");
@@ -88,8 +89,10 @@ class UserService {
   }
 
   async me(req, res) {
+    // console.log(req.userId, 'req.userId')
     try {
       const user = await UserSchema.findById(req.userId);
+      console.log(user, `me`)
       if (!user) {
         return res.status(404).json({
           message: `пользователь не найден`,
@@ -98,9 +101,11 @@ class UserService {
 
       const { passwordHash, ...userData } = user._doc;
 
-      res.json({
-        ...userData,
-      });
+      // res.json({
+      //   ...userData,
+      // });
+      // return userData
+      return {...userData}
     } catch (err) {
       console.log("Не смог найти пользователя");
       res.status(500).json(err);

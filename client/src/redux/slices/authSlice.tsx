@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
+// import AuthService from "../../services/AuthService";
+// import { IUser } from "../../models/IUser";
 
 export const fetchRegister: any = createAsyncThunk(
   "api/fetchRegister",
@@ -9,9 +11,9 @@ export const fetchRegister: any = createAsyncThunk(
   }
 );
 
-export const fetchLogin: any = createAsyncThunk(
-  "api/fetchLogin",
-  async (params: any) => {
+export const fetchLogin: any = createAsyncThunk("api/fetchLogin",
+  async (params: any) =>
+  {
     const { data } = await axios.post("/api/login", params);
     return data;
   }
@@ -25,6 +27,17 @@ export const fetchGoogle: any = createAsyncThunk(
   }
 );
 
+// export const AuthLogin = async (params: any) => {
+//   try {
+//       const response = await AuthService.login(params.email, params.password);
+//       console.log(response)
+//       localStorage.setItem('token', response.data.accessToken);
+//       console.log(response.data.user)
+//   } catch (e: any) {
+//       console.log(e.response?.data?.message);
+//   }
+// }
+
 // export const fetchAuthMe: any = createAsyncThunk(
 //   "auth/fetchAuthMe",
 //   async (value: any) => {
@@ -33,11 +46,13 @@ export const fetchGoogle: any = createAsyncThunk(
 //   }
 // );
 
-export const fetchAuthMe: any = createAsyncThunk('api/fetchAuthMe', async () => {
-  const { data } = await axios.get('/api/me')
-  return data;
-})
-
+export const fetchAuthMe: any = createAsyncThunk(
+  "api/fetchAuthMe",
+  async () => {
+    const { data } = await axios.get("/api/me");
+    return data;
+  }
+);
 
 type DataType = {
   admin: false;
@@ -46,11 +61,11 @@ type DataType = {
   name: null | string;
   token: null | string;
   _id: null | string;
-}
+};
 
 type AuthState = {
-  data?: null | DataType,
-  status: string
+  data?: null | DataType;
+  status: string;
 };
 
 //popular new

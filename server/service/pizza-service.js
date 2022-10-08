@@ -1,9 +1,9 @@
-const PizzaModel = require("../models/pizza-model");
+const PizzaSchema = require("../models/pizza-model");
 
 class PizzaService {
   async getAllPizzas(page) {
     const perPage = 4;
-    const pizzas = await PizzaModel.find()
+    const pizzas = await PizzaSchema.find()
       .skip(page * perPage)
       .limit(perPage);
     return pizzas;
@@ -11,31 +11,31 @@ class PizzaService {
 
   // async create(page) {
   //     const perPage = 4;
-  //     const pizzas = await PizzaModel.find().skip(page * perPage).limit(perPage);
+  //     const pizzas = await PizzaSchema.find().skip(page * perPage).limit(perPage);
   //     return pizzas;
   // }
 
   // async g(page) {
   //     const perPage = 4;
-  //     const pizzas = await PizzaModel.find().skip(page * perPage).limit(perPage);
+  //     const pizzas = await PizzaSchema.find().skip(page * perPage).limit(perPage);
   //     return pizzas;
   // }
 
   // async g(page) {
   //     const perPage = 4;
-  //     const pizzas = await PizzaModel.find().skip(page * perPage).limit(perPage);
+  //     const pizzas = await PizzaSchema.find().skip(page * perPage).limit(perPage);
   //     return pizzas;
   // }
 
   // async g(page) {
   //     const perPage = 4;
-  //     const pizzas = await PizzaModel.find().skip(page * perPage).limit(perPage);
+  //     const pizzas = await PizzaSchema.find().skip(page * perPage).limit(perPage);
   //     return pizzas;
   // }
 
   // async g(page) {
   //     const perPage = 4;
-  //     const pizzas = await PizzaModel.find().skip(page * perPage).limit(perPage);
+  //     const pizzas = await PizzaSchema.find().skip(page * perPage).limit(perPage);
   //     return pizzas;
   // }
 }

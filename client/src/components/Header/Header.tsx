@@ -28,6 +28,7 @@ export const Header = () => {
   const userLogout = () => {
     if(window.confirm(`Вы точно хотите выйти?`)){
       dispatch(authSlice.actions.logout())
+      window.localStorage.removeItem('token')
     }
   }
 

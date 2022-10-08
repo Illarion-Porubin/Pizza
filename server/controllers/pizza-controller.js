@@ -1,21 +1,20 @@
 // const PizzaService = require("../service/pizza-service");
 // const ApiError = require("../exceptions/api-error");
 const { validationResult } = require("express-validator");
-const PizzaModel = require("../models/pizza-model");
+const PizzaSchema = require("../models/pizza-model");
 const pizzaService = require("../service/pizza-service");
-const validations = require ("../validations/validations");
-
+const validations = require("../validations/validations");
 
 class PizzaController {
   //////////////////////Pizzas////////////////////////////////
   async getPizzas(req, res, next) {
     try {
       const page = req.query.p || 0;
-      const pizzas = await pizzaService.getAllPizzas(page)
+      const pizzas = await pizzaService.getAllPizzas(page);
       if (!pizzas) {
         return res.status(400).json("ошибка получения данных");
       }
-      const data = await PizzaModel.find();
+      const data = await PizzaSchema.find();
       const pages = Math.ceil(data.length / 4);
       res.json({
         pages,
@@ -27,16 +26,15 @@ class PizzaController {
     }
   }
 
-
-  async createPizza(req, res, ) {
+  async createPizza(req, res) {
     try {
       const errors = validationResult(req);
-      console.log(req)
+      console.log(req);
       if (!errors.isEmpty()) {
         res.status(400).json(errors.array());
       }
-  
-      const doc = new PizzaModel({
+
+      const doc = new PizzaSchema({
         imageUrl: req.body.imageUrl,
         name: req.body.name,
         types: req.body.types,
@@ -47,9 +45,9 @@ class PizzaController {
         new: req.body.new,
         popular: req.body.popular,
       });
-  
+
       const pizza = await doc.save();
-  
+
       res.json(pizza);
     } catch (error) {
       console.log(error);
@@ -60,11 +58,11 @@ class PizzaController {
   async categoryPizzas(req, res, next) {
     try {
       const category = req.params.id;
-      const pizzas = await PizzaModel.find({ category });
+      const pizzas = await PizzaSchema.find({ category });
       if (!pizzas) {
         return res.status(400).json("ошибка получения данных");
       }
-      const data = await PizzaModel.find();
+      const data = await PizzaSchema.find();
       const pages = Math.ceil(data.length / 4);
       res.json({
         pages,
@@ -82,11 +80,11 @@ class PizzaController {
       const sort = req.params.value.slice(-4) === `less` ? -1 : 1;
       const filt = req.params.value.replace(req.params.value.slice(-4), "");
       const value = { [filt]: sort };
-      const pizzas = await PizzaModel.find().sort(value);
+      const pizzas = await PizzaSchema.find().sort(value);
       if (!pizzas) {
         return res.status(400).json("ошибка получения данных");
       }
-      const data = await PizzaModel.find();
+      const data = await PizzaSchema.find();
       const pages = Math.ceil(data.length / 4);
       res.json({
         pages,
@@ -101,13 +99,13 @@ class PizzaController {
   async search(req, res) {
     try {
       const value = req.params.value;
-      const pizzas = await PizzaModel.find({
+      const pizzas = await PizzaSchema.find({
         name: { $regex: value, $options: "i" },
       });
       if (!pizzas) {
         return res.status(400).json("ошибка получения данных");
       }
-      const data = await PizzaModel.find();
+      const data = await PizzaSchema.find();
       const pages = Math.ceil(data.length / 4);
       res.json({
         pages,

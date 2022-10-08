@@ -12,6 +12,7 @@ import { useCustomSelector } from "../../hooks/store";
 import "./AuthPage.module.scss";
 import { selectAuthData } from "../../redux/selectors";
 import { fetchGoogle, fetchLogin } from "../../redux/slices/authSlice";
+import { authSlice } from "../../redux/slices/authSlice";
 
 export const LoginPage: FC = () => {
   const isAuth = Boolean(useCustomSelector(selectAuthData).data);
@@ -30,7 +31,7 @@ export const LoginPage: FC = () => {
 
   const onSubmit = async (values: any) => {
     const data = await dispatch(fetchLogin(values));
-    console.log(data)
+    console.log(data.payload, 'values')
     if (!data.payload) {
       alert("Не удалось авторизоваться");
     }
