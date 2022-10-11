@@ -13,16 +13,17 @@ import { fetchAuthMe } from "./redux/slices/authSlice";
 import { useCustomSelector } from "./hooks/store";
 import { selectAuthData } from "./redux/selectors";
 import { useDispatch } from "react-redux";
+import { ConfirmPage } from "./pages/ConfirmPage";
 
 
 function App() {
   const dispatch = useDispatch()
-  const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
   console.log(useCustomSelector(selectAuthData).data, 'isAuth')
 
   useEffect(() => {
     dispatch(fetchAuthMe())
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -32,6 +33,7 @@ function App() {
           <div className="container">
             <Routes>
               <Route path="/" element={<HomePage/>}/>
+              <Route path="/confirm" element={<ConfirmPage/>}/>
               <Route path="/regist" element={<RegistrationPage/>}/>
               <Route path="/login" element={<LoginPage/>}/>
               <Route path="/cart" element={<CartPage/>}/>

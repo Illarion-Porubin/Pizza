@@ -23,13 +23,13 @@ const initialState: CartState = {
   isLoading: false,
 };
 
-localStorage.setItem("state", JSON.stringify(initialState))
+// localStorage.setItem("state", JSON.stringify(initialState))
 
-let stateCart = JSON.parse(localStorage.getItem("state") || "");
+// let stateCart = JSON.parse(localStorage.getItem("state") || "");
 
 export const cartSlice = createSlice({
   name: "cart",
-  initialState: stateCart,
+  initialState,
   reducers: {
     addItem(state, action: any) {
       state.items.push(action.payload);

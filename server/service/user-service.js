@@ -6,6 +6,9 @@ const tokenService = require("./token-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
 
+
+
+///////////////////////////////
 class UserService {
   async registration(email, password, name) {
     const candidate = await UserSchema.findOne({ email });
@@ -30,8 +33,8 @@ class UserService {
 
     const userDto = new UserDto(user); // id, email, isActivated
     const tokens = tokenService.generateTokens({ ...userDto });
-    await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
+    await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
 
@@ -56,11 +59,31 @@ class UserService {
     }
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
-
+    
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
-    return { ...tokens, user: userDto };
+    // return { ...tokens, user: userDto }; // токены и userDto;
+    const { ...userData } = user._doc;
+    return { ...userData, ...tokens};
   }
 
+  async me(req, res) {
+    try {
+      const user = await UserSchema.findById(req.userId);
+      if (!user) {
+        return res.status(404).json({
+          message: `пользователь не найден`,
+        });
+      }
+
+      const { passwordHash, ...userData } = user._doc;
+      
+      return {...userData}
+    } catch (err) {
+      console.log("Не смог найти пользователя");
+      res.status(500).json(err);
+    }
+  }
+///////////////////////////////
   async logout(refreshToken) {
     const token = await tokenService.removeToken(refreshToken);
     return token;
@@ -86,30 +109,6 @@ class UserService {
   async getAllUsers() {
     const users = await UserSchema.find();
     return users;
-  }
-
-  async me(req, res) {
-    // console.log(req.userId, 'req.userId')
-    try {
-      const user = await UserSchema.findById(req.userId);
-      console.log(user, `me`)
-      if (!user) {
-        return res.status(404).json({
-          message: `пользователь не найден`,
-        });
-      }
-
-      const { passwordHash, ...userData } = user._doc;
-
-      // res.json({
-      //   ...userData,
-      // });
-      // return userData
-      return {...userData}
-    } catch (err) {
-      console.log("Не смог найти пользователя");
-      res.status(500).json(err);
-    }
   }
 }
 

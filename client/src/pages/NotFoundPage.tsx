@@ -1,5 +1,5 @@
 import React from 'react'
-import {NotFound} from "../components/NotFoundBlock/NotFound"
+import {NotFound} from "../components/NotFound/NotFoundBlock"
 
 export const NotFoundPage = () => {
   return (

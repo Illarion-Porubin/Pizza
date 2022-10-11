@@ -16,7 +16,8 @@ import s from "./AuthPage.module.scss";
 
 export const RegistrationPage = () => {
   const auth = useCustomSelector(selectAuthData);
-  const isAuth = Boolean(auth.data);
+  // const isAuth = Boolean(auth.data);
+  console.log(auth, 'regist')
 
   const dispatch = useDispatch();
   const {
@@ -25,8 +26,8 @@ export const RegistrationPage = () => {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      name: "Василий Пупкин",
-      email: "vasya@test.ru",
+      name: "Test User",
+      email: "porubin.lar@yandex.ru",
       password: "12345",
     },
     mode: "onChange",
@@ -43,8 +44,8 @@ export const RegistrationPage = () => {
     }
   };
 
-  if (isAuth) {
-    return <Navigate to="/login" />;
+  if (auth.data?.user.isActivated === false) {
+    return <Navigate to="/confirm" />;
   }
 
   return (

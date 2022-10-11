@@ -13,8 +13,11 @@ import "../../scss/components/_header.scss";
 // 3:04:00
 
 export const Header = () => {
-  const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+  const auth = useCustomSelector(selectAuthData);
+  console.log(auth, 'header')
   const cart = useCustomSelector(selectCartData)
+  const userAuth = auth.data?.isActivated;
   
   let totalPrice = cart.totalPrice;
   // cart.items.map((item: any) => item.price * item.count).forEach((obj: any) => {
@@ -50,9 +53,9 @@ export const Header = () => {
           <Search />
           <div className="header__cart">
             <Link to="/login" className="header__user-wrapp">
-              {isAuth ? (
+              {userAuth ? (
                 <Button onClick={() => userLogout()} className={s.userEnter}>Выйти</Button>
-              ) : (
+                ) : (
                 <Button className={s.userEnter}>Войти</Button>
               )}
             </Link>

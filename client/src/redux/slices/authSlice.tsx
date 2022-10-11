@@ -61,6 +61,8 @@ type DataType = {
   name: null | string;
   token: null | string;
   _id: null | string;
+  isActivated: boolean
+  user: any // data.user потом поправлю login\regist
 };
 
 type AuthState = {
