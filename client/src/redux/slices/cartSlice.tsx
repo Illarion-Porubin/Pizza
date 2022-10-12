@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { PizzaTypes } from "../../types/types";
 import axios from "../../axios";
+// import { PizzaTypes } from "../../types/types";
 
-// export const fetchAddPizzas: any = createAsyncThunk('pizzas/fetchAddPizzas', async (value: object) => {
-//   const {data} = await axios.post('/add', value={value})
-//   return data;
-// });
+export const fetchGetCart: any = createAsyncThunk('cart/fetchGetCart', async (id: any) => {
+  console.log(id, 'fetchGetCart')
+  const { data } = await axios.get('/api/userCart/' + id)
+  return data;
+});
 
 type CartState = {
   totalPrice: number;
@@ -24,7 +25,6 @@ const initialState: CartState = {
 };
 
 // localStorage.setItem("state", JSON.stringify(initialState))
-
 // let stateCart = JSON.parse(localStorage.getItem("state") || "");
 
 export const cartSlice = createSlice({
@@ -46,18 +46,18 @@ export const cartSlice = createSlice({
     },
   },
   extraReducers: {
-    // [fetchAddPizzas.pending]: (state) => {
-    //   state.items = [];
-    //   state.status = "loading";
-    // },
-    // [fetchAddPizzas.fulfilled]: (state, action) => {
-    //   state.items = action.payload;
-    //   state.status = "loaded";
-    // },
-    // [fetchAddPizzas.rejected]: (state) => {
-    //   state.items = [];
-    //   state.status = "error";
-    // },
+    [fetchGetCart.pending]: (state) => {
+      state.items = [];
+      state.status = "loading";
+    },
+    [fetchGetCart.fulfilled]: (state, action) => {
+      state.items = action.payload;
+      state.status = "loaded";
+    },
+    [fetchGetCart.rejected]: (state) => {
+      state.items = [];
+      state.status = "error";
+    },
   },
 });
 

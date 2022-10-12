@@ -14,15 +14,19 @@ import { useCustomSelector } from "./hooks/store";
 import { selectAuthData } from "./redux/selectors";
 import { useDispatch } from "react-redux";
 import { ConfirmPage } from "./pages/ConfirmPage";
+import { fetchGetCart } from "./redux/slices/cartSlice";
 
 
 function App() {
   const dispatch = useDispatch()
   // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
-  console.log(useCustomSelector(selectAuthData).data, 'isAuth')
+  const userId = (useCustomSelector(selectAuthData).data?._id)
 
   useEffect(() => {
     dispatch(fetchAuthMe())
+    // dispatch(fetchGetCart(String(userId))) 
+    console.log(userId)
+
   }, [dispatch])
 
   return (

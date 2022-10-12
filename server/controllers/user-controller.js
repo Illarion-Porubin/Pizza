@@ -85,7 +85,7 @@ class UserController {
   async getMe(req, res, next) {
     try {
       const me = await userService.me(req, res);
-      console.log(me, 'getMe')
+      // console.log(me, 'getMe')
       return res.json(me);
     } catch (e) {
       next(e);

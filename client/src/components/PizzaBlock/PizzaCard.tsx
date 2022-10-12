@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
-import { selectCartData } from "../../redux/selectors";
+import { selectAuthData, selectCartData } from "../../redux/selectors";
+import { fetchOrder } from "../../redux/slices/authSlice";
 import { cartSlice } from "../../redux/slices/cartSlice";
 // import { fetchAddPizzas,  } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
@@ -18,16 +19,18 @@ export const PizzaCards: FC<Props> = ({ data }) => {
   const [pizzaCount, setPizzaCount] = useState<number>(0);
   const dispatch = useDispatch()
 
+  const id = useCustomSelector(selectAuthData).data?._id
 
   const orderPizza = (data: PizzaTypes) => {
     if(pizzaCount) {
       const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount}
-      dispatch(cartSlice.actions.addItem(newOrder))
+      console.log(id)
+      dispatch(fetchOrder({newOrder, userId: id} ))
     }
   }
 
   useEffect(() => {
-    console.log(cart.items, 'cart')
+    console.log(cart, 'cart')
   }, [cart])
 
   return (

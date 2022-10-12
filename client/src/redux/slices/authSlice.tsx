@@ -27,29 +27,19 @@ export const fetchGoogle: any = createAsyncThunk(
   }
 );
 
-// export const AuthLogin = async (params: any) => {
-//   try {
-//       const response = await AuthService.login(params.email, params.password);
-//       console.log(response)
-//       localStorage.setItem('token', response.data.accessToken);
-//       console.log(response.data.user)
-//   } catch (e: any) {
-//       console.log(e.response?.data?.message);
-//   }
-// }
-
-// export const fetchAuthMe: any = createAsyncThunk(
-//   "auth/fetchAuthMe",
-//   async (value: any) => {
-//     const { data } = await axios.get("/auth/me/" + value);
-//     return data;
-//   }
-// );
-
 export const fetchAuthMe: any = createAsyncThunk(
   "api/fetchAuthMe",
   async () => {
     const { data } = await axios.get("/api/me");
+    return data;
+  }
+);
+
+export const fetchOrder: any = createAsyncThunk(
+  "api/fetchOrder",
+  async (params: any) =>
+  {
+    const { data } = await axios.post("/api/order", params);
     return data;
   }
 );

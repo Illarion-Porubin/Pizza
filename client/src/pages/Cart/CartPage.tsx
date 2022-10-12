@@ -24,7 +24,7 @@ export const CartPage: FC = () => {
     totalPrice += obj
   })
 
-  console.log(cart, 'pizzaCart')
+  console.log(cart.items, 'pizzaCart')
 
   const onClickClear = () => {
     if (window.confirm('Очистить корзину?')) {
@@ -32,9 +32,9 @@ export const CartPage: FC = () => {
     }
   };
 
-  if (!totalPrice) {
-    return <CartEmptyPage />;
-  }
+  // if (!totalPrice) {
+  //   return <CartEmptyPage />;
+  // }
 
 
   return (

@@ -25,6 +25,7 @@ export const CartItem: React.FC<any> = ({
   count,
   imageUrl,
 }) => {
+  console.log(count)
   const dispatch = useDispatch();
 //   const onClickPlus = () => {
 //     dispatch(

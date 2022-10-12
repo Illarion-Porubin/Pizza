@@ -5,6 +5,7 @@ const router = new Router();
 const { body } = require("express-validator");
 const authMiddleware = require("../middlewares/auth-middleware");
 const pizzaController = require("../controllers/pizza-controller");
+const cartController = require("../controllers/cart-controller");
 const validations = require("../validations/validations");
 const passport = require("passport");
 const checkAuth = require("./checkAuth")
@@ -57,6 +58,9 @@ router.get("/activate/:link", userController.activate);
 router.get("/refresh", userController.refresh);
 router.get("/users", authMiddleware, userController.getUsers);
 router.get('/me', checkAuth.check, userController.getMe);
+///////////////cart//////////////
+router.post("/order", cartController.order);
+router.get("/userCart/:id", cartController.userCart);
 ///////////////pizza/////////////
 router.get("/pizzas", pizzaController.getPizzas);
 router.get("/pizzas/:id", pizzaController.categoryPizzas);
