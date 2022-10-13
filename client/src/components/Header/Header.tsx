@@ -15,11 +15,17 @@ import "../../scss/components/_header.scss";
 export const Header = () => {
   // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
   const auth = useCustomSelector(selectAuthData);
-  console.log(auth, 'header')
   const cart = useCustomSelector(selectCartData)
   const userAuth = auth.data?.isActivated;
+
+  console.log(cart, 'cart')
+
+  let totalPrice = 0
+  let totalCount = 0
+  cart.items.forEach((item: any) => totalCount += +item.count)
+  cart.items.forEach((item: any) => totalPrice += +item.count * +item.price)
+
   
-  let totalPrice = cart.totalPrice;
   // cart.items.map((item: any) => item.price * item.count).forEach((obj: any) => {
   //   totalPrice += obj
   // })
@@ -92,7 +98,7 @@ export const Header = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>{cart.items.length}</span>
+                <span>{totalCount }</span>
               </div>
             </Link>
           </div>

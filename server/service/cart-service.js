@@ -8,18 +8,16 @@ class CartService {
 
   async newOrder(userId, newOrder) {
     const userOrder = await CartSchema.find({ name: newOrder.name });
-    if (userOrder) {
-        const order = await CartSchema.updateOne({ name: newOrder.name }, { 'count': newOrder.count});
-        return order
+    if(!userOrder.length){
+      const newUserOrder = await CartSchema.create({
+        ...newOrder,
+        user: userId,
+      });
+      const userCart = await newUserOrder.save();
+      return userCart;
     }
-
-    const newUserOrder = new CartSchema({
-      ...newOrder,
-      user: userId,
-    });
-
-    const userCart = await newUserOrder.save();
-    return userCart;
+    const order = await CartSchema.updateOne({ name: newOrder.name }, { 'count': newOrder.count});
+    return order
   }
 }
 

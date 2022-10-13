@@ -17,10 +17,10 @@ type CartState = {
 };
 
 const initialState: CartState = {
-  totalPrice: 0,
-  totalCount: 0,
-  status: 'loading',
   items: [],
+  totalPrice: 0,
+  totalCount: 0, /////////////////////////////////////////////////////////////////////////////////////
+  status: 'loading',
   isLoading: false,
 };
 

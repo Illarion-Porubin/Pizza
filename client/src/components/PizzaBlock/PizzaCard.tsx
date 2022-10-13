@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { fetchOrder } from "../../redux/slices/authSlice";
-import { cartSlice } from "../../redux/slices/cartSlice";
+import { cartSlice, fetchGetCart } from "../../redux/slices/cartSlice";
 // import { fetchAddPizzas,  } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
 import s from "./PizzaCard.module.scss";
@@ -14,9 +14,13 @@ interface Props {
 
 export const PizzaCards: FC<Props> = ({ data }) => {
   const cart = useCustomSelector(selectCartData);
+
   const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
   const [pizzaCount, setPizzaCount] = useState<number>(0);
+
+  const auth = useCustomSelector(selectAuthData);
+
   const dispatch = useDispatch()
 
   const id = useCustomSelector(selectAuthData).data?._id
@@ -30,8 +34,10 @@ export const PizzaCards: FC<Props> = ({ data }) => {
   }
 
   useEffect(() => {
-    console.log(cart, 'cart')
-  }, [cart])
+    // dispatch(fetchGetCart(auth.data?._id)) 
+    dispatch(fetchGetCart('634565bcabd56b3e3a8946f9')) 
+
+  }, [dispatch, auth])
 
   return (
     <div className="pizza-block">

@@ -5,28 +5,19 @@ import { HomePage } from "./pages/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { RegistrationPage } from "./pages/Auth/RegistrationPage";
 import { LoginPage } from "./pages/Auth/LoginPage";
-
-import "./scss/components/_all.scss";
-// import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchAuthMe } from "./redux/slices/authSlice";
-import { useCustomSelector } from "./hooks/store";
-import { selectAuthData } from "./redux/selectors";
 import { useDispatch } from "react-redux";
 import { ConfirmPage } from "./pages/ConfirmPage";
-import { fetchGetCart } from "./redux/slices/cartSlice";
+import "./scss/components/_all.scss";
+
 
 
 function App() {
   const dispatch = useDispatch()
-  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
-  const userId = (useCustomSelector(selectAuthData).data?._id)
 
   useEffect(() => {
     dispatch(fetchAuthMe())
-    // dispatch(fetchGetCart(String(userId))) 
-    console.log(userId)
-
   }, [dispatch])
 
   return (
