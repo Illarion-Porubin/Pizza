@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { cartSlice }  from '../redux/slices/cartSlice';
 import { PizzaTypes } from "../../src/types/types";
 // import { addItem, minusItem, removeItem } from '../redux/cart/slice';
 // import { CartItem as CartItemType } from '../redux/cart/types';
@@ -25,7 +26,7 @@ export const CartItem: React.FC<any> = ({
   count,
   imageUrl,
 }) => {
-  console.log(count)
+  console.log(_id)
   const dispatch = useDispatch();
 //   const onClickPlus = () => {
 //     dispatch(
@@ -35,15 +36,17 @@ export const CartItem: React.FC<any> = ({
 //     );
 //   };
 
-//   const onClickMinus = () => {
-//     dispatch(minusItem(id));
-//   };
+  const onClickMinus = () => {
+    dispatch(cartSlice.actions.minusOrder(_id));
+  };
 
-//   const onClickRemove = () => {
-//     if (window.confirm('Вы действительно хотите удалить товар?')) {
-//       dispatch(removeItem(id));
-//     }
-//   };
+  const onClickPlus = () => {
+    dispatch(cartSlice.actions.plusOrder(_id));
+  };
+
+  const onClickRemove = () => {
+      dispatch(cartSlice.actions.removeItem(_id));
+  };
 
   return (
     <div className="cart__item">
@@ -59,7 +62,7 @@ export const CartItem: React.FC<any> = ({
       <div className="cart__item-count">
         <button
           disabled={count === 1}
-          // onClick={onClickMinus}
+          onClick={onClickMinus}
           className="button button--outline button--circle cart__item-count-minus">
           <svg
             width="10"
@@ -77,7 +80,7 @@ export const CartItem: React.FC<any> = ({
         </button>
         <b>{count}</b>
         <button
-        //   onClick={onClickPlus}
+          onClick={onClickPlus}
           className="button button--outline button--circle cart__item-count-plus">
           <svg
             width="10"
@@ -99,7 +102,7 @@ export const CartItem: React.FC<any> = ({
       </div>
       <div className="cart__item-remove">
         <div 
-        // onClick={onClickRemove} 
+        onClick={onClickRemove} 
         className="button button--outline button--circle"
         >
           <svg

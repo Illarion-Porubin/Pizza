@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useCustomSelector } from '../../hooks/store';
 import { selectCartData } from '../../redux/selectors';
 import { CartItem } from '../../components/CartItem';
-import { cartSlice } from '../../redux/slices/cartSlice';
+import { cartSlice, fetchOrder } from '../../redux/slices/cartSlice';
 import { CartEmptyPage } from '../CartEmptyPage';
 
 
@@ -24,13 +24,17 @@ export const CartPage: FC = () => {
     totalPrice += obj
   })
 
-  console.log(cart.items, 'pizzaCart')
+  console.log(cart.items, 'pizzaCard')
 
   const onClickClear = () => {
     if (window.confirm('Очистить корзину?')) {
       dispatch(cartSlice.actions.clearItems());
     }
   };
+
+  const createOrder = () => {
+    dispatch(fetchOrder(cart.items))
+  }
 
   // if (!totalPrice) {
   //   return <CartEmptyPage />;
@@ -140,8 +144,8 @@ export const CartPage: FC = () => {
 
               <span>Вернуться назад</span>
             </Link>
-            <div className="button pay-btn">
-              <span>Оплатить сейчас</span>
+            <div className="button pay-btn" onClick={createOrder}>
+              <span>Сделать заказ</span>
             </div>
           </div>
         </div>

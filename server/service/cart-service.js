@@ -7,17 +7,31 @@ class CartService {
   }
 
   async newOrder(userId, newOrder) {
-    const userOrder = await CartSchema.find({ name: newOrder.name });
-    if(!userOrder.length){
-      const newUserOrder = await CartSchema.create({
+    // const userOrder = await CartSchema.find({ name: newOrder.name });
+    // if(!userOrder.length){
+    //   const newUserOrder = await CartSchema.create({
+    //     user: userId,
+    //     order: [
+    //       {...newOrder}
+    //     ]
+    //   });
+    //   const userCart = await newUserOrder.save();
+    //   return userCart;
+    // }
+    // const userOrder = 
+    const newUserOrder = await CartSchema.create({
+      user: userId,
+      totlCount: newOrder.reduce((sum, current) => sum + current.count, 0),
+      totlPrice: newOrder.reduce((sum, current) => sum + (current.count * current.price), 0),
+      order: [
         ...newOrder,
-        user: userId,
-      });
-      const userCart = await newUserOrder.save();
-      return userCart;
-    }
-    const order = await CartSchema.updateOne({ name: newOrder.name }, { 'count': newOrder.count});
-    return order
+      ]
+    });
+    const userCart = await newUserOrder.save();
+    return userCart;
+
+    // const order = await CartSchema.updateOne({ name: newOrder.name }, { 'count': newOrder.count});
+    // return order
   }
 }
 

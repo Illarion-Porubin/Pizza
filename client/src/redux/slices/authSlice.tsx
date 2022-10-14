@@ -35,15 +35,6 @@ export const fetchAuthMe: any = createAsyncThunk(
   }
 );
 
-export const fetchOrder: any = createAsyncThunk(
-  "api/fetchOrder",
-  async (params: any) =>
-  {
-    const { data } = await axios.post("/api/order", params);
-    return data;
-  }
-);
-
 type DataType = {
   admin: false;
   cart: [];

@@ -2,11 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
 // import { PizzaTypes } from "../../types/types";
 
-export const fetchGetCart: any = createAsyncThunk('cart/fetchGetCart', async (id: any) => {
-  console.log(id, 'fetchGetCart')
-  const { data } = await axios.get('/api/userCart/' + id)
-  return data;
-});
+export const fetchOrder: any = createAsyncThunk(
+  "api/fetchOrder",
+  async (params: any) =>
+  {
+    const { data } = await axios.post("/api/order", params);
+    return data;
+  }
+);
 
 type CartState = {
   totalPrice: number;
@@ -16,6 +19,9 @@ type CartState = {
   status: string;
 };
 
+// const stateLocal: any = localStorage.getItem("persist:root")
+// const mainState = JSON.parse(stateLocal).cartSliceReducer;
+
 const initialState: CartState = {
   items: [],
   totalPrice: 0,
@@ -24,108 +30,38 @@ const initialState: CartState = {
   isLoading: false,
 };
 
-// localStorage.setItem("state", JSON.stringify(initialState))
-// let stateCart = JSON.parse(localStorage.getItem("state") || "");
-
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItem(state, action: any) {
-      state.items.push(action.payload);
-      state.totalCount = state.items.length;
-      state.totalPrice = state.items.reduce((sum: number, obj: any) => {
-        return +obj.price + +sum
-      }, 0);
+    addOrder(state, action: any) { 
+      !state.items.length 
+      ?state.items.push(action.payload) 
+      :state.items.find((item: any) => item._id === action.payload._id 
+        ? item.count = item.count += action.payload.count 
+        : state.items.push(action.payload))
     },
+    plusOrder(state, action: any) {
+      console.log(action.payload)
+      state.items.find((item: any) => item._id === action.payload
+      ? item.count += 1 
+      : null)
+    },
+    minusOrder(state, action: any) {
+      state.items.find((item: any) => item._id === action.payload
+      ? item.count -= 1 
+      : null)
+    },
+
     removeItem(state, action) {
-      state.items = state.items.filter((obj: any) => obj.id !== action.payload);
+      state.items = state.items.filter((obj: any) => obj._id !== action.payload);  
     },
     clearItems(state) {
       state.items = [];
     },
   },
-  extraReducers: {
-    [fetchGetCart.pending]: (state) => {
-      state.items = [];
-      state.status = "loading";
-    },
-    [fetchGetCart.fulfilled]: (state, action) => {
-      state.items = action.payload;
-      state.status = "loaded";
-    },
-    [fetchGetCart.rejected]: (state) => {
-      state.items = [];
-      state.status = "error";
-    },
-  },
 });
 
+
+
 export default cartSlice.reducer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- // {
-      //   category: "1",
-      //   imageUrl: "https://cdn.dodostatic.net/static/Img/Products/a02280d5dd9342f7925538752be9b521_292x292.jpeg",
-      //   name: "Четыре сезона",
-      //   price: "525",
-      //   rating: "8",
-      //   sizes: '26',
-      //   types: 'традиционное',
-      //   count: 2,
-      //   _id: '630df0304af71ef7546de9d7'
-      // },
-      // {
-      //   category: "1",
-      //   imageUrl: "https://cdn.dodostatic.net/static/Img/Products/a02280d5dd9342f7925538752be9b521_292x292.jpeg",
-      //   name: "Четыре сезона",
-      //   price: "525",
-      //   rating: "8",
-      //   sizes: '40',
-      //   types: 'тонкое',
-      //   count: 1,
-      //   _id: '630df0304af71ef7546de9d6'
-      // },
-      // {
-      //   category: "1",
-      //   imageUrl: "https://cdn.dodostatic.net/static/Img/Products/5630c6ed3f394c7ba25e1ef79a67b7ee_292x292.jpeg",
-      //   name: "Ветчина и Сыр",
-      //   price: "480",
-      //   rating: "7",
-      //   sizes: '26',
-      //   types: 'традиционное',
-      //   count: 1,
-      //   _id: '630df04a4af71ef7546de9d9'
-      // },
-      // {
-      //   category: "1",
-      //   imageUrl: "https://cdn.dodostatic.net/static/Img/Products/5630c6ed3f394c7ba25e1ef79a67b7ee_292x292.jpeg",
-      //   name: "Ветчина и Сыр",
-      //   price: "480",
-      //   rating: "7",
-      //   sizes: '40',
-      //   types: 'тонкое',
-      //   count: 2,
-      //   _id: '630df04a4af71ef7546de9d8'
-      // },

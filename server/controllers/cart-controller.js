@@ -13,7 +13,7 @@ class CartController {
 
   async order(req, res, next) {
     try {
-      const userOrder = await cartService.newOrder(req.body.userId, req.body.newOrder)
+      const userOrder = await cartService.newOrder(req.body.userId, req.body)
       return userOrder
     } catch (e) {
       next(e);

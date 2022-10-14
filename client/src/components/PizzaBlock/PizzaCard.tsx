@@ -1,10 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
-import { selectAuthData, selectCartData } from "../../redux/selectors";
-import { fetchOrder } from "../../redux/slices/authSlice";
-import { cartSlice, fetchGetCart } from "../../redux/slices/cartSlice";
-// import { fetchAddPizzas,  } from "../../redux/slices/cartSlice";
+import { selectCartData } from "../../redux/selectors";
+import { cartSlice } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
 import s from "./PizzaCard.module.scss";
 
@@ -15,29 +13,26 @@ interface Props {
 export const PizzaCards: FC<Props> = ({ data }) => {
   const cart = useCustomSelector(selectCartData);
 
+  console.log(cart.items)
+
   const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
   const [pizzaCount, setPizzaCount] = useState<number>(0);
 
-  const auth = useCustomSelector(selectAuthData);
 
   const dispatch = useDispatch()
 
-  const id = useCustomSelector(selectAuthData).data?._id
 
   const orderPizza = (data: PizzaTypes) => {
     if(pizzaCount) {
       const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount}
-      console.log(id)
-      dispatch(fetchOrder({newOrder, userId: id} ))
+      dispatch(cartSlice.actions.addOrder(newOrder))
     }
   }
 
   useEffect(() => {
-    // dispatch(fetchGetCart(auth.data?._id)) 
-    dispatch(fetchGetCart('634565bcabd56b3e3a8946f9')) 
 
-  }, [dispatch, auth])
+  }, [dispatch])
 
   return (
     <div className="pizza-block">
