@@ -37,7 +37,7 @@ export const cartSlice = createSlice({
     addOrder(state, action: any) { 
       !state.items.length 
       ?state.items.push(action.payload) 
-      :state.items.find((item: any) => item._id === action.payload._id 
+      :state.items.find((item: any) => (item._id === action.payload._id && item.types === action.payload.types && item.sizes === action.payload.sizes)
         ? item.count = item.count += action.payload.count 
         : state.items.push(action.payload))
     },

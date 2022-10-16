@@ -19,6 +19,7 @@ class CartService {
     //   return userCart;
     // }
     // const userOrder = 
+    console.log(...newOrder)
     const newUserOrder = await CartSchema.create({
       user: userId,
       totlCount: newOrder.reduce((sum, current) => sum + current.count, 0),

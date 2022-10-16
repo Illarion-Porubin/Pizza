@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
 import { selectCartData } from "../../redux/selectors";
@@ -18,21 +18,24 @@ export const PizzaCards: FC<Props> = ({ data }) => {
   const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
   const [pizzaCount, setPizzaCount] = useState<number>(0);
+  const [indexSize, setIndexSize] = useState<number>(0)
+  const sizePrice = [0, 130, 255]
 
 
   const dispatch = useDispatch()
 
+  const changeSize = (size: any, i: any) => {
+    setActiveSize(size)
+    setIndexSize(i)
+  }
+
 
   const orderPizza = (data: PizzaTypes) => {
     if(pizzaCount) {
-      const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount}
+      const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount, price: +data.price + +sizePrice[indexSize]}
       dispatch(cartSlice.actions.addOrder(newOrder))
     }
   }
-
-  useEffect(() => {
-
-  }, [dispatch])
 
   return (
     <div className="pizza-block">
@@ -53,17 +56,17 @@ export const PizzaCards: FC<Props> = ({ data }) => {
         <ul>
           {data.sizes.map((sizes, index) => (
             <li
-              onClick={() => setActiveSize(sizes)}
+              onClick={() => changeSize(sizes, index)}
               className={activeSize === sizes ? "active" : ""}
               key={index}
             >
-              {sizes}
+              {sizes} см
             </li>
           ))}
         </ul>
       </div>
       <div className="pizza-block__bottom">
-        <div className="pizza-block__price">{data.price} ₽</div>
+        <div className="pizza-block__price">{+data.price + +sizePrice[indexSize]} ₽</div>
         <div className={s.pizzaBlockValue}>
           <button
             className={s.countValue}

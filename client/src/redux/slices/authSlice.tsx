@@ -37,7 +37,7 @@ export const fetchAuthMe: any = createAsyncThunk(
 
 type DataType = {
   admin: false;
-  cart: [];
+  cart: []; 
   email: null | string;
   name: null | string;
   token: null | string;

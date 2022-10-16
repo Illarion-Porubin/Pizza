@@ -114,7 +114,7 @@ export const CartPage: FC = () => {
         </div>
         <div className="content__items">
           {cart.items.map((item: any) => (
-            <CartItem key={item._id} {...item} />
+            <CartItem key={item._id + item.sizes + item.types} {...item} />
           ))}
         </div>
         <div className="cart__bottom">
