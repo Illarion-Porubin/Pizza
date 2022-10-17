@@ -1,29 +1,25 @@
-const { Schema, model, default: mongoose } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const CartSchema= new Schema(
+const CartSchema = new Schema(
   {
     // user: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: 'User',
+    //   unique: false,
     //   required: false,
     // },
-    totlCount: {
+    totolCount: {
       type: String,
       required: true,
       unique: false
     },
-    totlPrice: {
+    totolPrice: {
       type: String,
       required: true,
       unique: false
     },
     order: [
       {
-        // imageUrl: {
-        //   type: String,
-        //   required: true,
-        //   unique: false
-        // },
         name: {
           type: String,
           required: true,
@@ -44,6 +40,11 @@ const CartSchema= new Schema(
           required: true,
           unique: false
         },
+        pizessPrice: {
+          type: String,
+          required: true,
+          unique: false
+        },
         count: {
           type: String,
           required: true,
@@ -52,56 +53,6 @@ const CartSchema= new Schema(
      }
   ]
   },
-  {
-    timestamps: true,
-  }
 );
 
 module.exports = model("Cart", CartSchema);
-
-
-
-// order: [
-//   pizza = {
-    // imageUrl: {
-    //   type: String,
-    //   required: true,
-    // },
-    // name: {
-    //   type: String,
-    //   required: true,
-    // },
-    // types: {
-    //   type: [String],
-    //   required: true,
-    // },
-    // sizes: {
-    //   type: [String],
-    //   required: true,
-    // },
-    // price: {
-    //   type: String,
-    //   required: true,
-    // },
-    // category: {
-    //   type: String,
-    //   required: true,
-    // },
-    // rating: {
-    //   type: String,
-    //   required: true,
-    // },
-    // new: {
-    //   type: Boolean,
-    //   required: true,
-    // },
-    // popular: {
-    //   type: Boolean,
-    //   required: true,
-    // },
-    // count: {
-    //   type: String,
-    //   required: true
-    // }
-//   }
-// ], 

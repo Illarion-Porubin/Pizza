@@ -4,6 +4,8 @@ import { useCustomSelector } from "../../hooks/store";
 import { selectCartData } from "../../redux/selectors";
 import { cartSlice } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
+
+
 import s from "./PizzaCard.module.scss";
 
 interface Props {
@@ -13,7 +15,7 @@ interface Props {
 export const PizzaCards: FC<Props> = ({ data }) => {
   const cart = useCustomSelector(selectCartData);
 
-  console.log(cart.items)
+  // console.log(cart)
 
   const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
@@ -32,7 +34,14 @@ export const PizzaCards: FC<Props> = ({ data }) => {
 
   const orderPizza = (data: PizzaTypes) => {
     if(pizzaCount) {
-      const newOrder = {...data, sizes: activeSize, types: activeTypes, count: pizzaCount, price: +data.price + +sizePrice[indexSize]}
+      const newOrder = {
+        ...data, 
+        sizes: activeSize, 
+        types: activeTypes, 
+        count: pizzaCount, 
+        price: +data.price + +sizePrice[indexSize],
+        identity: data.name + activeTypes + indexSize
+      }
       dispatch(cartSlice.actions.addOrder(newOrder))
     }
   }

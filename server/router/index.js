@@ -60,7 +60,7 @@ router.get("/users", authMiddleware, userController.getUsers);
 router.get('/me', checkAuth.check, userController.getMe);
 ///////////////cart//////////////
 router.post("/order", cartController.order);
-router.get("/userCart/:id", cartController.userCart);
+// router.get("/userCart/:id", cartController.userCart);
 ///////////////pizza/////////////
 router.get("/pizzas", pizzaController.getPizzas);
 router.get("/pizzas/:id", pizzaController.categoryPizzas);

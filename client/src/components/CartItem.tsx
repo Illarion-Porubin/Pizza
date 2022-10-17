@@ -25,8 +25,9 @@ export const CartItem: React.FC<any> = ({
   price,
   count,
   imageUrl,
+  identity,
 }) => {
-  console.log(_id)
+  console.log(identity)
   const dispatch = useDispatch();
 //   const onClickPlus = () => {
 //     dispatch(
@@ -37,15 +38,15 @@ export const CartItem: React.FC<any> = ({
 //   };
 
   const onClickMinus = () => {
-    dispatch(cartSlice.actions.minusOrder(_id));
+    dispatch(cartSlice.actions.minusOrder(identity));
   };
 
   const onClickPlus = () => {
-    dispatch(cartSlice.actions.plusOrder(_id));
+    dispatch(cartSlice.actions.plusOrder(identity));
   };
 
   const onClickRemove = () => {
-      dispatch(cartSlice.actions.removeItem(_id));
+      dispatch(cartSlice.actions.removeItem(identity));
   };
 
   return (

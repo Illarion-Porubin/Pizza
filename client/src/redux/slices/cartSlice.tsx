@@ -35,33 +35,49 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addOrder(state, action: any) { 
-      !state.items.length 
-      ?state.items.push(action.payload) 
-      :state.items.find((item: any) => (item._id === action.payload._id && item.types === action.payload.types && item.sizes === action.payload.sizes)
-        ? item.count = item.count += action.payload.count 
-        : state.items.push(action.payload))
+      if(!state.items.length) {
+         state.items.push(action.payload)
+      }
+      else {
+        const check = state.items.find((item: any) => {
+          if(item.identity === action.payload.identity) {
+            return item 
+          }
+          return false
+        }) 
+        check ? check.count = check.count += action.payload.count : state.items.push(action.payload)
+      }
     },
     plusOrder(state, action: any) {
-      console.log(action.payload)
-      state.items.find((item: any) => item._id === action.payload
-      ? item.count += 1 
-      : null)
+      const check = state.items.find((item: any) => {
+        if(item.identity === action.payload) {
+          return item 
+        }
+        else {
+          return false
+        }
+      }) 
+      check.count++ 
     },
     minusOrder(state, action: any) {
-      state.items.find((item: any) => item._id === action.payload
-      ? item.count -= 1 
-      : null)
+      const check = state.items.find((item: any) => {
+        if(item.identity === action.payload) {
+          return item 
+        }
+        else {
+          return false
+        }
+      }) 
+      check.count-- 
     },
-
     removeItem(state, action) {
-      state.items = state.items.filter((obj: any) => obj._id !== action.payload);  
+      state.items = state.items.filter((item: any) => item.identity !== action.payload); 
     },
     clearItems(state) {
       state.items = [];
     },
   },
 });
-
 
 
 export default cartSlice.reducer;

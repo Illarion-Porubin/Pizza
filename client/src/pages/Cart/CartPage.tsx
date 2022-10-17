@@ -7,7 +7,7 @@ import { selectCartData } from '../../redux/selectors';
 import { CartItem } from '../../components/CartItem';
 import { cartSlice, fetchOrder } from '../../redux/slices/cartSlice';
 import { CartEmptyPage } from '../CartEmptyPage';
-
+import { v1 } from 'uuid'
 
 export const CartPage: FC = () => {
 
@@ -33,6 +33,7 @@ export const CartPage: FC = () => {
   };
 
   const createOrder = () => {
+    // console.log(cart.items)
     dispatch(fetchOrder(cart.items))
   }
 
@@ -114,7 +115,7 @@ export const CartPage: FC = () => {
         </div>
         <div className="content__items">
           {cart.items.map((item: any) => (
-            <CartItem key={item._id + item.sizes + item.types} {...item} />
+            <CartItem key={v1()} {...item} />
           ))}
         </div>
         <div className="cart__bottom">

@@ -1,5 +1,4 @@
 const UserSchema = require("../models/user-model");
-const CartSchema = require("../models/cart-model");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const mailService = require("./mail-service");
