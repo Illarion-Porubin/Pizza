@@ -8,14 +8,12 @@ import { LoginPage } from "./pages/Auth/LoginPage";
 import { useEffect } from "react";
 import { fetchAuthMe } from "./redux/slices/authSlice";
 import { useDispatch } from "react-redux";
-import { ConfirmPage } from "./pages/ConfirmPage";
 import "./scss/components/_all.scss";
 
 
 
 function App() {
   const dispatch = useDispatch()
-
   useEffect(() => {
     dispatch(fetchAuthMe())
   }, [dispatch])
@@ -28,7 +26,6 @@ function App() {
           <div className="container">
             <Routes>
               <Route path="/" element={<HomePage/>}/>
-              <Route path="/confirm" element={<ConfirmPage/>}/>
               <Route path="/regist" element={<RegistrationPage/>}/>
               <Route path="/login" element={<LoginPage/>}/>
               <Route path="/cart" element={<CartPage/>}/>

@@ -2,22 +2,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { cartSlice }  from '../redux/slices/cartSlice';
 import { PizzaTypes } from "../../src/types/types";
-// import { addItem, minusItem, removeItem } from '../redux/cart/slice';
-// import { CartItem as CartItemType } from '../redux/cart/types';
 
-// type CartItemProps = {
-//     _id: number;
-//     imageUrl: string;
-//     name: string;
-//     types: string[];
-//     sizes: number[];
-//     price: number;
-//     category: string;
-//     rating: number;
-//     count: number
-// };
-
-export const CartItem: React.FC<any> = ({
+export const CartItem: React.FC<PizzaTypes> = React.memo(({
   _id,
   name, 
   types,
@@ -27,16 +13,8 @@ export const CartItem: React.FC<any> = ({
   imageUrl,
   identity,
 }) => {
-  console.log(identity)
-  const dispatch = useDispatch();
-//   const onClickPlus = () => {
-//     dispatch(
-//       addItem({
-//         id,
-//       } as CartItemType),
-//     );
-//   };
 
+  const dispatch = useDispatch();
   const onClickMinus = () => {
     dispatch(cartSlice.actions.minusOrder(identity));
   };
@@ -44,7 +22,7 @@ export const CartItem: React.FC<any> = ({
   const onClickPlus = () => {
     dispatch(cartSlice.actions.plusOrder(identity));
   };
-
+  
   const onClickRemove = () => {
       dispatch(cartSlice.actions.removeItem(identity));
   };
@@ -122,5 +100,6 @@ export const CartItem: React.FC<any> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
+)

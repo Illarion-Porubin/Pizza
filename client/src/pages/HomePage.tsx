@@ -6,7 +6,6 @@ import { useCustomSelector } from "../hooks/store";
 import { selectCurrentData } from "../redux/selectors";
 import { useDispatch } from "react-redux";
 import { fetchPizzas } from "../redux/slices/pizzaSlice";
-
 import { PizzaTypes } from "../types/types";
 import { Pagination } from "../components/Pagination/Pagination";
 import Skeleton from "../components/PizzaBlock/Skeleton";
