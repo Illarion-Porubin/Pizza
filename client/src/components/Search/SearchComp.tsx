@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
 
-import s from "./Search.module.scss";
+import s from "./SearchComp.module.scss";
 
 export const Search: FC = () => {
   const [searchName, setSearchName] = useState<string>("");

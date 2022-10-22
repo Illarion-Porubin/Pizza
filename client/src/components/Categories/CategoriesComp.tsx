@@ -1,11 +1,8 @@
-import React, { FC, useState } from "react";
-import { fetchPizzas, } from "../redux/slices/pizzaSlice";
-
+import { FC, useState } from "react";
+import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 import { useDispatch } from "react-redux";
-import "../scss/components/_categories.scss";
-
-
-
+import "../../scss/components/_categories.scss";
+import "./CategoriesComp.module.scss";
 
 export const Categories: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -20,9 +17,9 @@ export const Categories: FC = () => {
   ];
 
   const menu = (id: number) => {
-    dispatch(fetchPizzas(id))
-    setActiveIndex(id)
-  }
+    dispatch(fetchPizzas(id));
+    setActiveIndex(id);
+  };
 
   return (
     <div className="categories">

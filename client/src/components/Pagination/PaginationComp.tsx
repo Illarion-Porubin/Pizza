@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useCustomSelector } from '../../hooks/store';
 import { selectCurrentData } from '../../redux/selectors';
 import { fetchPaginationPizzas } from '../../redux/slices/pizzaSlice';
-import s from './Pagination.module.scss';
+import s from './PaginationComp.module.scss';
 
 export const Pagination: FC = () => {
   const dispatch = useDispatch()

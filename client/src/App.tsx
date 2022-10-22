@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { Header } from "./components/Header/Header";
+import { Header } from "./components/Header/HeaderComp";
 import { CartPage } from "./pages/Cart/CartPage";
-import { HomePage } from "./pages/HomePage";
-import { NotFoundPage } from "./pages/NotFoundPage";
+import { HomePage } from "./pages/Home/HomePage";
+import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 import { RegistrationPage } from "./pages/Auth/RegistrationPage";
 import { LoginPage } from "./pages/Auth/LoginPage";
 import { useEffect } from "react";
@@ -10,13 +10,11 @@ import { fetchAuthMe } from "./redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import "./scss/components/_all.scss";
 
-
-
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAuthMe())
-  }, [dispatch])
+    dispatch(fetchAuthMe());
+  }, [dispatch]);
 
   return (
     <>
@@ -25,11 +23,11 @@ function App() {
         <div className="content">
           <div className="container">
             <Routes>
-              <Route path="/" element={<HomePage/>}/>
-              <Route path="/regist" element={<RegistrationPage/>}/>
-              <Route path="/login" element={<LoginPage/>}/>
-              <Route path="/cart" element={<CartPage/>}/>
-              <Route path="*" element={<NotFoundPage/>}/>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/regist" element={<RegistrationPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
         </div>

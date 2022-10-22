@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import s from "./NotFoundBlock.module.scss"
+import s from "./NotFoundComp.module.scss"
 
 export const NotFound: FC = () => {
   return (

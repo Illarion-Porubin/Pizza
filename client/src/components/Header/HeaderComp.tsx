@@ -1,13 +1,13 @@
 import pizaLogo from "../../assets/img/pizza-logo.svg";
 import { Link } from "react-router-dom";
-import { Search } from "../Search/Search";
+import { Search } from "../Search/SearchComp";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
-import s from "./Header.module.scss";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { authSlice } from "../../redux/slices/authSlice";
 import "../../scss/components/_header.scss";
+import s from "./HeaderComp.module.scss";
 
 
 // 3:04:00

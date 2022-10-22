@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
 import { selectCartData } from "../../redux/selectors";
-import { CartItem } from "../../components/CartItem";
+import { CartItem } from "../../components/CartItem/CartItemComp";
 import { cartSlice, fetchOrder } from "../../redux/slices/cartSlice";
 import { v1 } from "uuid";
 ////////////ui////////////

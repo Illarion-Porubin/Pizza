@@ -1,7 +1,9 @@
 import React, { FC, useState } from "react";
 import { useDispatch } from "react-redux";
-import "../scss/components/_sort.scss";
-import { fetchSortPizzas } from "../redux/slices/pizzaSlice";
+import { fetchSortPizzas } from "../../redux/slices/pizzaSlice";
+import "../../scss/components/_sort.scss"
+import "./SortComp.module.scss"
+
 
 interface Props {}
 
@@ -38,7 +40,7 @@ export const Sort: FC<Props> = () => {
     return () => {
       // размонтируем обработчик событий (addEventListener) при переходе на др стр
       document.body.removeEventListener("click", handleClickOutside);
-    }
+    };
   }, []);
 
   return (

@@ -4,9 +4,9 @@ import { useCustomSelector } from "../../hooks/store";
 import { selectCartData } from "../../redux/selectors";
 import { cartSlice } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
+import s from "./PizzasComp.module.scss";
 
 
-import s from "./PizzaCard.module.scss";
 
 interface Props {
   data: PizzaTypes;
