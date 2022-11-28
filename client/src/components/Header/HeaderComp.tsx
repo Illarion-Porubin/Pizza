@@ -6,34 +6,19 @@ import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { authSlice } from "../../redux/slices/authSlice";
-import "../../scss/components/_header.scss";
+import sb from "../../scss/components/_button.module.scss"
 import s from "./HeaderComp.module.scss";
 
 
 // 3:04:00
 
 export const Header = () => {
-  // const isAuth = Boolean(useCustomSelector(selectAuthData).data);
-  const auth = useCustomSelector(selectAuthData);
   const cart = useCustomSelector(selectCartData)
-  const userAuth = auth.data?.isActivated;
-
-  console.log(cart, 'cart')
-
-  let totalPrice = 0
-  let totalCount = 0
-  cart.items.forEach((item: any) => totalCount += +item.count)
-  cart.items.forEach((item: any) => totalPrice += +item.count * +item.price)
-
-  
-  // cart.items.map((item: any) => item.price * item.count).forEach((obj: any) => {
-  //   totalPrice += obj
-  // })
-
-
+  const totalPrice = cart.items.reduce((sum: number, current: any) => sum + (current.price * current.pizzasCount), 0)
+  const totalCount = cart.items.reduce((sum: number, current: any) => sum + (current.pizzasCount), 0)
+  const userAuth = useCustomSelector(selectAuthData).data?.isActivated;
 
   const dispatch = useDispatch()
-
   const userLogout = () => {
     if(window.confirm(`Вы точно хотите выйти?`)){
       dispatch(authSlice.actions.logout())
@@ -41,24 +26,27 @@ export const Header = () => {
     }
   }
 
-
+  // console.log(useCustomSelector(selectAuthData).data, userAuth, 'userAuth')
 
   return (
-    <div className="wrapper">
-      <div className="header">
-        <div className="container">
+    <div className={s.wrapper}>
+      <div className={s.header}>
+        <div className={s.container}>
           <Link to="/">
-            <div className="header__logo">
+            <div className={s.header__logo}>
               <img width="38" src={pizaLogo} alt="Pizza logo" />
-              <div>
+              <div className={s.logo__title}>
                 <h1>React Pizza</h1>
                 <p>самая вкусная пицца во вселенной</p>
               </div>
             </div>
           </Link>
           <Search />
-          <div className="header__cart">
-            <Link to="/login" className="header__user-wrapp">
+          <div className={s.header__cart}>
+          <Link to="/account">
+            <Button>Кабинет</Button>
+          </Link>
+            <Link to="/login" className={s.header__user_wrapp}>
               {userAuth ? (
                 <Button onClick={() => userLogout()} className={s.userEnter}>Выйти</Button>
                 ) : (
@@ -66,9 +54,9 @@ export const Header = () => {
               )}
             </Link>
             <Link to="/cart">
-              <div className="button button--cart">
+              <div className={`${sb.button} ${sb.button__cart}`}>
                 <span>{totalPrice} ₽</span>
-                <div className="button__delimiter"></div>
+                <div className={sb.button__delimiter}></div>
                 <svg
                   width="18"
                   height="18"

@@ -1,6 +1,7 @@
-@import '../../scss/_variables';
+@import '../variables';
 
 .sort {
+  
   position: relative;
   &__label {
     display: flex;
@@ -52,7 +53,7 @@
       }
     }
   }
-  &__popupDizable{
+  &__popup-dizable{
     position: absolute;
     z-index: -1;
     opacity: 0; 
@@ -75,16 +76,6 @@
           color: $orange;
         }
       }
-    }
-  }
-}
-
-@media (max-width: 1230px) {
-  .sort {
-    padding-left: 20px;
-    margin-top: 20px;
-    b {
-      display: none;
     }
   }
 }

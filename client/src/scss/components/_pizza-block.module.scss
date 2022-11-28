@@ -1,21 +1,4 @@
-@import '../../scss/_variables';
-
-
-.pizzaBlockValue{
-    padding-top: 8px;
-    width: 30px;
-    display: block;
-    justify-content: center;
-}
-
-
-.countValue{
-    width: 100%;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: all .3s;
-}
+@import '../variables';
 
 .pizza_block {
   cursor: pointer;

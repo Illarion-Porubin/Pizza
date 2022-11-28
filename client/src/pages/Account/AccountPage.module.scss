@@ -1,0 +1,60 @@
+.root {
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.title {
+    font-size: 30px;
+}
+
+.photo__wrap{
+    width: 200px;
+    margin: 0 auto;
+}
+
+.photo {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 30px 0;
+  border: 6px solid;
+}
+
+.Field {
+    border: none !important;
+    color: red !important;
+    padding: 10px 0;
+}
+
+.account {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  .pen {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  .name {
+    color: orange;
+    font-weight: bold;
+  }
+  .email {
+    font-size: 16px;
+  }
+  .tel {
+    font-size: 16px;
+  }
+  .pas {
+    font-size: 16px;
+  }
+}
+
+.TextField {
+  width: 50%;
+  color: red;
+}
+.Button {
+  width: 20px;
+}

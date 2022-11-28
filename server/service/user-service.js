@@ -10,7 +10,8 @@ const ApiError = require("../exceptions/api-error");
 
 ///////////////////////////////
 class UserService {
-  async registration(email, password, name) {
+  async registration(email, password, name, phone) {
+    console.log(email, password, name, phone)
     const candidate = await UserSchema.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(
@@ -22,29 +23,24 @@ class UserService {
 
     const user = await UserSchema.create({
       email,
+      phone,
       password: hashPassword,
       name,
       activationLink,
     });
-    await mailService.sendActivationMail(
-      email,
-      `${process.env.API_URL}/api/activate/${activationLink}`
-    );
+    /// mailService если письмо не отправляется, то нужно подождать 2-3 дня, ограничение на отправку от гугла
+    // await mailService.sendActivationMail(
+    //   email,
+    //   `${process.env.API_URL}/api/activate/${activationLink}`
+    // ); 
 
     const userDto = new UserDto(user); // id, email, isActivated
     const tokens = tokenService.generateTokens({ ...userDto });
 
+    console.log(tokens, 'tokens<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
-  }
-
-  async activate(activationLink) {
-    const user = await UserSchema.findOne({ activationLink });
-    if (!user) {
-      throw ApiError.BadRequest("Неккоректная ссылка активации");
-    }
-    user.isActivated = true;
-    await user.save();
   }
 
   async login(email, password) {
@@ -62,8 +58,18 @@ class UserService {
     
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     // return { ...tokens, user: userDto }; // токены и userDto;
+    
     const { ...userData } = user._doc;
     return { ...userData, ...tokens};
+  }
+
+  async activate(activationLink) {
+    const user = await UserSchema.findOne({ activationLink });
+    if (!user) {
+      throw ApiError.BadRequest("Неккоректная ссылка активации");
+    }
+    user.isActivated = true;
+    await user.save();
   }
 
   async me(req, res) {

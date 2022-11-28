@@ -3,10 +3,8 @@ const { body } = require ("express-validator");
 
 class validations {
     login = [
-        // body('name', 'Длинна должна быть больше 4 символов').isString().isLength({ min: 4 }),
         body('email', 'Длинна должна быть больше 4 символов').isEmail(),
         body('password', 'Длинна должна быть больше 4 символов').isString(),
-        // body('admin', "true или fasle").isBoolean().optional()
     ];
     
     regist = [

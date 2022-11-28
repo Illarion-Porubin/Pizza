@@ -45,7 +45,7 @@ export const cartSlice = createSlice({
           }
           return false
         }) 
-        check ? check.count = check.count += action.payload.count : state.items.push(action.payload)
+        check ? check.pizzasCount = check.pizzasCount += action.payload.pizzasCount : state.items.push(action.payload)
       }
     },
     plusOrder(state, action: any) {
@@ -57,7 +57,7 @@ export const cartSlice = createSlice({
           return false
         }
       }) 
-      check.count++ 
+      check.pizzasCount++ 
     },
     minusOrder(state, action: any) {
       const check = state.items.find((item: any) => {
@@ -68,7 +68,7 @@ export const cartSlice = createSlice({
           return false
         }
       }) 
-      check.count-- 
+      check.pizzasCount-- 
     },
     removeItem(state, action) {
       state.items = state.items.filter((item: any) => item.identity !== action.payload); 

@@ -8,6 +8,11 @@ const CartSchema = new Schema(
     //   unique: false,
     //   required: false,
     // },
+    phone: {
+      type: String,
+      required: true,
+      unique: false
+    },
     totolCount: {
       type: String,
       required: true,
@@ -40,12 +45,12 @@ const CartSchema = new Schema(
           required: true,
           unique: false
         },
-        pizessPrice: {
+        pizzasCount: {
           type: String,
           required: true,
           unique: false
         },
-        count: {
+        pizzasPrice: {
           type: String,
           required: true,
           unique: false

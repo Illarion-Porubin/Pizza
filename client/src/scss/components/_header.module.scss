@@ -1,4 +1,4 @@
-@import '../../scss//_variables';
+@import '../variables';
 
 .header {
   border-bottom: 1px solid $gray-line;
@@ -26,9 +26,7 @@
 
     @media (max-width: 645px) {
       flex-direction: column;
-      .header__logo{
-        margin-bottom: 15px;
-      }
+
       .header__cart {
         margin-top: 20px;
       }
@@ -53,11 +51,5 @@
     p {
       color: #7b7b7b;
     }
-  }
-}
-
-@media (max-width: 1120px) {
-  .logo__title {
-    display: none;
   }
 }

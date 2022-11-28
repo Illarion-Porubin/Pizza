@@ -6,8 +6,9 @@ export type PizzaTypes = {
   types: string[];
   sizes: number[];
   price: number;
+  pizzasPrice: number;
+  pizzasCount: number;
   category: string;
   rating: number;
-  count: number;
   identity: string;
 };

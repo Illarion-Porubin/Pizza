@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
 import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 import { useDispatch } from "react-redux";
-import "../../scss/components/_categories.scss";
-import "./CategoriesComp.module.scss";
+import s from "./CategoriesComp.module.scss";
 
 export const Categories: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -22,11 +21,11 @@ export const Categories: FC = () => {
   };
 
   return (
-    <div className="categories">
+    <div className={s.categories}>
       <ul>
         {categories.map((value, index: number) => (
           <li
-            className={activeIndex === index ? "active" : " "}
+            className={activeIndex === index ? s.active : " "}
             onClick={() => menu(index)}
             key={index}
           >

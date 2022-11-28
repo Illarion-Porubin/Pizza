@@ -19,13 +19,13 @@ export const fetchLogin: any = createAsyncThunk("api/fetchLogin",
   }
 );
 
-export const fetchGoogle: any = createAsyncThunk(
-  "api/fetchGoogle",
-  async () => {
-    const { data } = await axios.post("/api/google");
-    return data;
-  }
-);
+// export const fetchGoogle: any = createAsyncThunk(
+//   "api/fetchGoogle",
+//   async () => {
+//     const { data } = await axios.post("/api/google");
+//     return data;
+//   }
+// );
 
 export const fetchAuthMe: any = createAsyncThunk(
   "api/fetchAuthMe",
@@ -40,10 +40,11 @@ type DataType = {
   cart: []; 
   email: null | string;
   name: null | string;
+  phone: null | string;
   token: null | string;
   _id: null | string;
-  isActivated: boolean
-  user: any // data.user потом поправлю login\regist
+  isActivated: boolean;
+  user: any;
 };
 
 type AuthState = {

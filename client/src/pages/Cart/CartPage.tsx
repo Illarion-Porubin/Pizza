@@ -1,41 +1,56 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
-import { selectCartData } from "../../redux/selectors";
+import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { CartItem } from "../../components/CartItem/CartItemComp";
 import { cartSlice, fetchOrder } from "../../redux/slices/cartSlice";
 import { v1 } from "uuid";
 ////////////ui////////////
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 //////////
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+import sb from "../../scss/components/_button.module.scss";
 import s from "./CartPage.module.scss";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
+
 
 export const CartPage: FC = React.memo(() => {
   const dispatch = useDispatch();
   const cart = useCustomSelector(selectCartData);
+  const userInfo = useCustomSelector(selectAuthData).data?.phone;
+  
   const [open, setOpen] = React.useState<boolean>(false);
-  const [number, setNumber] = useState<any>("");
-  const inputNumber = useRef<any>("+");
+  const [number, setNumber] = React.useState<any>(userInfo);
 
-  let totalCount = 0;
-  let totalPrice = 0;
+  console.log(userInfo, "userInfo");
+  console.log(number, "number");
 
-  cart.items
-    .map((item: any) => item.price * item.count)
-    .forEach((obj: any) => {
-      totalPrice += obj;
-    });
+  const openForm = useMemo<any>(() => {
+    return open;
+  }, [open]);
+  const cartState = useMemo<any>(() => {
+    return cart;
+  }, [cart]);
 
-  console.log(cart.items, "pizzaCard");
+  useEffect(() => {
+    console.log("cartState");
+  }, [cartState]);
+
+  const totalPrice = cart.items.reduce(
+    (sum: number, current: any) => sum + current.price * current.pizzasCount,
+    0
+  );
+  const totalCount = cart.items.reduce(
+    (sum: number, current: any) => sum + current.pizzasCount,
+    0
+  );
 
   const onClickClear = () => {
     if (window.confirm("Очистить корзину?")) {
@@ -44,17 +59,15 @@ export const CartPage: FC = React.memo(() => {
   };
 
   const createOrder = () => {
-    // setOpen(false);
-    setNumber(inputNumber.current);
-    console.log(number, "number");
-    // dispatch(fetchOrder(cart.items))
+    const order = { number, cart: cart.items };
+    console.log(order, "<<<<<<<<<<<<<<order");
+    setOpen(false);
+    // dispatch(fetchOrder(order))
+    // dispatch(cartSlice.actions.clearItems());
   };
 
-  // if (!totalPrice) {
-  //   return <CartEmptyPage />;
-  // }
-
-  const handleClickOpen = () => {
+  const handleClickOpen = (e: any) => {
+    e.preventDefault();
     setOpen(true);
   };
 
@@ -62,17 +75,28 @@ export const CartPage: FC = React.memo(() => {
     setOpen(false);
   };
 
-  console.log(inputNumber.current, "inputNumber");
+  // const handleChange = (e: any) => {
+  //   const onlyNums = e.target.value.replace(/[^0-9]/g, "");
+  //   if (onlyNums.length < 11) {
+  //     setNumber(onlyNums);
+  //   } else if (onlyNums.length === 11) {
+  //     const number = onlyNums.replace(
+  //       /(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/,
+  //       "$1($2)-$3-$4-$5"
+  //     );
+  //     setNumber(number);
+  //   }
+  // };
 
   return (
     <>
       {cart.items.length ? null : (
         <h1 className={s.cart_empty}>Корзина пуста</h1>
       )}
-      <div className="container container--cart">
-        <div className="cart">
-          <div className="cart__top">
-            <h2 className="content__title">
+      <div className={`${s.container} ${s.container__cart}`}>
+        <div className={`${s.cart}`}>
+          <div className={s.cart__top}>
+            <h2 className={s.content__title}>
               <svg
                 width="18"
                 height="18"
@@ -102,9 +126,9 @@ export const CartPage: FC = React.memo(() => {
                   strokeLinejoin="round"
                 ></path>
               </svg>
-              Корзина
+              <span className={s.cart__title}>Корзина</span>
             </h2>
-            <div onClick={onClickClear} className="cart__clear">
+            <div onClick={onClickClear} className={`${s.cart__clear}`}>
               <svg
                 width="20"
                 height="20"
@@ -141,17 +165,18 @@ export const CartPage: FC = React.memo(() => {
                   strokeLinejoin="round"
                 ></path>
               </svg>
-
               <span>Очистить корзину</span>
             </div>
           </div>
-          <div className="content__items">
-            {cart.items.map((item: any) => (
-              <CartItem key={v1()} {...item} />
-            ))}
+          <div className={`${s.content__items}`}>
+            {useMemo<any>(() => {
+              return cart.items.map((item: any) => (
+                <CartItem key={v1()} {...item} />
+              ));
+            }, [cart.items])}
           </div>
-          <div className="cart__bottom">
-            <div className="cart__bottom-details">
+          <div className={`${s.cart__bottom}`}>
+            <div className={`${s.cart__bottom_details}`}>
               <span>
                 Всего пицц: <b>{totalCount} шт.</b>{" "}
               </span>
@@ -159,18 +184,12 @@ export const CartPage: FC = React.memo(() => {
                 Сумма заказа: <b>{totalPrice} ₽</b>{" "}
               </span>
             </div>
-            <div className="cart__bottom-buttons">
+            <div className={`${s.cart__bottom_buttons}`}>
               <Link
                 to="/"
-                className="button button--outline button--add go-back-btn"
+                className={`${sb.button} ${sb.button__outline} ${sb.button__add} ${sb.go_back_btn}`}
               >
-                <svg
-                  width="8"
-                  height="14"
-                  viewBox="0 0 8 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg width="18" height="12" viewBox="0 0 8 14" fill="none">
                   <path
                     d="M7 13L1 6.93015L6.86175 1"
                     stroke="#D3D3D3"
@@ -181,28 +200,44 @@ export const CartPage: FC = React.memo(() => {
                 </svg>
                 <span>Вернуться назад</span>
               </Link>
-              {cart.items.length ? (
+              {cartState.items.length ? (
                 <>
                   <Button variant="outlined" onClick={handleClickOpen}>
                     Сделать заказ
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
+                  <Dialog open={openForm} onClose={handleClose}>
                     <DialogTitle>Ваш номер</DialogTitle>
                     <DialogContent>
                       <DialogContentText sx={{ mb: 3 }}>
                         Осталось совсем немного, введите свой номер телефона,
                         чтобы мы могли подтвердить ваш заказ.
                       </DialogContentText>
-                      <PhoneInput
-                        ref={inputNumber}
-                        className={s.PhoneInputInput}
-                        defaultCountry="RU"
-                        placeholder="+7989-888-99-00"
-                        value={inputNumber.current}
-                        onChange={(e?: any) => {
-                          inputNumber.current = e?.target?.value;
-                        }}
-                      />
+                       <form>
+                        {/* <TextField
+                          type="phone"
+                          className={s.field}
+                          label="Phone"
+                          value={number.replace(
+                            /(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/,
+                            "$1($2)-$3-$4-$5"
+                            // "$1$2$3$4$5"
+                          )}
+                          onChange={handleChange}
+                          fullWidth
+                        />  */}
+                        <PhoneInput
+                          inputProps={{
+                            name: "phone",
+                            required: true,
+                            autoFocus: true,
+                          }}
+                          country={"ru"}
+                          autoFormat
+                          placeholder="Enter phone number"
+                          value={number}
+                          onChange={setNumber}
+                        />
+                      </form>
                       <DialogContentText paragraph={true} sx={{ mt: 3, mb: 0 }}>
                         Продолжая, вы соглашаетесь со сбором и обработкой
                         персональных данных и{" "}
@@ -210,8 +245,8 @@ export const CartPage: FC = React.memo(() => {
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button onClick={createOrder}>Subscribe</Button>
+                      <Button onClick={handleClose}>Отмена</Button>
+                      <Button onClick={createOrder}>Заказать</Button>
                     </DialogActions>
                   </Dialog>
                 </>

@@ -1,22 +1,20 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import s from "./AuthPage.module.scss";
 import { Navigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
-
-import "./AuthPage.module.scss";
 import { selectAuthData } from "../../redux/selectors";
-import { fetchGoogle, fetchLogin } from "../../redux/slices/authSlice";
-import { authSlice } from "../../redux/slices/authSlice";
+import { fetchLogin } from "../../redux/slices/authSlice";
+import s from "./AuthPage.module.scss";
 
 export const LoginPage: FC = () => {
-  const isAuth = Boolean(useCustomSelector(selectAuthData).data);
+  const isAuth = useCustomSelector(selectAuthData).data?.isActivated;
   const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -31,32 +29,28 @@ export const LoginPage: FC = () => {
 
   const onSubmit = async (values: any) => {
     const data = await dispatch(fetchLogin(values));
-    console.log(data.payload, 'values')
+    console.log(data.payload.isActivated, "values");
     if (!data.payload) {
-      alert("Не удалось авторизоваться");
+      return alert("Не удалось авторизоваться");
     }
-
-    if ("accessToken" in data.payload) {
-      window.localStorage.setItem("token", data.payload.accessToken);
+    if (!data.payload.isActivated) {
+      return alert("Пожалуйста, подтвердите аккаунт");
+    } else {
+      if ("accessToken" in data.payload) {
+        window.localStorage.setItem("token", data.payload.accessToken);
+      }
     }
   };
+
+  console.log(isAuth, "isAuth");
 
   if (isAuth) {
     return <Navigate to="/" />;
   }
 
-  // useEffect(() => {
-
-  // }, [])
-
-
-
   const google = async () => {
-    // return await dispatch(fetchGoogle());
-    window.open("http://localhost:4400/api/google", "_self")
-  }
-
-  
+    window.open("http://localhost:4400/api/google", "_self");
+  };
 
   return (
     <Paper classes={{ root: s.root }}>

@@ -1,11 +1,10 @@
 import React from "react"
 import ContentLoader from "react-content-loader"
-
-
+import s from "./PizzasComp.module.scss";
 
 const Skeleton = (props: any) => (
   <ContentLoader 
-    className="pizza-block"
+    className={s.pizza_block}
     speed={0}
     width={280}
     height={466}

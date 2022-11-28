@@ -7,17 +7,28 @@ class CartService {
   //   return cart;
   // }
 
-  async newOrder(userId, newOrder) {
-    console.log(newOrder)
-    const userOrder = newOrder.map((item ) => {
-      return {...item, pizessPrice: item.count * item.price}
-    })
+  // async newOrder(userId, newOrder) {
+  //   console.log(newOrder)
+  //   const userOrder = newOrder.map((item ) => {
+  //     return {...item, pizessPrice: item.count * item.price}
+  //   })
 
+  //   const newUserOrder = new CartSchema({
+  //     totolCount: userOrder.reduce((sum, current) => sum += current.count, 0),
+  //     totolPrice: userOrder.reduce((sum, current) => sum += current.count * current.price, 0),
+  //     order: [...userOrder]
+  //   });
+  //   return await newUserOrder.save();
+  // }
+  async newOrder(userId, newOrder) {
     const newUserOrder = new CartSchema({
-      totolCount: userOrder.reduce((sum, current) => sum += current.count, 0),
-      totolPrice: userOrder.reduce((sum, current) => sum += current.count * current.price, 0),
-      order: [...userOrder]
+      phone: newOrder.number,
+      totolCount: newOrder.cart.reduce((sum, current) => sum += current.pizzasCount, 0),
+      totolPrice: newOrder.cart.reduce((sum, current) => sum += current.pizzasCount * current.price, 0),
+      order: [...newOrder.cart]
     });
+    console.log(newUserOrder)
+
     return await newUserOrder.save();
   }
 }

@@ -11,12 +11,12 @@ class UserController {
           ApiError.BadRequest("Ошибка при валидации", errors.array())
         );
       }
-      const { email, password, name } = req.body;
-      const userData = await userService.registration(email, password, name);
-      // res.cookie("refreshToken", userData.refreshToken, {
-      //   maxAge: 30 * 24 * 60 * 60 * 1000,
-      //   httpOnly: true,
-      // });
+      const { email, password, name, phone } = req.body;
+      const userData = await userService.registration(email, password, name, phone);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
       return res.json(userData);
     } catch (e) {
       next(e);
@@ -73,7 +73,7 @@ class UserController {
     }
   }
 
-  async getUsers(req, res, next) {
+  async getUsers(res, next) {
     try {
       const users = await userService.getAllUsers();
       return res.json(users);

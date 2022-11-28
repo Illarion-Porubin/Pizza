@@ -1,8 +1,8 @@
 import React, { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchSortPizzas } from "../../redux/slices/pizzaSlice";
-import "../../scss/components/_sort.scss"
-import "./SortComp.module.scss"
+// import "../../scss/components/_sort.scss"
+import s from "./SortComp.module.scss"
 
 
 interface Props {}
@@ -44,8 +44,8 @@ export const Sort: FC<Props> = () => {
   }, []);
 
   return (
-    <div ref={sortRef} className="sort">
-      <div className="sort__label">
+    <div ref={sortRef} className={s.sort}>
+      <div className={s.sort__label}>
         <svg
           width="10"
           height="6"
@@ -61,11 +61,11 @@ export const Sort: FC<Props> = () => {
         <b>Сортировка по:</b>
         <span onClick={() => setOpen(!open)}>{sortArray[activeSort].name}</span>
       </div>
-      <div className={open ? "sort__popup" : "sort__popup-dizable"}>
+      <div className={open ? s.sort__popup : s.sort__popupDizable}>
         <ul>
           {sortArray.map((value, index: number) => (
             <li
-              className={index === activeSort ? "active" : " "}
+              className={index === activeSort ? s.active : " "}
               key={index}
               onClick={() => selectSort(index, value.sort)}
             >

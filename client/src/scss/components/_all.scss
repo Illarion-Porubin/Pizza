@@ -1,7 +1,15 @@
 @import '../libs/normalize.scss';
-@import './header.scss';
-@import './button.scss';
-@import './categories.scss';
-@import './sort.scss';
-@import './pizza-block.scss';
-@import '../app.scss';
+@import '../app.module.scss';
+@import './sort.module.scss';
+@import './header.module.scss';
+@import './button.module.scss';
+@import './categories.module.scss';
+@import './pizza-block.module.scss';
+
+// @import '../libs/normalize.scss';
+// @import './header.scss';
+// @import './button.scss';
+// @import './categories.scss';
+// @import './pizza-block.scss';
+// @import '../app.scss';
+// @import './sort.scss';

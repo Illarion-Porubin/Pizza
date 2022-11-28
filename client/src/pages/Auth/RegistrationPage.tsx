@@ -9,19 +9,26 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 /////////////////////////////
-import { Navigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchRegister } from "../../redux/slices/authSlice";
 import { useForm } from "react-hook-form";
-
 import { useCustomSelector } from "../../hooks/store";
-
 import { selectAuthData } from "../../redux/selectors";
+
 import s from "./AuthPage.module.scss";
 
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 export const RegistrationPage = React.memo(() => {
+  const dispatch = useDispatch();
+
   const auth = useCustomSelector(selectAuthData);
   const [open, setOpen] = React.useState(false);
+  const [phone, setPhone] = React.useState("");
+
+  console.log(phone);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,30 +38,41 @@ export const RegistrationPage = React.memo(() => {
     setOpen(false);
   };
 
-  const dispatch = useDispatch();
+  // const handleChange = (e: any) => {
+  //   const onlyNums = e.target.value.replace(/[^+0-9]/g, "");
+  //   if (onlyNums.length < 12) {
+  //     setPhone(onlyNums);
+  //   } else if (onlyNums.length === 12) {
+  //     const number = onlyNums.replace(
+  //       /(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/,
+  //       "$1($2)-$3-$4-$5"
+  //     );
+  //     setPhone(`+${number}`);
+  //   }
+  // };
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    defaultValues: {
-      name: "Test User",
-      email: "porubin.lar@yandex.ru",
-      password: "12345",
-    },
     mode: "onChange",
   });
 
   const onSubmit = async (values: any) => {
-    const data = await dispatch(fetchRegister(values));
-    if (!data.payload) {
-      alert("Не удалось зарегистрироваться!");
-    }
-
-    if ("token" in data.payload) {
-      window.localStorage.setItem("token", data.payload.token);
+    console.log(values.phone);
+    if (!values || values.phone.length < 11) {
+      return alert("Номер слишком мал, укажите 11 символов");
+    } else {
+      const data = await dispatch(fetchRegister(values));
+      if ("token" in data.payload) {
+        window.localStorage.setItem("token", data.payload.token);
+      }
     }
   };
+
+  console.log(isValid)
+
 
   if (auth.data?.user.isActivated === false) {
     return (
@@ -72,9 +90,11 @@ export const RegistrationPage = React.memo(() => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-        <Link to="/">
-          <Button onClick={handleClose} autoFocus>Ок</Button>
-        </Link>
+          <Link to="/">
+            <Button onClick={handleClose} autoFocus>
+              Ок
+            </Button>
+          </Link>
         </DialogActions>
       </Dialog>
     );
@@ -86,33 +106,63 @@ export const RegistrationPage = React.memo(() => {
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
+            type="text"
             error={Boolean(errors.name?.message)}
-            helperText={errors.name?.message}
-            {...register("name", { required: "Укажите полное имя" })}
             className={s.field}
             label="Полное имя"
             fullWidth
+            {...register("name", {
+              required: {
+                value: true,
+                message:
+                  "You must specify your first name before moving forward",
+              },
+              // pattern: {
+              //   value: /^[a-zA-Z]+$/,
+              //   message: "That's not a valid name where I come from...",
+              // },
+            })}
           />
+
+          <PhoneInput
+            {...register("phone", { required: "Укажите телефон" })}
+            country={"ru"}
+            value={phone}
+            onChange={(phone) => setPhone(phone)}
+          />
+
+          {/* <TextField
+            type="phone"
+            error={Boolean(errors.phone?.message)}
+            {...register("phone", { required: "Укажите телефон" })}
+            className={s.field}
+            placeholder={"+7989-XXX-XX-XX"}
+            value={phone}
+            label="Phone"
+            onChange={handleChange}
+            fullWidth
+          /> */}
+
           <TextField
             type="email"
             error={Boolean(errors.email?.message)}
-            helperText={errors.email?.message}
             {...register("email", { required: "Укажите email" })}
             className={s.field}
             label="E-Mail"
             fullWidth
           />
-          <TextField
+
+          {/* <TextField
             type="password"
             error={Boolean(errors.password?.message)}
-            helperText={errors.password?.message}
             {...register("password", { required: "Укажите password" })}
             className={s.field}
             label="Пароль"
             fullWidth
-          />
+          />  */}
+
           <Button
-            disabled={!isValid}
+            disabled={phone?.length < 11 && !isValid}
             type="submit"
             size="large"
             variant="contained"

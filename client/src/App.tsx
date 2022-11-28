@@ -7,26 +7,32 @@ import { RegistrationPage } from "./pages/Auth/RegistrationPage";
 import { LoginPage } from "./pages/Auth/LoginPage";
 import { useEffect } from "react";
 import { fetchAuthMe } from "./redux/slices/authSlice";
+import { AccountPage } from "./pages/Account/AccountPage";
 import { useDispatch } from "react-redux";
-import "./scss/components/_all.scss";
+import s from "./scss/_app.module.scss";
+import "./scss/libs/_normalize.scss"
+
+
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAuthMe());
-  }, [dispatch]);
+    dispatch(fetchAuthMe())
+  }, [dispatch])
 
+  
   return (
     <>
-      <div className="wrapper">
+      <div className={s.wrapper}>
         <Header />
-        <div className="content">
-          <div className="container">
+        <div className={s.content}>
+          <div className={s.container}>
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/account" element={<AccountPage />} />
               <Route path="/regist" element={<RegistrationPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>

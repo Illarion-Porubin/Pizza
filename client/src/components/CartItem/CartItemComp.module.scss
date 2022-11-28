@@ -1,0 +1,125 @@
+@import '../../scss/variables';
+
+
+.cart {
+    &__item {
+      display: flex;
+      width: 100%;
+      border-top: 1px solid $gray-line;
+      padding-top: 30px;
+      margin-top: 30px;
+  
+      &_img {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+        width: 10%;
+  
+        img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+  
+      &_info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 40%;
+  
+        h3 {
+          font-weight: bold;
+          font-size: 22px;
+          line-height: 27px;
+          letter-spacing: 0.01em;
+        }
+  
+        p {
+          font-size: 18px;
+          color: #8d8d8d;
+        }
+      }
+  
+      &_count {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 13%;
+  
+        &-minus {
+          svg {
+            path:first-of-type {
+              display: none;
+            }
+          }
+  
+          &:disabled {
+            opacity: 0.4;
+            border-color: #787878;
+  
+            &:active {
+              transform: none;
+            }
+  
+            &:hover {
+              background-color: transparent;
+  
+              svg path {
+                fill: #787878;
+              }
+            }
+  
+            svg path {
+              fill: #787878;
+            }
+          }
+        }
+        
+        b {
+          font-size: 22px;
+        }
+      }
+  
+      &_price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 33%;
+  
+        b {
+          font-weight: bold;
+          font-size: 22px;
+          letter-spacing: 0.01em;
+        }
+      }
+  
+      &_remove {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 4%;
+        
+        .button {
+          border-color: darken($color: $gray-line, $amount: 10);
+        }
+        svg {
+          transform: rotate(45deg);
+          path {
+            fill: darken($color: $orange, $amount: 15);
+          }
+        }
+        .button {
+          svg {
+            width: 11.5px;
+            height: 11.5px;
+            position: relative;
+          }
+          &:hover,
+          &:active {
+            border-color: darken($color: $gray-line, $amount: 80);
+            background-color: darken($color: $gray-line, $amount: 80);
+          }
+        }
+      }
+    }
+  }

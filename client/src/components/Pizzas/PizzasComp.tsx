@@ -1,10 +1,9 @@
 import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useCustomSelector } from "../../hooks/store";
-import { selectCartData } from "../../redux/selectors";
 import { cartSlice } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
 import s from "./PizzasComp.module.scss";
+import sb from "../../scss/components/_button.module.scss"
 
 
 
@@ -12,11 +11,7 @@ interface Props {
   data: PizzaTypes;
 }
 
-export const PizzaCards: FC<Props> = ({ data }) => {
-  const cart = useCustomSelector(selectCartData);
-
-  // console.log(cart)
-
+export const PizzasComp: FC<Props> = ({ data }) => {
   const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
   const [pizzaCount, setPizzaCount] = useState<number>(0);
@@ -38,8 +33,8 @@ export const PizzaCards: FC<Props> = ({ data }) => {
         ...data, 
         sizes: activeSize, 
         types: activeTypes, 
-        count: pizzaCount, 
-        price: +data.price + +sizePrice[indexSize],
+        pizzasCount: pizzaCount, 
+        pizzasPrice: pizzaCount * (+data.price + +sizePrice[indexSize]),
         identity: data.name + activeTypes + indexSize
       }
       dispatch(cartSlice.actions.addOrder(newOrder))
@@ -47,15 +42,15 @@ export const PizzaCards: FC<Props> = ({ data }) => {
   }
 
   return (
-    <div className="pizza-block">
-      <img className="pizza-block__image" src={data.imageUrl} alt="Pizza" />
-      <h4 className="pizza-block__title">{data.name}</h4>
-      <div className="pizza-block__selector">
+    <div className={s.pizza_block}>
+      <img className={s.pizza_block__image} src={data.imageUrl} alt="Pizza" />
+      <h4 className={s.pizza_block__title}>{data.name}</h4>
+      <div className={s.pizza_block__selector}>
         <ul>
           {data.types.map((types, index) => (
             <li
               onClick={() => setActiveTypes(types)}
-              className={activeTypes === types ? "active" : ""}
+              className={activeTypes === types ? s.active : ""}
               key={index}
             >
               {types}
@@ -66,7 +61,7 @@ export const PizzaCards: FC<Props> = ({ data }) => {
           {data.sizes.map((sizes, index) => (
             <li
               onClick={() => changeSize(sizes, index)}
-              className={activeSize === sizes ? "active" : ""}
+              className={activeSize === sizes ? s.active : ""}
               key={index}
             >
               {sizes} см
@@ -74,8 +69,8 @@ export const PizzaCards: FC<Props> = ({ data }) => {
           ))}
         </ul>
       </div>
-      <div className="pizza-block__bottom">
-        <div className="pizza-block__price">{+data.price + +sizePrice[indexSize]} ₽</div>
+      <div className={s.pizza_block__bottom}>
+        <div className={s.pizza_block__price}>{+data.price + +sizePrice[indexSize]} ₽</div>
         <div className={s.pizzaBlockValue}>
           <button
             className={s.countValue}
@@ -122,7 +117,7 @@ export const PizzaCards: FC<Props> = ({ data }) => {
             </svg>
           </button>
         </div>
-        <div className="button button--outline button--add" onClick={() => orderPizza(data)}>
+        <div className={`${sb.button} ${sb.button__outline} ${sb.button__add}`} onClick={() => orderPizza(data)}>
           <span>Добавить</span>
           <i>{pizzaCount}</i>
         </div>
