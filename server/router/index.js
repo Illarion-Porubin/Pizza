@@ -54,10 +54,13 @@ router.get("/google/callback", passport.authenticate("google",
 router.post("/login", userController.login);
 router.post("/logout", userController.logout);
 router.post("/register", userController.registration);
+router.put("/update", userController.update)
+
 router.get("/activate/:link", userController.activate);
 router.get("/refresh", userController.refresh);
 router.get("/users", authMiddleware, userController.getUsers);
 router.get('/me', checkAuth.check, userController.getMe);
+router.post('/avatar', userController.avatar)
 ///////////////cart//////////////
 router.post("/order", cartController.order);
 // router.get("/userCart/:id", cartController.userCart);

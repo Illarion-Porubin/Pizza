@@ -1,23 +1,42 @@
 .root {
-    width: 400px;
-    padding: 50px;
-    border: 1px solid #dedede;
-    margin: 50px auto;
-  }
-  
-  .field {
-    margin-bottom: 20px !important;
-  }
-  
-  .title {
-    text-align: center !important;
-    font-weight: bold !important;
-    margin-bottom: 30px !important;
-  }
-  
-  .account{
-    padding: 10px;
-    font-size: 20px;
-    line-height: 24px;
-    text-align: center;
-  }
+  width: 400px;
+  padding: 50px;
+  border: 1px solid #dedede;
+  margin: 50px auto;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.account {
+  padding: 10px;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+}
+
+.input__phone {
+  height: 54px !important;
+  padding-left: 40px !important;
+  border: none !important;
+  width: 100% !important;
+}
+
+.input__phone label {
+  left: 40px;
+  padding-bottom: 20px;
+}
+.input__phone input {
+  height: 54px !important;
+}
+
+.input__conteiner {
+  margin-bottom: 20px !important;
+}

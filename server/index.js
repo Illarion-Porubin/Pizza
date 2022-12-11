@@ -16,8 +16,8 @@ app.use(cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use(express.json());
+app.use(express.static('static'))
 app.use(cookieParser());
 app.use(cors(
   {

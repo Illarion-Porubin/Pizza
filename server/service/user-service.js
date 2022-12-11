@@ -5,13 +5,13 @@ const mailService = require("./mail-service");
 const tokenService = require("./token-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
+const { findById } = require("../models/user-model");
 
 
 
 ///////////////////////////////
 class UserService {
   async registration(email, password, name, phone) {
-    console.log(email, password, name, phone)
     const candidate = await UserSchema.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(
@@ -37,10 +37,28 @@ class UserService {
     const userDto = new UserDto(user); // id, email, isActivated
     const tokens = tokenService.generateTokens({ ...userDto });
 
-    console.log(tokens, 'tokens<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+    console.log(tokens, 'tokens<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
 
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
+  }
+
+  async update(email, name, phone, color) {
+    const user = await UserSchema.findOne({ email });
+    console.log(user)
+    if (!user) {
+      throw ApiError.BadRequest("Пользователь с таким email не найден");
+    }
+    await user.updateOne({email, name, phone, color})
+  }
+
+  async activate(activationLink) {
+    const user = await UserSchema.findOne({ activationLink });
+    if (!user) {
+      throw ApiError.BadRequest("Неккоректная ссылка активации");
+    }
+    user.isActivated = true;
+    await user.save();
   }
 
   async login(email, password) {
@@ -63,15 +81,6 @@ class UserService {
     return { ...userData, ...tokens};
   }
 
-  async activate(activationLink) {
-    const user = await UserSchema.findOne({ activationLink });
-    if (!user) {
-      throw ApiError.BadRequest("Неккоректная ссылка активации");
-    }
-    user.isActivated = true;
-    await user.save();
-  }
-
   async me(req, res) {
     try {
       const user = await UserSchema.findById(req.userId);
@@ -89,6 +98,7 @@ class UserService {
       res.status(500).json(err);
     }
   }
+
 ///////////////////////////////
   async logout(refreshToken) {
     const token = await tokenService.removeToken(refreshToken);
@@ -116,6 +126,15 @@ class UserService {
     const users = await UserSchema.find();
     return users;
   }
+
+  // async avatar(file, user) {
+  //   const userId = await findById(user.id);
+  //   const avatarName = uuid.v4() + "jpg";
+  //   file.mv(process.env.STATIC_PATCH + "\\" + avatarName)
+  //   userId.avatar = avatarName
+  //   await user.save()
+  //   return user
+  // }
 }
 
 module.exports = new UserService();

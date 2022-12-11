@@ -1,6 +1,8 @@
 const userService = require("../service/user-service");
+const UserSchema = require("../models/user-model");
 const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/api-error");
+const uuid = require("uuid");
 
 class UserController {
   async registration(req, res, next) {
@@ -18,6 +20,16 @@ class UserController {
         httpOnly: true,
       });
       return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async update(req, res, next) {
+    try {
+      const { email, name, phone, color } = req.body;
+      const userData = await userService.update(email, name, phone, color);
+      return res.json(userData)
     } catch (e) {
       next(e);
     }
@@ -91,6 +103,22 @@ class UserController {
       next(e);
     }
   }
+
+  async avatar(req, res) {
+    console.log(req.body, req.files)
+    // try {
+    //   const file = req.files.file
+    //   const user = await UserSchema.findById('638f6f850c8ee36e8518211a')
+    //   const avatarName = uuid.v4() + "jpg";
+    //   file.mv(process.env.STATIC_PATCH + "\\" + avatarName)
+    //   user.avatar = avatarName
+    //   await user.save()
+    //   return res.json({message: "Avatar was uploaded"});
+    // } catch (e) {
+    //   console.log(e)
+    // }
+  }
+
 }
 
 module.exports = new UserController();

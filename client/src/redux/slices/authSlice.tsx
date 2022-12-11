@@ -19,14 +19,6 @@ export const fetchLogin: any = createAsyncThunk("api/fetchLogin",
   }
 );
 
-// export const fetchGoogle: any = createAsyncThunk(
-//   "api/fetchGoogle",
-//   async () => {
-//     const { data } = await axios.post("/api/google");
-//     return data;
-//   }
-// );
-
 export const fetchAuthMe: any = createAsyncThunk(
   "api/fetchAuthMe",
   async () => {
@@ -34,6 +26,22 @@ export const fetchAuthMe: any = createAsyncThunk(
     return data;
   }
 );
+
+export const fetchUpdate: any = createAsyncThunk(
+  "api/update",
+  async (params: any) => {
+    const { data } = await axios.put("/api/update", params);
+    return data;
+  }
+);
+
+// export const fetchGoogle: any = createAsyncThunk(
+//   "api/fetchGoogle",
+//   async () => {
+//     const { data } = await axios.post("/api/google");
+//     return data;
+//   }
+// );
 
 type DataType = {
   admin: false;
