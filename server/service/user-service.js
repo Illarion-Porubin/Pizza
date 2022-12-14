@@ -52,6 +52,15 @@ class UserService {
     await user.updateOne({email, name, phone, color})
   }
 
+  async avatar(id, publicId) {
+    const user = await UserSchema.findById(id);
+    console.log(user, 'user')
+    if (!id) {
+      throw ApiError.BadRequest("Пользователь не найден");
+    }
+    await user.updateOne({email: user.email, publicId})
+  }
+
   async activate(activationLink) {
     const user = await UserSchema.findOne({ activationLink });
     if (!user) {
@@ -127,14 +136,7 @@ class UserService {
     return users;
   }
 
-  // async avatar(file, user) {
-  //   const userId = await findById(user.id);
-  //   const avatarName = uuid.v4() + "jpg";
-  //   file.mv(process.env.STATIC_PATCH + "\\" + avatarName)
-  //   userId.avatar = avatarName
-  //   await user.save()
-  //   return user
-  // }
+  
 }
 
 module.exports = new UserService();

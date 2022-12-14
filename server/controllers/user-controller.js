@@ -14,7 +14,12 @@ class UserController {
         );
       }
       const { email, password, name, phone } = req.body;
-      const userData = await userService.registration(email, password, name, phone);
+      const userData = await userService.registration(
+        email,
+        password,
+        name,
+        phone
+      );
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -29,14 +34,24 @@ class UserController {
     try {
       const { email, name, phone, color } = req.body;
       const userData = await userService.update(email, name, phone, color);
-      return res.json(userData)
+      return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async avatar(req, res) {
+    try {
+      const { id, publicId } = req.body;
+      const user = await userService.avatar(id, publicId)
+      return res.json(user);
     } catch (e) {
       next(e);
     }
   }
 
   async login(req, res, next) {
-    console.log(req.body, 'user-cont, login')
+    console.log(req.body, "user-cont, login");
     try {
       const { email, password } = req.body;
       const userData = await userService.login(email, password);
@@ -103,22 +118,6 @@ class UserController {
       next(e);
     }
   }
-
-  async avatar(req, res) {
-    console.log(req.body, req.files)
-    // try {
-    //   const file = req.files.file
-    //   const user = await UserSchema.findById('638f6f850c8ee36e8518211a')
-    //   const avatarName = uuid.v4() + "jpg";
-    //   file.mv(process.env.STATIC_PATCH + "\\" + avatarName)
-    //   user.avatar = avatarName
-    //   await user.save()
-    //   return res.json({message: "Avatar was uploaded"});
-    // } catch (e) {
-    //   console.log(e)
-    // }
-  }
-
 }
 
 module.exports = new UserController();

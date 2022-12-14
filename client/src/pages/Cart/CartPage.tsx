@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { CartItem } from "../../components/CartItem/CartItemComp";
-import { cartSlice, fetchOrder } from "../../redux/slices/cartSlice";
+import { cartSlice } from "../../redux/slices/cartSlice";
 import { v1 } from "uuid";
 ////////////ui////////////
 import Button from "@mui/material/Button";

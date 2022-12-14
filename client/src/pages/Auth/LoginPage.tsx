@@ -49,9 +49,9 @@ export const LoginPage: FC = () => {
     return <Navigate to="/" />;
   }
 
-  const google = async () => {
-    window.open("http://localhost:4400/api/google", "_self");
-  };
+  // const google = async () => {
+  //   window.open("http://localhost:4400/api/google", "_self");
+  // };
 
   return (
     <StyledEngineProvider injectFirst>

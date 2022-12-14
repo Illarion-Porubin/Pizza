@@ -1,8 +1,8 @@
 import React, { FC, useEffect } from "react";
-import Avatar from "@mui/material/Avatar";
+// import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 // import "react-phone-input-2/lib/style.css";
-import cat from "../../../src/assets/img/cat.png";
+// import cat from "../../../src/assets/img/cat.png";
 import s from "./AccountPage.module.scss";
 import "./sryle.scss";
 import { useCustomSelector } from "../../hooks/store";
@@ -13,6 +13,7 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import ReactPhoneInput from "react-phone-input-material-ui";
 import { useDispatch } from "react-redux";
 import { fetchUpdate } from "../../redux/slices/authSlice";
+import { UploadWidget } from "../../components/Upload/UploadWidget";
 // import pencil from "../../assets/img/pencil.svg";
 
 export const AccountPage: FC = () => {
@@ -52,7 +53,12 @@ export const AccountPage: FC = () => {
   ]);
 
   const onSubmit = async () => {
-    const user = { name, email: userInfo.data?.email, phone: tel, color: activeColor };
+    const user = {
+      name,
+      email: userInfo.data?.email,
+      phone: tel,
+      color: activeColor,
+    };
     dispatch(fetchUpdate(user));
   };
 
@@ -67,13 +73,8 @@ export const AccountPage: FC = () => {
         Личный кабинет
       </Typography>
       <Paper className={s.root}>
-        <Stack direction="row" className={s.photo__wrap}>
-          <Avatar
-            className={s.photo}
-            alt="Remy Sharp"
-            src={cat}
-            sx={{ borderColor: activeColor }}
-          />
+        <Stack direction="row" className={s.photo__wrap} >
+            <UploadWidget color={activeColor}/>
         </Stack>
         <div className={s.popup}>
           <div className={s.popup__wrap} onClick={() => setOpen(!open)}>

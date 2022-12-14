@@ -35,6 +35,15 @@ export const fetchUpdate: any = createAsyncThunk(
   }
 );
 
+export const fetchAvatar: any = createAsyncThunk(
+  "api/avatar",
+  async (params: any) => {
+    console.log(params, 'params')
+    const { data } = await axios.put("/api/avatar", params);
+    return data;
+  }
+);
+
 // export const fetchGoogle: any = createAsyncThunk(
 //   "api/fetchGoogle",
 //   async () => {
@@ -49,6 +58,7 @@ type DataType = {
   email: null | string;
   name: null | string;
   phone: null | string;
+  publicId: null | string;
   token: null | string;
   _id: null | string;
   isActivated: boolean;
@@ -111,6 +121,19 @@ export const authSlice = createSlice({
       state.status = "loaded";
     },
     [fetchAuthMe.rejected]: (state) => {
+      state.data = null;
+      state.status = "error";
+    },
+    /////////////////
+    [fetchAvatar.pending]: (state) => {
+      state.data = null;
+      state.status = "loading";
+    },
+    [fetchAvatar.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      state.status = "loaded";
+    },
+    [fetchAvatar.rejected]: (state) => {
       state.data = null;
       state.status = "error";
     },
