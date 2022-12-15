@@ -3,8 +3,7 @@ import React, { FC, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 // import "react-phone-input-2/lib/style.css";
 // import cat from "../../../src/assets/img/cat.png";
-import s from "./AccountPage.module.scss";
-import "./sryle.scss";
+
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import { Button, Paper, TextField, Typography } from "@mui/material";
@@ -14,6 +13,8 @@ import ReactPhoneInput from "react-phone-input-material-ui";
 import { useDispatch } from "react-redux";
 import { fetchUpdate } from "../../redux/slices/authSlice";
 import { UploadWidget } from "../../components/Upload/UploadWidget";
+import s from "./AccountPage.module.scss";
+import "./sryle.scss";
 // import pencil from "../../assets/img/pencil.svg";
 
 export const AccountPage: FC = () => {
@@ -23,6 +24,8 @@ export const AccountPage: FC = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [name, setName] = React.useState<any>("");
   const [tel, setTel] = React.useState<any>("");
+  const [publicId, setPublicId] = React.useState<any>("");
+
   const { handleSubmit, setValue } = useForm({
     mode: "onChange",
   });
@@ -55,12 +58,18 @@ export const AccountPage: FC = () => {
   const onSubmit = async () => {
     const user = {
       name,
-      email: userInfo.data?.email,
+      publicId,
       phone: tel,
       color: activeColor,
+      email: userInfo.data?.email,
     };
+    console.log(user)
     dispatch(fetchUpdate(user));
   };
+
+  const publickId = (id: any) => {
+    setPublicId(id)
+  }
 
   const checDataUser =
     activeColor !== userInfo.data?.color ||
@@ -74,7 +83,7 @@ export const AccountPage: FC = () => {
       </Typography>
       <Paper className={s.root}>
         <Stack direction="row" className={s.photo__wrap} >
-            <UploadWidget color={activeColor}/>
+            <UploadWidget color={activeColor} publickId={(e: any) => publickId(e)}/>
         </Stack>
         <div className={s.popup}>
           <div className={s.popup__wrap} onClick={() => setOpen(!open)}>

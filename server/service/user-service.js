@@ -43,22 +43,13 @@ class UserService {
     return { ...tokens, user: userDto };
   }
 
-  async update(email, name, phone, color) {
+  async update(email, name, phone, color, publicId) {
     const user = await UserSchema.findOne({ email });
     console.log(user)
     if (!user) {
       throw ApiError.BadRequest("Пользователь с таким email не найден");
     }
-    await user.updateOne({email, name, phone, color})
-  }
-
-  async avatar(id, publicId) {
-    const user = await UserSchema.findById(id);
-    console.log(user, 'user')
-    if (!id) {
-      throw ApiError.BadRequest("Пользователь не найден");
-    }
-    await user.updateOne({email: user.email, publicId})
+    await user.updateOne({email, name, phone, color, publicId})
   }
 
   async activate(activationLink) {
