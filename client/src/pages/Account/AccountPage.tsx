@@ -1,30 +1,27 @@
-import React, { FC, useEffect } from "react";
-// import Avatar from "@mui/material/Avatar";
+import React from "react";
 import Stack from "@mui/material/Stack";
 // import "react-phone-input-2/lib/style.css";
-// import cat from "../../../src/assets/img/cat.png";
 
-import { useCustomSelector } from "../../hooks/store";
+import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import { Button, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { StyledEngineProvider } from "@mui/material/styles";
-import ReactPhoneInput from "react-phone-input-material-ui";
-import { useDispatch } from "react-redux";
-import { fetchUpdate } from "../../redux/slices/authSlice";
+import { UserType, fetchUpdate } from "../../redux/slices/authSlice";
 import { UploadWidget } from "../../components/Upload/UploadWidget";
+import { AuthState } from "../../redux/slices/authSlice";
+
+import ReactPhoneInput from "react-phone-input-material-ui";
 import s from "./AccountPage.module.scss";
 import "./sryle.scss";
 // import pencil from "../../assets/img/pencil.svg";
 
-export const AccountPage: FC = () => {
-  const dispatch = useDispatch();
-  const userInfo = useCustomSelector<any>(selectAuthData);
-  const [activeColor, setActiveColor] = React.useState<string>("");
+export const AccountPage: React.FC = () => {
+  const dispatch = useCustomDispatch();
+  const userInfo = useCustomSelector<AuthState>(selectAuthData);
+  const [userData, setUserData] = React.useState<UserType | null>(null);
+  const [userPhone, setUserPhone] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
-  const [name, setName] = React.useState<any>("");
-  const [tel, setTel] = React.useState<any>("");
-  const [publicId, setPublicId] = React.useState<any>("");
 
   const { handleSubmit, setValue } = useForm({
     mode: "onChange",
@@ -41,40 +38,47 @@ export const AccountPage: FC = () => {
     "black",
   ];
 
-  useEffect(() => {
-    if (userInfo.data?.name) {
-      setName(userInfo.data?.name);
+  React.useEffect(() => {
+    if (userInfo.data) {
+      setUserData(userInfo.data)
+      setUserPhone(userInfo.data?.phone); // нужно выводить отдельно для работы ReactPhoneInput
     }
-    setTel(userInfo.data?.phone);
-    setActiveColor(userInfo.data?.color);
   }, [
     setValue,
-    setActiveColor,
     userInfo.data?.name,
     userInfo.data?.phone,
     userInfo.data?.color,
+    userInfo.data?.email,
+    userInfo.data
   ]);
 
-  const onSubmit = async () => {
-    const user = {
-      name,
-      publicId,
-      phone: tel,
-      color: activeColor,
-      email: userInfo.data?.email,
-    };
-    console.log(user)
-    dispatch(fetchUpdate(user));
+  type submitType = {
+    name: string | undefined;
+    phone: string | undefined;
+    color: string | undefined;
+    email: string | undefined;
+    publicId: string | undefined;
   };
 
-  const publickId = (id: any) => {
-    setPublicId(id)
-  }
+  const onSubmit = async () => {
+    const user: submitType = {
+      phone: userPhone,
+      name: userData?.name,
+      email: userData?.email,
+      color: userData?.color,
+      publicId: userData?.publicId,
+    };
+    dispatch<AuthState>(fetchUpdate(user));
+  };
 
-  const checDataUser =
-    activeColor !== userInfo.data?.color ||
-    name !== userInfo.data?.name ||
-    (tel?.length >= 11 && tel !== userInfo.data?.phone);
+  const publickId = (id: string) => {
+    setUserData((prev: any) => prev = {...prev, imgId: id})
+  };
+
+  const checDataUser: boolean =
+    userData?.color !== userInfo.data?.color ||
+    userData?.name !== userInfo.data?.name ||
+    (userPhone.length >= 11 && userPhone !== userInfo.data?.phone);
 
   return (
     <>
@@ -82,25 +86,28 @@ export const AccountPage: FC = () => {
         Личный кабинет
       </Typography>
       <Paper className={s.root}>
-        <Stack direction="row" className={s.photo__wrap} >
-            <UploadWidget color={activeColor} publickId={(e: any) => publickId(e)}/>
+        <Stack direction="row" className={s.photo__wrap}>
+          <UploadWidget
+            color={userData?.color}
+            publickId={(e: string) => publickId(e)}
+          />
         </Stack>
         <div className={s.popup}>
           <div className={s.popup__wrap} onClick={() => setOpen(!open)}>
             <span className={s.popup__text_color}>Change color</span>
             <div
               className={s.popup__main_color}
-              style={{ backgroundColor: activeColor }}
+              style={{ backgroundColor: userData?.color }}
             ></div>
           </div>
           <div className={s.popup__block}>
             <ul className={open ? s.popup__color_open : s.popup__color}>
               {colorArray.map((color, index: number) => (
                 <li
-                  key={index}
+                  key={color}
                   className={s.popup__colors}
                   style={{ backgroundColor: color }}
-                  onClick={() => setActiveColor(color)}
+                  onClick={() => setUserData((prev: any) => prev = {...prev, color})}
                 >
                   ㅤ
                 </li>
@@ -114,8 +121,10 @@ export const AccountPage: FC = () => {
               type="text"
               className={s.field}
               label="Полное имя"
-              value={name}
-              onChange={(e: any) => setName(e.target?.value)}
+              value={userData?.name ? userData?.name : "Ваше имя"}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserData((prev: any) => prev = {...prev, name: e.target?.value})
+              }
               fullWidth
             />
 
@@ -123,8 +132,8 @@ export const AccountPage: FC = () => {
               inputClass={s.input__phone}
               containerClass={s.input__conteiner}
               country={"ru"}
-              value={tel}
-              onChange={setTel}
+              value={userPhone ? userPhone : "+7"}
+              onChange={setUserPhone}
               component={TextField}
             />
 

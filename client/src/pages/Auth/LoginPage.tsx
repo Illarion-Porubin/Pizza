@@ -1,10 +1,10 @@
-import { FC } from "react";
+import React from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { Navigate, Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
@@ -12,15 +12,20 @@ import { fetchLogin } from "../../redux/slices/authSlice";
 import { StyledEngineProvider } from "@mui/material/styles";
 import s from "./AuthPage.module.scss";
 
-export const LoginPage: FC = () => {
-  const isAuth = useCustomSelector(selectAuthData).data?.isActivated;
+export const LoginPage: React.FC = () => {
+  const isAuth = useCustomSelector(selectAuthData)
   const dispatch = useDispatch();
+
+  type FormValues = {
+    email: string,
+    password: string
+  }
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<FormValues>({
     defaultValues: {
       email: "vasya@test.ru",
       password: "12345",
@@ -28,9 +33,8 @@ export const LoginPage: FC = () => {
     mode: "onChange",
   });
 
-  const onSubmit = async (values: any) => {
+  const onSubmit: SubmitHandler<FormValues> = async (values: FormValues) => {
     const data = await dispatch(fetchLogin(values));
-    console.log(data.payload.isActivated, "values");
     if (!data.payload) {
       return alert("Не удалось авторизоваться");
     }
@@ -45,7 +49,7 @@ export const LoginPage: FC = () => {
 
   console.log(isAuth, "isAuth");
 
-  if (isAuth) {
+  if (isAuth.data?.isActivated) {
     return <Navigate to="/" />;
   }
 

@@ -18,26 +18,24 @@ export const fetchSearchPizzas: any = createAsyncThunk('pizzas/fetchSearchPizzas
 });
 
 export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginationPizzas', async (page: number) => {
-  const {data} = await axios.get('/api/pizzas?p='+page)
+  const {data} = await axios.get('/api/pizzas?p=' + page)
   return data;
 });
 
 
 
 
-type PizzaState = {
+export type PizzaState = {
   pizza: {
     items: {
       pages: number,
-      pizzas: PizzaTypes[],
+      pizzas: [] | PizzaTypes[],
     }
     status: string
   };
   isLoading: boolean;
 };
 
-
-//popular new
 
 const initialState: PizzaState = {
   pizza: {

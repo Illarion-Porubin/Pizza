@@ -14,7 +14,6 @@ export const UploadWidget = ({ color, publickId }) => {
   const widgetRef = React.useRef();
   const [avatar, setAvatar] = React.useState("");
   const [border, setBorder] = React.useState("");
-  ////////////////////////////////Cloudinary//////////////////////////////////////
 
   const userAvatar = React.useMemo(() => {
     return avatar;
@@ -38,7 +37,6 @@ export const UploadWidget = ({ color, publickId }) => {
         uploadPreset: "qsce39om",
       },
       function (error, result) {
-        console.log(error, 'error')
         try {
           const publicId = result.info.public_id;
           if (result.info.public_id) {

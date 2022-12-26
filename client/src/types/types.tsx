@@ -8,7 +8,7 @@ export type PizzaTypes = {
   price: number;
   pizzasPrice: number;
   pizzasCount: number;
-  category: string;
   rating: number;
+  category: number;
   identity: string;
 };

@@ -1,18 +1,18 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useCustomDispatch } from "../../hooks/store";
 import { cartSlice } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
 import s_b from "../../scss/components/_button.module.scss"
 import s_pb from "../../scss/components/_pizza-block.module.scss"
 import s from "./CartItemComp.module.scss";
-
+//?
 
 export const CartItem: React.FC<PizzaTypes> = React.memo(
   ({ name, types, sizes, price, pizzasCount, imageUrl, identity }) => {
-    const dispatch = useDispatch();
-    const onClickPlus = () =>  dispatch(cartSlice.actions.plusOrder(identity));
-    const onClickMinus = () => dispatch(cartSlice.actions.minusOrder(identity));
-    const onClickRemove = () => dispatch(cartSlice.actions.removeItem(identity));
+    const dispatch = useCustomDispatch();
+    const onClickPlus = (): { payload: string; type: string; } => dispatch(cartSlice.actions.plusOrder(identity));
+    const onClickMinus = (): { payload: string; type: string; } => dispatch(cartSlice.actions.minusOrder(identity));
+    const onClickRemove = (): { payload: string; type: string; } => dispatch(cartSlice.actions.removeItem(identity));
 
     return (
       <div className={s.cart__item}>

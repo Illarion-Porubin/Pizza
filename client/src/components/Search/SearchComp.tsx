@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
 import s from "./SearchComp.module.scss";
 
-export const Search: FC = () => {
-  const [searchName, setSearchName] = useState<string>("");
+export const Search: React.FC = () => {
+  const [searchName, setSearchName] = React.useState<string>("");
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch(fetchSearchPizzas(searchName));
   }, [searchName, dispatch]);
 
@@ -23,7 +23,7 @@ export const Search: FC = () => {
         </g>
       </svg>
       <input
-        onChange={(e) => setSearchName(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchName(e.target.value)}
         className={s.search}
         placeholder="Поиск пиццы..."
         value={searchName}

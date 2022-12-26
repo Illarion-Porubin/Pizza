@@ -1,11 +1,13 @@
-import React, { FC, useEffect, useMemo } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { CartItem } from "../../components/CartItem/CartItemComp";
-import { cartSlice } from "../../redux/slices/cartSlice";
+import { cartSlice, fetchOrder } from "../../redux/slices/cartSlice";
 import { v1 } from "uuid";
+import { PizzaTypes } from "../../types/types";
+import { CartState } from "../../redux/slices/cartSlice";
 ////////////ui////////////
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -13,35 +15,36 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { StyledEngineProvider, TextField } from "@mui/material";
 //////////
 import sb from "../../scss/components/_button.module.scss";
 import s from "./CartPage.module.scss";
-import PhoneInput from "react-phone-input-2";
+// import PhoneInput from "react-phone-input-2";
+import ReactPhoneInput from "react-phone-input-material-ui";
+
 import "react-phone-input-2/lib/style.css";
+import { AuthState, UserType } from "../../redux/slices/authSlice";
 
-
-
-export const CartPage: FC = React.memo(() => {
+export const CartPage: React.FC = React.memo(() => {
   const dispatch = useDispatch();
-  const cart = useCustomSelector(selectCartData);
-  const userInfo = useCustomSelector(selectAuthData).data?.phone;
-  
+  const cart = useCustomSelector<CartState>(selectCartData);
+  const userInfo = useCustomSelector<AuthState>(selectAuthData);
+  const [userData, setUserData] = React.useState<UserType | null>(null);
+  // const [userCart, setUserCart]  = React.useState<CartState | null>(null);
+  const [number, setNumber] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
-  const [number, setNumber] = React.useState<any>(userInfo);
-
-  console.log(userInfo, "userInfo");
-  console.log(number, "number");
-
-  const openForm = useMemo<any>(() => {
+  const openForm = React.useMemo<boolean>(() => {
     return open;
   }, [open]);
-  const cartState = useMemo<any>(() => {
-    return cart;
-  }, [cart]);
 
-  useEffect(() => {
-    console.log("cartState");
-  }, [cartState]);
+  console.log(userData, cart, "userData, cart")
+
+  React.useEffect((): void => {
+    if (userInfo.data) {
+      setUserData(userInfo.data);
+      setNumber(userInfo.data.phone)
+    }
+  }, [userInfo.data]);
 
   const totalPrice = cart.items.reduce(
     (sum: number, current: any) => sum + current.price * current.pizzasCount,
@@ -62,7 +65,7 @@ export const CartPage: FC = React.memo(() => {
     const order = { number, cart: cart.items };
     console.log(order, "<<<<<<<<<<<<<<order");
     setOpen(false);
-    // dispatch(fetchOrder(order))
+    dispatch(fetchOrder(order))
     // dispatch(cartSlice.actions.clearItems());
   };
 
@@ -169,8 +172,8 @@ export const CartPage: FC = React.memo(() => {
             </div>
           </div>
           <div className={`${s.content__items}`}>
-            {useMemo<any>(() => {
-              return cart.items.map((item: any) => (
+            {React.useMemo(() => {
+              return cart.items.map((item: PizzaTypes) => (
                 <CartItem key={v1()} {...item} />
               ));
             }, [cart.items])}
@@ -200,55 +203,49 @@ export const CartPage: FC = React.memo(() => {
                 </svg>
                 <span>Вернуться назад</span>
               </Link>
-              {cartState.items.length ? (
+              {cart.items.length ? (
                 <>
-                  <Button variant="outlined" onClick={handleClickOpen}>
-                    Сделать заказ
-                  </Button>
-                  <Dialog open={openForm} onClose={handleClose}>
-                    <DialogTitle>Ваш номер</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText sx={{ mb: 3 }}>
-                        Осталось совсем немного, введите свой номер телефона,
-                        чтобы мы могли подтвердить ваш заказ.
-                      </DialogContentText>
-                       <form>
-                        {/* <TextField
-                          type="phone"
-                          className={s.field}
-                          label="Phone"
-                          value={number.replace(
-                            /(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/,
-                            "$1($2)-$3-$4-$5"
-                            // "$1$2$3$4$5"
-                          )}
-                          onChange={handleChange}
-                          fullWidth
-                        />  */}
-                        <PhoneInput
-                          inputProps={{
-                            name: "phone",
-                            required: true,
-                            autoFocus: true,
-                          }}
-                          country={"ru"}
-                          autoFormat
-                          placeholder="Enter phone number"
-                          value={number}
-                          onChange={setNumber}
-                        />
-                      </form>
-                      <DialogContentText paragraph={true} sx={{ mt: 3, mb: 0 }}>
-                        Продолжая, вы соглашаетесь со сбором и обработкой
-                        персональных данных и{" "}
-                        <Link to="#">пользовательским соглашением.</Link>
-                      </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose}>Отмена</Button>
-                      <Button onClick={createOrder}>Заказать</Button>
-                    </DialogActions>
-                  </Dialog>
+                  <StyledEngineProvider injectFirst>
+                    <Button variant="outlined" onClick={handleClickOpen}>
+                      Сделать заказ
+                    </Button>
+                    <Dialog open={openForm} onClose={handleClose}>
+                      <DialogTitle>Ваш номер</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText sx={{ mb: 3 }}>
+                          Осталось совсем немного, введите свой номер телефона,
+                          чтобы мы могли подтвердить ваш заказ.
+                        </DialogContentText>
+                        <form>
+                          <ReactPhoneInput
+                            inputProps={{
+                              name: "phone",
+                              autoFocus: true,
+                            }}
+                            inputClass={s.input__phone}
+                            containerClass={s.input__conteiner}
+                            country={"ru"}
+                            placeholder="Enter phone number"
+                            value={number}
+                            onChange={setNumber}
+                            component={TextField}
+                          />
+                        </form>
+                        <DialogContentText
+                          paragraph={true}
+                          sx={{ mt: 3, mb: 0 }}
+                        >
+                          Продолжая, вы соглашаетесь со сбором и обработкой
+                          персональных данных и{" "}
+                          <Link to="#">пользовательским соглашением.</Link>
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose}>Отмена</Button>
+                        <Button onClick={createOrder}>Заказать</Button>
+                      </DialogActions>
+                    </Dialog>
+                  </StyledEngineProvider>
                 </>
               ) : null}
             </div>

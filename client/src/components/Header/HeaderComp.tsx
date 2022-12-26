@@ -1,24 +1,29 @@
-import pizaLogo from "../../assets/img/pizza-logo.svg";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Search } from "../Search/SearchComp";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { authSlice } from "../../redux/slices/authSlice";
+import { authSlice, AuthState } from "../../redux/slices/authSlice";
+import pizaLogo from "../../assets/img/pizza-logo.svg";
 import sb from "../../scss/components/_button.module.scss"
 import s from "./HeaderComp.module.scss";
 
 
-// 3:04:00
+type CurrentType = {
+  price: number, 
+  pizzasCount: number
+}
 
-export const Header = () => {
+export const Header: React.FC = () => {
   const cart = useCustomSelector(selectCartData)
-  const totalPrice = cart.items.reduce((sum: number, current: any) => sum + (current.price * current.pizzasCount), 0)
-  const totalCount = cart.items.reduce((sum: number, current: any) => sum + (current.pizzasCount), 0)
-  const userAuth = useCustomSelector(selectAuthData).data?.isActivated;
+  const totalPrice = cart.items.reduce((sum: number, current: CurrentType) => sum + (current.price * current.pizzasCount), 0)
+  const totalCount = cart.items.reduce((sum: number, current: CurrentType) => sum + (current.pizzasCount), 0)
+  const userAuth = useCustomSelector<AuthState>(selectAuthData);
 
   const dispatch = useDispatch()
+  
   const userLogout = () => {
     if(window.confirm(`Вы точно хотите выйти?`)){
       dispatch(authSlice.actions.logout())
@@ -26,7 +31,6 @@ export const Header = () => {
     }
   }
 
-  // console.log(useCustomSelector(selectAuthData).data, userAuth, 'userAuth')
 
   return (
     <div className={s.wrapper}>
@@ -47,7 +51,7 @@ export const Header = () => {
             <Button>Кабинет</Button>
           </Link>
             <Link to="/login" className={s.header__user_wrapp}>
-              {userAuth ? (
+              {userAuth.data?.isActivated ? (
                 <Button onClick={() => userLogout()} className={s.userEnter}>Выйти</Button>
                 ) : (
                 <Button className={s.userEnter}>Войти</Button>

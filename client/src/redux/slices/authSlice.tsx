@@ -11,9 +11,9 @@ export const fetchRegister: any = createAsyncThunk(
   }
 );
 
-export const fetchLogin: any = createAsyncThunk("api/fetchLogin",
-  async (params: any) =>
-  {
+export const fetchLogin: any = createAsyncThunk(
+  "api/fetchLogin",
+  async (params: any) => {
     const { data } = await axios.post("/api/login", params);
     return data;
   }
@@ -38,7 +38,7 @@ export const fetchUpdate: any = createAsyncThunk(
 export const fetchAvatar: any = createAsyncThunk(
   "api/avatar",
   async (params: any) => {
-    console.log(params, 'params')
+    console.log(params, "params");
     const { data } = await axios.put("/api/avatar", params);
     return data;
   }
@@ -52,25 +52,23 @@ export const fetchAvatar: any = createAsyncThunk(
 //   }
 // );
 
-type DataType = {
-  admin: false;
-  cart: []; 
-  email: null | string;
-  name: null | string;
-  phone: null | string;
-  publicId: null | string;
-  token: null | string;
-  _id: null | string;
+export type UserType = {
+  cart: any,
+  _id: string;
+  phone: string;
   isActivated: boolean;
-  user: any;
+  name: string;
+  email: string;
+  admin: false;
+  publicId: string;
+  token: string;
+  color: string;
 };
 
-type AuthState = {
-  data?: null | DataType;
+export type AuthState = {
+  data: null | UserType;
   status: string;
 };
-
-//popular new
 
 const initialState: AuthState = {
   data: null,

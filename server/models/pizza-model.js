@@ -17,19 +17,19 @@ const PizzaSchema= new Schema(
       required: true,
     },
     sizes: {
-      type: [String],
+      type: [Number],
       required: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
     },
     category: {
-      type: String,
+      type: Number,
       required: true,
     },
     rating: {
-      type: String,
+      type: Number,
       required: true,
     },
     new: {

@@ -1,11 +1,12 @@
-import { FC, useState } from "react";
+import React from "react";
 import { fetchPizzas } from "../../redux/slices/pizzaSlice";
-import { useDispatch } from "react-redux";
+import { useCustomDispatch } from "../../hooks/store";
 import s from "./CategoriesComp.module.scss";
+import { PizzaState } from "../../redux/slices/pizzaSlice";
 
-export const Categories: FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const dispatch = useDispatch();
+export const Categories: React.FC = () => {
+  const dispatch = useCustomDispatch();
+  const [activeIndex, setActiveIndex] = React.useState<number>(0);
 
   const categories: string[] = [
     "Все",
@@ -15,8 +16,8 @@ export const Categories: FC = () => {
     "Острые",
   ];
 
-  const menu = (id: number) => {
-    dispatch(fetchPizzas(id));
+  const menu = (id: React.SetStateAction<number>) => {
+    dispatch<PizzaState>(fetchPizzas(id));
     setActiveIndex(id);
   };
 
@@ -27,7 +28,7 @@ export const Categories: FC = () => {
           <li
             className={activeIndex === index ? s.active : " "}
             onClick={() => menu(index)}
-            key={index}
+            key={value}
           >
             {value}
           </li>

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { cartSlice } from "../../redux/slices/cartSlice";
 import { PizzaTypes } from "../../types/types";
@@ -11,28 +11,30 @@ interface Props {
   data: PizzaTypes;
 }
 
-export const PizzasComp: FC<Props> = ({ data }) => {
-  const [activeTypes, setActiveTypes] = useState<string>(data.types[0]);
-  const [activeSize, setActiveSize] = useState<number>(data.sizes[0]);
-  const [pizzaCount, setPizzaCount] = useState<number>(0);
-  const [indexSize, setIndexSize] = useState<number>(0)
+export const PizzasComp: React.FC<Props> = ({ data }) => {
+  const [activeTypes, setActiveTypes] = React.useState<string>(data.types[0]);
+  const [activeSize, setActiveSize] = React.useState<number>(data.sizes[0]);
+  const [pizzaCount, setPizzaCount] = React.useState<number>(0);
+  const [indexSize, setIndexSize] = React.useState<number>(0)
   const sizePrice = [0, 130, 255]
 
+  console.log(typeof data.sizes[0])
 
   const dispatch = useDispatch()
 
-  const changeSize = (size: any, i: any) => {
+  const changeSize = (size: number, i: number) => {
     setActiveSize(size)
     setIndexSize(i)
   }
+
 
 
   const orderPizza = (data: PizzaTypes) => {
     if(pizzaCount) {
       const newOrder = {
         ...data, 
-        sizes: activeSize, 
-        types: activeTypes, 
+        sizes: [activeSize], 
+        types: [activeTypes], 
         pizzasCount: pizzaCount, 
         pizzasPrice: pizzaCount * (+data.price + +sizePrice[indexSize]),
         identity: data.name + activeTypes + indexSize
@@ -51,7 +53,7 @@ export const PizzasComp: FC<Props> = ({ data }) => {
             <li
               onClick={() => setActiveTypes(types)}
               className={activeTypes === types ? s.active : ""}
-              key={index}
+              key={types}
             >
               {types}
             </li>
@@ -62,7 +64,7 @@ export const PizzasComp: FC<Props> = ({ data }) => {
             <li
               onClick={() => changeSize(sizes, index)}
               className={activeSize === sizes ? s.active : ""}
-              key={index}
+              key={sizes}
             >
               {sizes} см
             </li>

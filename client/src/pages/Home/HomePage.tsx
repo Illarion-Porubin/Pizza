@@ -1,25 +1,23 @@
-import React, { FC } from "react";
+import React from "react";
 import { PizzasComp } from "../../components/Pizzas/PizzasComp";
 import { Categories } from "../../components/Categories/CategoriesComp";
 import { Sort } from "../../components/Sort/SortComp";
-import { useCustomSelector } from "../../hooks/store";
+import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectCurrentData } from "../../redux/selectors";
-import { useDispatch } from "react-redux";
-import { fetchPizzas } from "../../redux/slices/pizzaSlice";
+// import { useDispatch } from "react-redux";
+import { fetchPizzas, PizzaState } from "../../redux/slices/pizzaSlice";
 import { PizzaTypes } from "../../types/types";
 import { Pagination } from "../../components/Pagination/PaginationComp";
 import Skeleton from "../../components/Pizzas/Skeleton";
 import s from "./HomePage.module.scss";
 
 
-export const HomePage: FC = () => {
-  const pizzaState = useCustomSelector(selectCurrentData);
-  const dispatch = useDispatch();
-
-  console.log(pizzaState, 'pizzaState<<<<<aaaaaa<<<')
+export const HomePage: React.FC = () => {
+  const pizzaState = useCustomSelector<PizzaState>(selectCurrentData);
+  const dispatch = useCustomDispatch();
 
   React.useEffect(() => {
-    dispatch(fetchPizzas());
+    dispatch<PizzaState>(fetchPizzas());
     window.scrollTo(0, 0);
   }, [dispatch]);
 
@@ -34,7 +32,7 @@ export const HomePage: FC = () => {
         {pizzaState.pizza.status === `loading`
           ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
           : pizzaState.pizza.items.pizzas.map((data: PizzaTypes) => (
-              <PizzasComp data={data} key={data._id} />
+              <PizzasComp data={data} key={data.name} />
             ))}
       </div>
       <Pagination />

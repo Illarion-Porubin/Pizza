@@ -2,7 +2,7 @@ import React from "react"
 import ContentLoader from "react-content-loader"
 import s from "./PizzasComp.module.scss";
 
-const Skeleton = (props: any) => (
+const Skeleton = (props: object) => (
   <ContentLoader 
     className={s.pizza_block}
     speed={0}

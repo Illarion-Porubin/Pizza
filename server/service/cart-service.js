@@ -20,16 +20,17 @@ class CartService {
   //   });
   //   return await newUserOrder.save();
   // }
-  async newOrder(userId, newOrder) {
-    const newUserOrder = new CartSchema({
-      phone: newOrder.number,
-      totolCount: newOrder.cart.reduce((sum, current) => sum += current.pizzasCount, 0),
-      totolPrice: newOrder.cart.reduce((sum, current) => sum += current.pizzasCount * current.price, 0),
-      order: [...newOrder.cart]
-    });
-    console.log(newUserOrder)
 
-    return await newUserOrder.save();
+  async newOrder(userPhone, newOrder) {
+    // const newUserOrder = new CartSchema({
+    //   phone: newOrder.number,
+    //   totolCount: newOrder.cart.reduce((sum, current) => sum += current.pizzasCount, 0),
+    //   totolPrice: newOrder.cart.reduce((sum, current) => sum += current.pizzasCount * current.price, 0),
+    //   order: [...newOrder.cart]
+    // });
+    // console.log(userId)
+
+    // return await newUserOrder.save();
   }
 }
 

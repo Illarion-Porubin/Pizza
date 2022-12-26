@@ -1,16 +1,15 @@
-import React, { FC, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchSortPizzas } from "../../redux/slices/pizzaSlice";
-// import "../../scss/components/_sort.scss"
 import s from "./SortComp.module.scss"
 
 
 interface Props {}
 
-export const Sort: FC<Props> = () => {
+export const Sort: React.FC<Props> = () => {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const [activeSort, setActiveSort] = useState<number>(0);
+  const [open, setOpen] = React.useState(false);
+  const [activeSort, setActiveSort] = React.useState<number>(0);
 
   const sortArray = [
     { name: `популярность (MORE)`, sort: "ratingmore" },
@@ -40,6 +39,7 @@ export const Sort: FC<Props> = () => {
     return () => {
       // размонтируем обработчик событий (addEventListener) при переходе на др стр
       document.body.removeEventListener("click", handleClickOutside);
+      console.log(handleClickOutside, 'handleClickOutside')
     };
   }, []);
 
@@ -66,7 +66,7 @@ export const Sort: FC<Props> = () => {
           {sortArray.map((value, index: number) => (
             <li
               className={index === activeSort ? s.active : " "}
-              key={index}
+              key={value.name}
               onClick={() => selectSort(index, value.sort)}
             >
               {value.name}

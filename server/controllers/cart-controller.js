@@ -11,6 +11,7 @@ class CartController {
   // }
 
   async order(req, res, next) {
+    console.log(req.body)
     try {
       const userOrder = await cartService.newOrder(req.body.userId, req.body)
       return res.json(userOrder)

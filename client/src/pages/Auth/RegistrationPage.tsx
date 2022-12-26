@@ -13,22 +13,27 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchRegister } from "../../redux/slices/authSlice";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import s from "./AuthPage.module.scss";
+import ReactPhoneInput from "react-phone-input-material-ui";
 
 // import PhoneInput from "react-phone-input-2";
-import ReactPhoneInput from "react-phone-input-material-ui";
 // import "react-phone-input-2/lib/style.css";
 
 export const RegistrationPage = React.memo(() => {
   const dispatch = useDispatch();
   const auth = useCustomSelector(selectAuthData);
-  const [open, setOpen] = React.useState(false);
-  const [phone, setPhone] = React.useState("");
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [phone, setPhone] = React.useState<string>("");
 
-  console.log(phone.length);
+  type FormValues = {
+    email: string;
+    name: string;
+    password: string;
+    tel: string;
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,13 +47,12 @@ export const RegistrationPage = React.memo(() => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<FormValues>({
     mode: "onChange",
   });
 
-  const onSubmit = async (values: any) => {
-    const user = {...values, phone}
-    console.log(user);
+  const onSubmit: SubmitHandler<FormValues> = async (values: FormValues) => {
+    const user = { ...values, phone };
     if (phone.length < 11) {
       return alert("Номер слишком мал, укажите 11 символов");
     } else {
@@ -59,9 +63,10 @@ export const RegistrationPage = React.memo(() => {
     }
   };
 
-  console.log(isValid);
+  console.log(auth.data?.isActivated);
+  console.log(auth.data?.isActivated);
 
-  if (auth.data?.user.isActivated === false) {
+  if (auth.data?.isActivated === false) {
     return (
       <StyledEngineProvider injectFirst>
         <Dialog
@@ -121,7 +126,7 @@ export const RegistrationPage = React.memo(() => {
               className={s.field}
               label="E-Mail"
               fullWidth
-            /> 
+            />
 
             <TextField
               type="password"
@@ -132,7 +137,7 @@ export const RegistrationPage = React.memo(() => {
               fullWidth
             />
 
-            <ReactPhoneInput 
+            <ReactPhoneInput
               error={Boolean(errors.tel?.message)}
               inputClass={s.input__phone}
               containerClass={s.input__conteiner}
