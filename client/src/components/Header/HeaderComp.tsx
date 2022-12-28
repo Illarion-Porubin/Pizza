@@ -18,8 +18,8 @@ type CurrentType = {
 
 export const Header: React.FC = () => {
   const cart = useCustomSelector(selectCartData)
-  const totalPrice = cart.items.reduce((sum: number, current: CurrentType) => sum + (current.price * current.pizzasCount), 0)
-  const totalCount = cart.items.reduce((sum: number, current: CurrentType) => sum + (current.pizzasCount), 0)
+  const totalPrice = cart.items?.reduce((sum: number, current: CurrentType) => sum + (current.price * current.pizzasCount), 0)
+  const totalCount = cart.items?.reduce((sum: number, current: CurrentType) => sum + (current.pizzasCount), 0)
   const userAuth = useCustomSelector<AuthState>(selectAuthData);
 
   const dispatch = useDispatch()

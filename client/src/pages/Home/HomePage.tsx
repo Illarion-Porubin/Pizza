@@ -16,8 +16,10 @@ export const HomePage: React.FC = () => {
   const pizzaState = useCustomSelector<PizzaState>(selectCurrentData);
   const dispatch = useCustomDispatch();
 
+  console.log(pizzaState.pizzas, 'pizzaState<<<<<<')
+
   React.useEffect(() => {
-    dispatch<PizzaState>(fetchPizzas());
+    dispatch(fetchPizzas());
     window.scrollTo(0, 0);
   }, [dispatch]);
 
@@ -29,9 +31,9 @@ export const HomePage: React.FC = () => {
       </div>
       <h2 className={s.content__title}>Все пиццы</h2>
       <div className={s.content__items}>
-        {pizzaState.pizza.status === `loading`
+        {pizzaState.isLoading === `loading`
           ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-          : pizzaState.pizza.items.pizzas.map((data: PizzaTypes) => (
+          : pizzaState.pizzas.map((data: PizzaTypes) => (
               <PizzasComp data={data} key={data.name} />
             ))}
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
+// import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
 import s from "./SearchComp.module.scss";
 
 export const Search: React.FC = () => {
@@ -8,7 +8,7 @@ export const Search: React.FC = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(fetchSearchPizzas(searchName));
+    // dispatch(fetchSearchPizzas(searchName));
   }, [searchName, dispatch]);
 
   return (

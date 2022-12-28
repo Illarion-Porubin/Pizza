@@ -14,12 +14,12 @@ const CartSchema = new Schema(
       unique: false
     },
     totolCount: {
-      type: String,
+      type: Number,
       required: true,
       unique: false
     },
     totolPrice: {
-      type: String,
+      type: Number,
       required: true,
       unique: false
     },
@@ -31,27 +31,27 @@ const CartSchema = new Schema(
           unique: false
         },
         types: {
-          type: String,
+          type: [String],
           required: true,
           unique: false
         },
         sizes: {
-          type: String,
+          type: [Number],
           required: true,
           unique: false
         },
         price: {
-          type: String,
+          type: Number,
           required: true,
           unique: false
         },
         pizzasCount: {
-          type: String,
+          type: Number,
           required: true,
           unique: false
         },
         pizzasPrice: {
-          type: String,
+          type: Number,
           required: true,
           unique: false
         },

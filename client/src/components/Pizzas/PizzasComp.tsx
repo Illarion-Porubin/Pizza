@@ -12,34 +12,31 @@ interface Props {
 }
 
 export const PizzasComp: React.FC<Props> = ({ data }) => {
+  const dispatch = useDispatch()
   const [activeTypes, setActiveTypes] = React.useState<string>(data.types[0]);
   const [activeSize, setActiveSize] = React.useState<number>(data.sizes[0]);
   const [pizzaCount, setPizzaCount] = React.useState<number>(0);
   const [indexSize, setIndexSize] = React.useState<number>(0)
   const sizePrice = [0, 130, 255]
 
-  console.log(typeof data.sizes[0])
-
-  const dispatch = useDispatch()
-
   const changeSize = (size: number, i: number) => {
     setActiveSize(size)
     setIndexSize(i)
   }
 
-
-
+  //// поменять тип PizzaTypes на OrderType
   const orderPizza = (data: PizzaTypes) => {
     if(pizzaCount) {
       const newOrder = {
         ...data, 
-        sizes: [activeSize], 
-        types: [activeTypes], 
+        sizes: [activeSize], // убрать массив
+        types: [activeTypes], // убрать массив
         pizzasCount: pizzaCount, 
         pizzasPrice: pizzaCount * (+data.price + +sizePrice[indexSize]),
         identity: data.name + activeTypes + indexSize
       }
-      dispatch(cartSlice.actions.addOrder(newOrder))
+      console.log(newOrder, 'pizzaCount >>>>>><<<<<<<<')
+      dispatch<{payload: PizzaTypes; type: string}>(cartSlice.actions.addOrder(newOrder))
     }
   }
 

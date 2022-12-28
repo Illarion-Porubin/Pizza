@@ -65,6 +65,7 @@ router.post("/order", cartController.order);
 // router.get("/userCart/:id", cartController.userCart);
 ///////////////pizza/////////////
 router.get("/pizzas", pizzaController.getPizzas);
+// router.get("/page", pizzaController.getPage);
 router.get("/pizzas/:id", pizzaController.categoryPizzas);
 router.post("/pizza", validations.create, pizzaController.createPizza);
 ///////////////sort/////////////

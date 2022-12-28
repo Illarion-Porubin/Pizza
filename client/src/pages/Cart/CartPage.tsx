@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useCustomSelector } from "../../hooks/store";
+import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { CartItem } from "../../components/CartItem/CartItemComp";
 import { cartSlice, fetchOrder } from "../../redux/slices/cartSlice";
@@ -24,36 +24,31 @@ import ReactPhoneInput from "react-phone-input-material-ui";
 
 import "react-phone-input-2/lib/style.css";
 import { AuthState, UserType } from "../../redux/slices/authSlice";
+import { AnyAsyncThunk } from "@reduxjs/toolkit/dist/matchers";
 
 export const CartPage: React.FC = React.memo(() => {
-  const dispatch = useDispatch();
+  const dispatch = useCustomDispatch();
   const cart = useCustomSelector<CartState>(selectCartData);
   const userInfo = useCustomSelector<AuthState>(selectAuthData);
-  const [userData, setUserData] = React.useState<UserType | null>(null);
-  // const [userCart, setUserCart]  = React.useState<CartState | null>(null);
+
+  // const [userData, setUserData] = React.useState<UserType | null>(null);
+
   const [number, setNumber] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
+
   const openForm = React.useMemo<boolean>(() => {
     return open;
   }, [open]);
 
-  console.log(userData, cart, "userData, cart")
-
   React.useEffect((): void => {
     if (userInfo.data) {
-      setUserData(userInfo.data);
+      // setUserData(userInfo.data);
       setNumber(userInfo.data.phone)
     }
   }, [userInfo.data]);
 
-  const totalPrice = cart.items.reduce(
-    (sum: number, current: any) => sum + current.price * current.pizzasCount,
-    0
-  );
-  const totalCount = cart.items.reduce(
-    (sum: number, current: any) => sum + current.pizzasCount,
-    0
-  );
+  const totalPrice = cart.items?.reduce((sum: number, current: any) => sum + current.price * current.pizzasCount, 0);
+  const totalCount = cart.items?.reduce((sum: number, current: any) => sum + current.pizzasCount, 0);
 
   const onClickClear = () => {
     if (window.confirm("Очистить корзину?")) {
@@ -61,11 +56,14 @@ export const CartPage: React.FC = React.memo(() => {
     }
   };
 
+  console.log(cart, 'cart<<<')
+
   const createOrder = () => {
-    const order = { number, cart: cart.items };
-    console.log(order, "<<<<<<<<<<<<<<order");
-    setOpen(false);
-    dispatch(fetchOrder(order))
+    const order = { number, items: cart.items };
+    console.log(order, 'order<<<<<<<<<<<>>>>>>')
+    // console.log(order, "<<<<<<<<<<<<<<order");
+    // setOpen(false);
+    // dispatch<{payload: CartState; type: string }>(fetchOrder(order)) 
     // dispatch(cartSlice.actions.clearItems());
   };
 
@@ -93,7 +91,7 @@ export const CartPage: React.FC = React.memo(() => {
 
   return (
     <>
-      {cart.items.length ? null : (
+      {cart.items?.length ? null : (
         <h1 className={s.cart_empty}>Корзина пуста</h1>
       )}
       <div className={`${s.container} ${s.container__cart}`}>
@@ -173,7 +171,7 @@ export const CartPage: React.FC = React.memo(() => {
           </div>
           <div className={`${s.content__items}`}>
             {React.useMemo(() => {
-              return cart.items.map((item: PizzaTypes) => (
+              return cart.items?.map((item: PizzaTypes) => (
                 <CartItem key={v1()} {...item} />
               ));
             }, [cart.items])}
@@ -203,7 +201,7 @@ export const CartPage: React.FC = React.memo(() => {
                 </svg>
                 <span>Вернуться назад</span>
               </Link>
-              {cart.items.length ? (
+              {cart.items?.length ? (
                 <>
                   <StyledEngineProvider injectFirst>
                     <Button variant="outlined" onClick={handleClickOpen}>
