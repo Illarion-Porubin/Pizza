@@ -3,33 +3,28 @@ import { PizzaTypes } from "../../types/types";
 import axios from "../../axios";
 
 
-export const fetchPizzas = createAsyncThunk<FetchPizzasTypes, number | undefined, {rejectValue: string}> // передаем ожидаемый шаблон
-  ('pizzas/fetchPizzas', async (categoryId, { rejectWithValue }) => {
-    
+export const fetchPizzas = createAsyncThunk<FetchPizzasTypes, number | undefined, {rejectValue: string}>('pizzas/fetchPizzas', async (categoryId, { rejectWithValue }) => {
   const {data}: any = categoryId ? await axios.get('/api/pizzas/' + categoryId) : await axios.get('/api/pizzas')
-
   if (!data) {
     return rejectWithValue('Server Error!');
   }
-  console.log(data, 'fetchPizzas<<<<<<<<,')
-
   return data;
 });
 
-// export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', async (value: string) => {
-//   const {data} = await axios.get('/api/sort/' + value)
-//   return data;
-// });
+export const fetchSortPizzas: any = createAsyncThunk('pizzas/fetchSortPizzas', async (value: string) => {
+  const {data} = await axios.get('/api/sort/' + value)
+  return data;
+});
 
-// export const fetchSearchPizzas: any = createAsyncThunk('pizzas/fetchSearchPizzas', async (value: string) => {
-//   const {data} = value ? await axios.get('/api/search/' + value) : await axios.get('/api/pizzas')
-//   return data;
-// });
+export const fetchSearchPizzas: any = createAsyncThunk('pizzas/fetchSearchPizzas', async (value: string) => {
+  const {data} = value ? await axios.get('/api/search/' + value) : await axios.get('/api/pizzas')
+  return data;
+});
 
-// export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginationPizzas', async (page: number) => {
-//   const {data} = await axios.get('/api/pizzas?p=' + page)
-//   return data;
-// });
+export const fetchPaginationPizzas: any = createAsyncThunk('pizzas/fetchPaginationPizzas', async (page: number) => {
+  const {data} = await axios.get('/api/pizzas?p=' + page)
+  return data;
+});
 
 type FetchPizzasTypes = {
   pages: number,
@@ -44,7 +39,7 @@ export type PizzaState = {
 };
 
 const initialState: PizzaState = {
-  pages: 0,
+  pages: 1,
   pizzas: [],
   isLoading: 'idle',
   error: null,
@@ -56,19 +51,61 @@ export const pizzaSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+    ///fetchPizzas
     .addCase(fetchPizzas.pending, (state) => {
       state.pizzas = [];
-      state.isLoading = 'loading'
+      state.isLoading = 'loading';
     })
     .addCase(fetchPizzas.fulfilled, (state, action) => {
-      console.log(action.payload.pages, 'action.payload')
       state.pages = action.payload.pages;
       state.pizzas = action.payload.pizzas; 
-      state.isLoading = 'loaded'
+      state.isLoading = 'loaded';
     })
     .addCase(fetchPizzas.rejected, (state) => {
       state.pizzas = [];
-      state.isLoading = 'error'
+      state.isLoading = 'error';
+    })
+    ///fetchSortPizzas
+    .addCase(fetchSortPizzas.pending, (state) => {
+      state.pizzas = [];
+      state.isLoading = 'loading';
+    })
+    .addCase(fetchSortPizzas.fulfilled, (state, action) => {
+      state.pages = action.payload.pages;
+      state.pizzas = action.payload.pizzas; 
+      state.isLoading = 'loaded';
+    })
+    .addCase(fetchSortPizzas.rejected, (state) => {
+      state.pizzas = [];
+      state.isLoading = "error";
+    })
+    ///fetchSearchPizzas
+    .addCase(fetchSearchPizzas.pending, (state) => {
+      state.pizzas = [];
+      state.isLoading = 'loading';
+    })
+    .addCase(fetchSearchPizzas.fulfilled, (state, action) => {  
+      state.pages = action.payload.pages;
+      state.pizzas = action.payload.pizzas; 
+      state.isLoading = 'loaded';
+    })
+    .addCase(fetchSearchPizzas.rejected, (state) => {
+      state.pizzas = [];  
+      state.isLoading = 'error';
+    })
+    ///fetchPaginationPizzas
+    .addCase(fetchPaginationPizzas.pending, (state) => {
+      state.pages = 0;
+      state.isLoading = 'loading';
+    })
+    .addCase(fetchPaginationPizzas.fulfilled, (state, action) => { /// <-----
+      state.pages = action.payload.pages;
+      state.pizzas = action.payload.pizzas; 
+      state.isLoading = 'loaded';
+    })
+    .addCase(fetchPaginationPizzas.rejected, (state) => {
+      state.pages = 0;
+      state.isLoading = 'error';
     })
   }
 });
@@ -97,18 +134,18 @@ export default pizzaSlice.reducer;
   //     state.pizza.items.pizzas = [];
   //     state.pizza.status = 'error'
   //   },
-  //   [fetchSortPizzas.pending]: (state) => {
-  //     state.pizza.items.pizzas = [];
-  //     state.pizza.status = 'loading'
-  //   },
-  //   [fetchSortPizzas.fulfilled]: (state, action) => {
-  //     state.pizza.items = action.payload;
-  //     state.pizza.status = 'loaded'
-  //   },
-  //   [fetchSortPizzas.rejected]: (state) => {
-  //     state.pizza.items.pizzas = [];
-  //     state.pizza.status = 'error'
-  //   },
+    // [fetchSortPizzas.pending]: (state) => {
+    //   state.pizza.items.pizzas = [];
+    //   state.pizza.status = 'loading'
+    // },
+    // [fetchSortPizzas.fulfilled]: (state, action) => {
+    //   state.pizza.items = action.payload;
+    //   state.pizza.status = 'loaded'
+    // },
+    // [fetchSortPizzas.rejected]: (state) => {
+    //   state.pizza.items.pizzas = [];
+    //   state.pizza.status = 'error'
+    // },
   //   [fetchSearchPizzas.pending]: (state) => {
   //     state.pizza.items.pizzas = [];
   //     state.pizza.status = 'loading'

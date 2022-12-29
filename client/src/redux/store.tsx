@@ -22,7 +22,6 @@ const rootReducer = combineReducers({
     cartSliceReducer
 });
 
-
 const persistConfig = {
     key: 'root',
     storage,

@@ -4,7 +4,6 @@ import { Categories } from "../../components/Categories/CategoriesComp";
 import { Sort } from "../../components/Sort/SortComp";
 import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectCurrentData } from "../../redux/selectors";
-// import { useDispatch } from "react-redux";
 import { fetchPizzas, PizzaState } from "../../redux/slices/pizzaSlice";
 import { PizzaTypes } from "../../types/types";
 import { Pagination } from "../../components/Pagination/PaginationComp";
@@ -14,9 +13,8 @@ import s from "./HomePage.module.scss";
 
 export const HomePage: React.FC = () => {
   const pizzaState = useCustomSelector<PizzaState>(selectCurrentData);
+  console.log(pizzaState)
   const dispatch = useCustomDispatch();
-
-  console.log(pizzaState.pizzas, 'pizzaState<<<<<<')
 
   React.useEffect(() => {
     dispatch(fetchPizzas());

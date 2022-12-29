@@ -31,12 +31,12 @@ const CartSchema = new Schema(
           unique: false
         },
         types: {
-          type: [String],
+          type: String,
           required: true,
           unique: false
         },
         sizes: {
-          type: [Number],
+          type: Number,
           required: true,
           unique: false
         },

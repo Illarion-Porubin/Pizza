@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-// import { fetchSortPizzas } from "../../redux/slices/pizzaSlice";
+import { fetchSortPizzas } from "../../redux/slices/pizzaSlice";
 import s from "./SortComp.module.scss"
 
 
@@ -23,7 +23,7 @@ export const Sort: React.FC<Props> = () => {
   const sortRef = React.useRef<HTMLDivElement>(null);
 
   const selectSort = (index: number, sort: string) => {
-    // dispatch(fetchSortPizzas(sort));
+    dispatch(fetchSortPizzas(sort));
     setActiveSort(index);
     setOpen(false);
   };
@@ -39,7 +39,6 @@ export const Sort: React.FC<Props> = () => {
     return () => {
       // размонтируем обработчик событий (addEventListener) при переходе на др стр
       document.body.removeEventListener("click", handleClickOutside);
-      console.log(handleClickOutside, 'handleClickOutside')
     };
   }, []);
 

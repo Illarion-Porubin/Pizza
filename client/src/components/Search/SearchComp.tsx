@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-// import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
+import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
 import s from "./SearchComp.module.scss";
 
 export const Search: React.FC = () => {
@@ -8,7 +8,9 @@ export const Search: React.FC = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    // dispatch(fetchSearchPizzas(searchName));
+    if(searchName) {
+      dispatch(fetchSearchPizzas(searchName));
+    }
   }, [searchName, dispatch]);
 
   return (
@@ -30,7 +32,6 @@ export const Search: React.FC = () => {
       />
       <svg 
         className={s.cross} 
-        onClick={(e) => setSearchName('')}
         viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <g data-name="1" id="_1">
           <path d="M257,461.46c-114,0-206.73-92.74-206.73-206.73S143,48,257,48s206.73,92.74,206.73,206.73S371,461.46,257,461.46ZM257,78C159.55,78,80.27,157.28,80.27,254.73S159.55,431.46,257,431.46s176.73-79.28,176.73-176.73S354.45,78,257,78Z" />

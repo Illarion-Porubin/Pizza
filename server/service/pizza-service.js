@@ -2,10 +2,10 @@ const PizzaSchema = require("../models/pizza-model");
 
 class PizzaService {
   async getAllPizzas(page) {
-    const perPage = 4;
+    const products = 4;
     const pizzas = await PizzaSchema.find()
-      .skip(page * perPage)
-      .limit(perPage);
+      .skip(page * products)
+      .limit(products);
     return pizzas;
   }
 }

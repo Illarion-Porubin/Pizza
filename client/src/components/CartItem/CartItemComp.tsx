@@ -1,13 +1,13 @@
 import React from "react";
 import { useCustomDispatch } from "../../hooks/store";
 import { cartSlice } from "../../redux/slices/cartSlice";
-import { PizzaTypes } from "../../types/types";
+import { CartTypes } from "../../types/types";
 import s_b from "../../scss/components/_button.module.scss"
 import s_pb from "../../scss/components/_pizza-block.module.scss"
 import s from "./CartItemComp.module.scss";
 
 
-export const CartItem: React.FC<PizzaTypes> = React.memo(
+export const CartItem: React.FC<CartTypes> = React.memo(
   ({ name, types, sizes, price, pizzasCount, imageUrl, identity }) => {
     const dispatch = useCustomDispatch();
     const onClickPlus = () => dispatch<{ payload: string; type: string; }>(cartSlice.actions.plusOrder(identity));

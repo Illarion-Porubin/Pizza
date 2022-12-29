@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
             </Link>
             <Link to="/cart">
               <div className={`${sb.button} ${sb.button__cart}`}>
-                <span>{totalPrice} ₽</span>
+                <span>{totalPrice ? totalPrice : 0} ₽</span>
                 <div className={sb.button__delimiter}></div>
                 <svg
                   width="18"
@@ -90,7 +90,7 @@ export const Header: React.FC = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>{totalCount }</span>
+                <span>{totalCount ? totalCount : 0}</span>
               </div>
             </Link>
           </div>

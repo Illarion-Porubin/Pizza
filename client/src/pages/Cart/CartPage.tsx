@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData, selectCartData } from "../../redux/selectors";
 import { CartItem } from "../../components/CartItem/CartItemComp";
 import { cartSlice, fetchOrder } from "../../redux/slices/cartSlice";
 import { v1 } from "uuid";
-import { PizzaTypes } from "../../types/types";
+import { CartTypes } from "../../types/types";
 import { CartState } from "../../redux/slices/cartSlice";
 ////////////ui////////////
 import Button from "@mui/material/Button";
@@ -23,8 +22,8 @@ import s from "./CartPage.module.scss";
 import ReactPhoneInput from "react-phone-input-material-ui";
 
 import "react-phone-input-2/lib/style.css";
-import { AuthState, UserType } from "../../redux/slices/authSlice";
-import { AnyAsyncThunk } from "@reduxjs/toolkit/dist/matchers";
+import { AuthState } from "../../redux/slices/authSlice";
+
 
 export const CartPage: React.FC = React.memo(() => {
   const dispatch = useCustomDispatch();
@@ -32,6 +31,9 @@ export const CartPage: React.FC = React.memo(() => {
   const userInfo = useCustomSelector<AuthState>(selectAuthData);
 
   // const [userData, setUserData] = React.useState<UserType | null>(null);
+
+  console.log(cart, 'cart')
+
 
   const [number, setNumber] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
@@ -56,15 +58,13 @@ export const CartPage: React.FC = React.memo(() => {
     }
   };
 
-  console.log(cart, 'cart<<<')
+  
 
   const createOrder = () => {
     const order = { number, items: cart.items };
-    console.log(order, 'order<<<<<<<<<<<>>>>>>')
-    // console.log(order, "<<<<<<<<<<<<<<order");
-    // setOpen(false);
-    // dispatch<{payload: CartState; type: string }>(fetchOrder(order)) 
-    // dispatch(cartSlice.actions.clearItems());
+    setOpen(false);
+    dispatch<{payload: CartState; type: string }>(fetchOrder(order)) 
+    dispatch(cartSlice.actions.clearItems());
   };
 
   const handleClickOpen = (e: any) => {
@@ -171,7 +171,7 @@ export const CartPage: React.FC = React.memo(() => {
           </div>
           <div className={`${s.content__items}`}>
             {React.useMemo(() => {
-              return cart.items?.map((item: PizzaTypes) => (
+              return cart.items?.map((item: CartTypes) => (
                 <CartItem key={v1()} {...item} />
               ));
             }, [cart.items])}

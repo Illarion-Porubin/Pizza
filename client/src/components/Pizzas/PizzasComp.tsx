@@ -1,10 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { cartSlice } from "../../redux/slices/cartSlice";
-import { PizzaTypes } from "../../types/types";
+import { PizzaTypes, CartTypes } from "../../types/types";
 import s from "./PizzasComp.module.scss";
 import sb from "../../scss/components/_button.module.scss"
-
 
 
 interface Props {
@@ -29,14 +28,14 @@ export const PizzasComp: React.FC<Props> = ({ data }) => {
     if(pizzaCount) {
       const newOrder = {
         ...data, 
-        sizes: [activeSize], // убрать массив
-        types: [activeTypes], // убрать массив
+        sizes: activeSize, 
+        types: activeTypes, 
         pizzasCount: pizzaCount, 
         pizzasPrice: pizzaCount * (+data.price + +sizePrice[indexSize]),
         identity: data.name + activeTypes + indexSize
       }
-      console.log(newOrder, 'pizzaCount >>>>>><<<<<<<<')
-      dispatch<{payload: PizzaTypes; type: string}>(cartSlice.actions.addOrder(newOrder))
+      // console.log(newOrder, 'pizzaCount >>>>>><<<<<<<<+++++++++++++')
+      dispatch<{payload: CartTypes; type: string}>(cartSlice.actions.addOrder(newOrder))
     }
   }
 
