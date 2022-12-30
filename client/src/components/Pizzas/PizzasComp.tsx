@@ -34,7 +34,7 @@ export const PizzasComp: React.FC<Props> = ({ data }) => {
         pizzasPrice: pizzaCount * (+data.price + +sizePrice[indexSize]),
         identity: data.name + activeTypes + indexSize
       }
-      // console.log(newOrder, 'pizzaCount >>>>>><<<<<<<<+++++++++++++')
+      console.log(newOrder, 'newOrder')
       dispatch<{payload: CartTypes; type: string}>(cartSlice.actions.addOrder(newOrder))
     }
   }

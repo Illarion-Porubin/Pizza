@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { UserTypes } from "../../types/types";
 import axios from "../../axios";
 // import AuthService from "../../services/AuthService";
 // import { IUser } from "../../models/IUser";
@@ -52,21 +53,10 @@ export const fetchAvatar: any = createAsyncThunk(
 //   }
 // );
 
-export type UserType = {
-  cart: any,
-  _id: string;
-  phone: string;
-  isActivated: boolean;
-  name: string;
-  email: string;
-  admin: false;
-  publicId: string;
-  token: string;
-  color: string;
-};
+
 
 export type AuthState = {
-  data: null | UserType;
+  data: null | UserTypes;
   status: string;
 };
 
@@ -83,45 +73,47 @@ export const authSlice = createSlice({
       state.data = null;
     },
   },
-  extraReducers: {
-    [fetchRegister.pending]: (state) => {
+  extraReducers: (builder) => {
+    builder
+    ///fetchRegister
+    .addCase(fetchRegister.pending, (state) => {
       state.data = null;
       state.status = "loading";
-    },
-    [fetchRegister.fulfilled]: (state, action) => {
+    })
+    .addCase(fetchRegister.fulfilled, (state, action) => {
       state.data = action.payload;
       state.status = "loaded";
-    },
-    [fetchRegister.rejected]: (state) => {
+    })
+    .addCase(fetchRegister.rejected, (state) => {
       state.data = null;
       state.status = "error";
-    },
-    /////
-    [fetchLogin.pending]: (state) => {
+    })
+    ///fetchLogin
+    .addCase(fetchLogin.pending, (state) => {
       state.data = null;
       state.status = "loading";
-    },
-    [fetchLogin.fulfilled]: (state, action) => {
+    })
+    .addCase(fetchLogin.fulfilled, (state, action) => {
       state.data = action.payload;
       state.status = "loaded";
-    },
-    [fetchLogin.rejected]: (state) => {
+    })
+    .addCase(fetchLogin.rejected, (state) => {
       state.data = null;
       state.status = "error";
-    },
-    //////
-    [fetchAuthMe.pending]: (state) => {
+    })
+    ///fetchAuthMe
+    .addCase(fetchAuthMe.pending, (state) => {
       state.data = null;
       state.status = "loading";
-    },
-    [fetchAuthMe.fulfilled]: (state, action) => {
+    })
+    .addCase(fetchAuthMe.fulfilled, (state, action) => {
       state.data = action.payload;
       state.status = "loaded";
-    },
-    [fetchAuthMe.rejected]: (state) => {
+    })
+    .addCase(fetchAuthMe.rejected, (state) => {
       state.data = null;
       state.status = "error";
-    },
+    })
     /////////////////
     // [fetchGoogle.pending]: (state) => {
     //   state.data = null;

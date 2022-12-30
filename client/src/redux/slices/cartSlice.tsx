@@ -3,7 +3,6 @@ import { CartTypes } from "../../types/types";
 import axios from "../../axios";
 
 // пофиксить any, возможно нужно сделать отдельаный slice для админа и перенисти фэч туда
-
 export const fetchOrder: any = createAsyncThunk<any | void, CartState, { rejectValue: string }>("cart/fetchOrder", async (params, { rejectWithValue }) => {
     console.log(params, 'params')
   const { data } = await axios.post("/api/order", params);
@@ -15,15 +14,12 @@ export const fetchOrder: any = createAsyncThunk<any | void, CartState, { rejectV
 
 
 export type CartState = {
-  items: CartTypes[] | null | undefined;
-  number: string | null;
+  items: CartTypes[];
 };
 
 export const initialState: CartState = {
-  items: null,
-  number: null,
+  items: [],
 };
-
 
 export const cartSlice = createSlice({
   name: "cart",

@@ -26,3 +26,15 @@ export type CartTypes = {
   category: number;
   identity: string;
 }
+
+export type UserTypes = {
+  _id: string;
+  phone: string;
+  isActivated: boolean;
+  name: string;
+  email: string;
+  admin: false;
+  publicId: string;
+  token: string;
+  color: string;
+};

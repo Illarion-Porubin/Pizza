@@ -3,13 +3,14 @@ import Stack from "@mui/material/Stack";
 // import "react-phone-input-2/lib/style.css";
 
 import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
-import { selectAuthData } from "../../redux/selectors";
 import { Button, Paper, TextField, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { UserType, fetchUpdate } from "../../redux/slices/authSlice";
+import { selectAuthData } from "../../redux/selectors";
 import { UploadWidget } from "../../components/Upload/UploadWidget";
+import { fetchUpdate } from "../../redux/slices/authSlice";
 import { AuthState } from "../../redux/slices/authSlice";
+import { UserTypes } from "../../types/types";
+import { useForm } from "react-hook-form";
 
 import ReactPhoneInput from "react-phone-input-material-ui";
 import s from "./AccountPage.module.scss";
@@ -19,7 +20,7 @@ import "./sryle.scss";
 export const AccountPage: React.FC = () => {
   const dispatch = useCustomDispatch();
   const userInfo = useCustomSelector<AuthState>(selectAuthData);
-  const [userData, setUserData] = React.useState<UserType | null>(null);
+  const [userData, setUserData] = React.useState<UserTypes | null>(null);
   const [userPhone, setUserPhone] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
 

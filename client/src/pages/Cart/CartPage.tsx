@@ -58,12 +58,10 @@ export const CartPage: React.FC = React.memo(() => {
     }
   };
 
-  
-
   const createOrder = () => {
     const order = { number, items: cart.items };
     setOpen(false);
-    dispatch<{payload: CartState; type: string }>(fetchOrder(order)) 
+    dispatch<{payload: any; type: string }>(fetchOrder(order)) 
     dispatch(cartSlice.actions.clearItems());
   };
 
