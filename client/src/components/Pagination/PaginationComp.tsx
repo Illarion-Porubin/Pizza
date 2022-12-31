@@ -32,7 +32,6 @@ export const Pagination: React.FC = () => {
       nextLabel=">"
       onPageChange={(e: PageType) => 
         setPage(e.selected)
-        // console.log(e.selected)
       }
       pageRangeDisplayed={2}
       pageCount={pizzaState.isLoading === "loaded" ? pizzaState.pages : 0}

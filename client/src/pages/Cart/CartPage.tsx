@@ -61,31 +61,9 @@ export const CartPage: React.FC = React.memo(() => {
   const createOrder = () => {
     const order = { number, items: cart.items };
     setOpen(false);
-    dispatch<{payload: any; type: string }>(fetchOrder(order)) 
+    dispatch<{payload: {number: string, items: CartTypes[]}; type: string }>(fetchOrder(order)) // пофиксить payload
     dispatch(cartSlice.actions.clearItems());
   };
-
-  const handleClickOpen = (e: any) => {
-    e.preventDefault();
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  // const handleChange = (e: any) => {
-  //   const onlyNums = e.target.value.replace(/[^0-9]/g, "");
-  //   if (onlyNums.length < 11) {
-  //     setNumber(onlyNums);
-  //   } else if (onlyNums.length === 11) {
-  //     const number = onlyNums.replace(
-  //       /(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/,
-  //       "$1($2)-$3-$4-$5"
-  //     );
-  //     setNumber(number);
-  //   }
-  // };
 
   return (
     <>
@@ -202,10 +180,10 @@ export const CartPage: React.FC = React.memo(() => {
               {cart.items?.length ? (
                 <>
                   <StyledEngineProvider injectFirst>
-                    <Button variant="outlined" onClick={handleClickOpen}>
+                    <Button variant="outlined" onClick={() => setOpen((prev) => !prev)}>
                       Сделать заказ
                     </Button>
-                    <Dialog open={openForm} onClose={handleClose}>
+                    <Dialog open={openForm} onClose={() => setOpen((prev) => !prev)}>
                       <DialogTitle>Ваш номер</DialogTitle>
                       <DialogContent>
                         <DialogContentText sx={{ mb: 3 }}>
@@ -237,7 +215,7 @@ export const CartPage: React.FC = React.memo(() => {
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={handleClose}>Отмена</Button>
+                        <Button onClick={() => setOpen((prev) => !prev)}>Отмена</Button>
                         <Button onClick={createOrder}>Заказать</Button>
                       </DialogActions>
                     </Dialog>

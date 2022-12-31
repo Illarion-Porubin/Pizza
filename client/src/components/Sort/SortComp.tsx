@@ -28,11 +28,16 @@ export const Sort: React.FC<Props> = () => {
     setOpen(false);
   };
 
-  const handleClickOutside = (event: any) => {
-    if (!event.path.includes(sortRef.current)) {
+  type PopupClick = MouseEvent & {
+    path: Node[];
+  }
+
+  const handleClickOutside = React.useCallback((event: MouseEvent) => {
+    const _event = event as PopupClick;
+    if (sortRef.current && !_event.path.includes(sortRef.current)) {
       setOpen(false);
     }
-  };
+  },[]);
 
   React.useEffect(() => {
     document.body.addEventListener("click", handleClickOutside);
@@ -40,7 +45,7 @@ export const Sort: React.FC<Props> = () => {
       // размонтируем обработчик событий (addEventListener) при переходе на др стр
       document.body.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
 
   return (
     <div ref={sortRef} className={s.sort}>

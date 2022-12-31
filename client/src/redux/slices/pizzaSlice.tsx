@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, AnyAction, PayloadAction } from "@reduxjs/toolkit";
 import { PizzaTypes } from "../../types/types";
 import axios from "../../axios";
 
@@ -107,13 +107,20 @@ export const pizzaSlice = createSlice({
       state.pages = 0;
       state.isLoading = 'error';
     })
+    ///Проверка на ошибки
+    .addMatcher(isError, (state, action: PayloadAction<string>) => {
+      state.error = action.type;
+      state.isLoading = "error"
+    })
   }
 });
 
 
 export default pizzaSlice.reducer;
 
-
+function isError(action: AnyAction) {
+  return action.type.endsWith('rejected');
+}
 
 
 
