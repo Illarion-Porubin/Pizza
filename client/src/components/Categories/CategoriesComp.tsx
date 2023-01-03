@@ -2,7 +2,6 @@ import React from "react";
 import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 import { useCustomDispatch } from "../../hooks/store";
 import s from "./CategoriesComp.module.scss";
-// import { PizzaState } from "../../redux/slices/pizzaSlice";
 
 export const Categories: React.FC = () => {
   const dispatch = useCustomDispatch();
@@ -15,8 +14,6 @@ export const Categories: React.FC = () => {
     "Гриль",
     "Острые",
   ];
-
-  //React.SetStateAction<number>
 
   const menu = (id: number) => {
     dispatch(fetchPizzas(id));

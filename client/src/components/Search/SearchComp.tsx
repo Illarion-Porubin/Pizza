@@ -1,11 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useCustomDispatch } from "../../hooks/store";
 import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
 import s from "./SearchComp.module.scss";
 
 export const Search: React.FC = () => {
   const [searchName, setSearchName] = React.useState<string>("");
-  const dispatch = useDispatch();
+  const dispatch = useCustomDispatch();
 
   React.useEffect(() => {
     if(searchName) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useCustomDispatch } from "../../hooks/store";
 import { fetchSortPizzas } from "../../redux/slices/pizzaSlice";
 import s from "./SortComp.module.scss"
 
@@ -7,7 +7,7 @@ import s from "./SortComp.module.scss"
 interface Props {}
 
 export const Sort: React.FC<Props> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useCustomDispatch();
   const [open, setOpen] = React.useState(false);
   const [activeSort, setActiveSort] = React.useState<number>(0);
 

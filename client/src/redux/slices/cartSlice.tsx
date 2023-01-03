@@ -4,8 +4,8 @@ import axios from "../../axios";
 
 // пофиксить any, возможно нужно сделать отдельаный slice для админа и перенисти фэч туда
 export const fetchOrder: any = createAsyncThunk<any | void, CartState, { rejectValue: string }>("cart/fetchOrder", async (params, { rejectWithValue }) => {
-    console.log(params, 'params')
-  const { data } = await axios.post("/api/order", params);
+  const { data }: any = await axios.post("/api/order", params);
+  console.log(data, 'data<<<<<<<<<<<<')
   if (!data) {
     return rejectWithValue("Server Error!");
   }
