@@ -11,10 +11,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { StyledEngineProvider } from "@mui/material/styles";
 /////////////////////////////
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { fetchRegister } from "../../redux/slices/authSlice";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useCustomSelector } from "../../hooks/store";
+import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import s from "./AuthPage.module.scss";
 import ReactPhoneInput from "react-phone-input-material-ui";
@@ -23,7 +22,7 @@ import ReactPhoneInput from "react-phone-input-material-ui";
 // import "react-phone-input-2/lib/style.css";
 
 export const RegistrationPage = React.memo(() => {
-  const dispatch = useDispatch();
+  const dispatch = useCustomDispatch();
   const auth = useCustomSelector(selectAuthData);
   const [open, setOpen] = React.useState<boolean>(false);
   const [phone, setPhone] = React.useState<string>("");
@@ -32,7 +31,7 @@ export const RegistrationPage = React.memo(() => {
     email: string;
     name: string;
     password: string;
-    tel: string;
+    phone: string;
   };
 
   const handleClickOpen = () => {
@@ -62,9 +61,6 @@ export const RegistrationPage = React.memo(() => {
       }
     }
   };
-
-  console.log(auth.data?.isActivated);
-  console.log(auth.data?.isActivated);
 
   if (auth.data?.isActivated === false) {
     return (
@@ -138,7 +134,7 @@ export const RegistrationPage = React.memo(() => {
             />
 
             <ReactPhoneInput
-              error={Boolean(errors.tel?.message)}
+              error={Boolean(errors.phone?.message)}
               inputClass={s.input__phone}
               containerClass={s.input__conteiner}
               value={phone}
@@ -148,7 +144,7 @@ export const RegistrationPage = React.memo(() => {
             />
 
             <Button
-              disabled={!(phone.length >= 11) && !isValid}
+              disabled={!((phone.length >= 11) && isValid)}
               className={s.button__mui}
               type="submit"
               size="large"

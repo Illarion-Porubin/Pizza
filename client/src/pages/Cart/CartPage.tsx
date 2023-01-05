@@ -20,7 +20,6 @@ import sb from "../../scss/components/_button.module.scss";
 import s from "./CartPage.module.scss";
 // import PhoneInput from "react-phone-input-2";
 import ReactPhoneInput from "react-phone-input-material-ui";
-
 import "react-phone-input-2/lib/style.css";
 import { AuthState } from "../../redux/slices/authSlice";
 
@@ -29,14 +28,13 @@ export const CartPage: React.FC = React.memo(() => {
   const dispatch = useCustomDispatch();
   const cart = useCustomSelector<CartState>(selectCartData);
   const userInfo = useCustomSelector<AuthState>(selectAuthData);
+  const [number, setNumber] = React.useState<string>("");
+  const [open, setOpen] = React.useState<boolean>(false);
 
   // const [userData, setUserData] = React.useState<UserType | null>(null);
 
   console.log(cart, 'cart')
 
-
-  const [number, setNumber] = React.useState<string>("");
-  const [open, setOpen] = React.useState<boolean>(false);
 
   const openForm = React.useMemo<boolean>(() => {
     return open;
@@ -49,8 +47,8 @@ export const CartPage: React.FC = React.memo(() => {
     }
   }, [userInfo.data]);
 
-  const totalPrice = cart.items?.reduce((sum: number, current: any) => sum + current.price * current.pizzasCount, 0);
-  const totalCount = cart.items?.reduce((sum: number, current: any) => sum + current.pizzasCount, 0);
+  const totalPrice = cart.items?.reduce((sum: number, current: CartTypes) => sum + current.price * current.pizzasCount, 0);
+  const totalCount = cart.items?.reduce((sum: number, current: CartTypes) => sum + current.pizzasCount, 0);
 
   const onClickClear = () => {
     if (window.confirm("Очистить корзину?")) {
@@ -59,11 +57,10 @@ export const CartPage: React.FC = React.memo(() => {
   };
 
   const createOrder = () => {
-    const order = { number, items: cart.items };
-    console.log(order, 'order<<<<<<<<<<<<<order')
+    const order = {phone: number, items: cart.items};
     setOpen(false);
-    dispatch<{payload: {number: string, items: CartTypes[]}; type: string }>(fetchOrder(order)) // пофиксить payload
-    // dispatch(cartSlice.actions.clearItems());
+    dispatch(fetchOrder(order))
+    dispatch(cartSlice.actions.clearItems());
   };
 
   return (

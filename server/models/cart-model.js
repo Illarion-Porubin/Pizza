@@ -23,7 +23,7 @@ const CartSchema = new Schema(
       required: true,
       unique: false
     },
-    order: [
+    items: [
       {
         name: {
           type: String,

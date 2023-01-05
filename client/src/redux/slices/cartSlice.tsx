@@ -2,16 +2,23 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { CartTypes } from "../../types/types";
 import axios from "../../axios";
 
-// пофиксить any, возможно нужно сделать отдельаный slice для админа и перенисти фэч туда
-export const fetchOrder: any = createAsyncThunk<any | void, CartState, { rejectValue: string }>("cart/fetchOrder", async (params, { rejectWithValue }) => {
-  const { data }: any = await axios.post("/api/order", params);
-  console.log(data, 'data<<<<<<<<<<<<')
+
+export const fetchOrder = createAsyncThunk<CartState, CartState, {rejectValue: string | unknown}>("cart/fetchOrder", async (params, { rejectWithValue }) => {
+  const { data }: DataType = await axios.post("/api/order", params);
   if (!data) {
     return rejectWithValue("Server Error!");
   }
   return data;
 });
 
+type DataType = {
+  data: {
+    phone: string,
+    items: CartTypes[],
+    totolCount?: number,
+    totolPrice?: number,
+  }
+}
 
 export type CartState = {
   items: CartTypes[];

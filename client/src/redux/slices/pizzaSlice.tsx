@@ -4,7 +4,7 @@ import axios from "../../axios";
 
 
 export const fetchPizzas = createAsyncThunk<FetchPizzasTypes, number | undefined, {rejectValue: string}>('pizzas/fetchPizzas', async (categoryId, { rejectWithValue }) => {
-  const {data}: DataType = categoryId ? await axios.get('/api/pizzas/' + categoryId) : await axios.get('/api/pizzas')
+  const { data }: DataType = categoryId ? await axios.get('/api/pizzas/' + categoryId) : await axios.get('/api/pizzas')
   if (!data) {
     return rejectWithValue('Server Error!');
   }
@@ -12,7 +12,7 @@ export const fetchPizzas = createAsyncThunk<FetchPizzasTypes, number | undefined
 });
 
 export const fetchSortPizzas = createAsyncThunk<FetchPizzasTypes, string, {rejectValue: string}>('pizzas/fetchSortPizzas', async (value: string, { rejectWithValue }) => {
-  const {data}: DataType = await axios.get('/api/sort/' + value)
+  const { data }: DataType = await axios.get('/api/sort/' + value)
   if (!data) {
     return rejectWithValue('Server Error!');
   }
@@ -20,7 +20,7 @@ export const fetchSortPizzas = createAsyncThunk<FetchPizzasTypes, string, {rejec
 });
 
 export const fetchSearchPizzas = createAsyncThunk<FetchPizzasTypes, string, {rejectValue: string}>('pizzas/fetchSearchPizzas', async (value: string, { rejectWithValue }) => {
-  const {data}: DataType = value ? await axios.get('/api/search/' + value) : await axios.get('/api/pizzas')
+  const { data }: DataType = value ? await axios.get('/api/search/' + value) : await axios.get('/api/pizzas')
   if (!data) {
     return rejectWithValue('Server Error!');
   }
@@ -28,7 +28,7 @@ export const fetchSearchPizzas = createAsyncThunk<FetchPizzasTypes, string, {rej
 });
 
 export const fetchPaginationPizzas = createAsyncThunk<FetchPizzasTypes, number, {rejectValue: string}>('pizzas/fetchPaginationPizzas', async (page: number, { rejectWithValue }) => {
-  const {data}: DataType = await axios.get('/api/pizzas?p=' + page)
+  const { data }: DataType = await axios.get('/api/pizzas?p=' + page)
   if (!data) {
     return rejectWithValue('Server Error!');
   }
