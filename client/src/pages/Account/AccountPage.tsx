@@ -24,6 +24,9 @@ export const AccountPage: React.FC = () => {
   const [userPhone, setUserPhone] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
 
+
+  console.log(userInfo.data, 'userInfo<<<<<<<') // (что стало?)
+
   const { handleSubmit, setValue } = useForm({
     mode: "onChange",
   });
@@ -40,16 +43,18 @@ export const AccountPage: React.FC = () => {
   ];
 
   React.useEffect(() => {
-    if (userInfo.data) {
-      setUserData(userInfo.data)
-      setUserPhone(userInfo.data?.phone); // нужно выводить отдельно для работы ReactPhoneInput
+    // if (userInfo.data) { // было userInfo.data.user (что стало?)
+    //   setUserData(userInfo.data) // было userInfo.data.user (что стало?)
+    // }
+    if (userInfo.data?.user.phone) {
+      setUserPhone(userInfo.data?.user.phone); // нужно выводить отдельно для работы ReactPhoneInput
     }
   }, [
-    setValue,
-    userInfo.data?.name,
-    userInfo.data?.phone,
-    userInfo.data?.color,
-    userInfo.data?.email,
+    // setValue,
+    // userInfo.data?.name,
+    // userInfo.data?.color,
+    // userInfo.data?.email,
+    userInfo.data?.user.phone,
     userInfo.data
   ]);
 
@@ -77,9 +82,9 @@ export const AccountPage: React.FC = () => {
   };
 
   const checDataUser: boolean =
-    userData?.color !== userInfo.data?.color ||
-    userData?.name !== userInfo.data?.name ||
-    (userPhone.length >= 11 && userPhone !== userInfo.data?.phone);
+    userData?.color !== userInfo.data?.user.color ||
+    userData?.name !== userInfo.data?.user.name ||
+    (userPhone.length >= 11 && userPhone !== userInfo.data?.user.phone);
 
   return (
     <>

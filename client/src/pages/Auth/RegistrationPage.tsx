@@ -11,12 +11,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { StyledEngineProvider } from "@mui/material/styles";
 /////////////////////////////
 import { Link } from "react-router-dom";
-import { fetchRegister } from "../../redux/slices/authSlice";
+import { authSlice, fetchRegister } from "../../redux/slices/authSlice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import s from "./AuthPage.module.scss";
 import ReactPhoneInput from "react-phone-input-material-ui";
+import { RegisterTypes, UserTypes } from "../../types/types";
 
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
@@ -24,10 +25,13 @@ import ReactPhoneInput from "react-phone-input-material-ui";
 export const RegistrationPage = React.memo(() => {
   const dispatch = useCustomDispatch();
   const auth = useCustomSelector(selectAuthData);
+
+  console.log(auth, 'auth<<<<' )
+
   const [open, setOpen] = React.useState<boolean>(false);
   const [phone, setPhone] = React.useState<string>("");
 
-  type FormValues = {
+  type FormTypes = {
     email: string;
     name: string;
     password: string;
@@ -40,29 +44,34 @@ export const RegistrationPage = React.memo(() => {
 
   const handleClose = () => {
     setOpen(false);
+    dispatch(authSlice.actions.logout())
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
+  } = useForm<FormTypes>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<FormValues> = async (values: FormValues) => {
+  const onSubmit: SubmitHandler<FormTypes> = async (values: FormTypes) => {
     const user = { ...values, phone };
     if (phone.length < 11) {
       return alert("Номер слишком мал, укажите 11 символов");
     } else {
-      const data = await dispatch(fetchRegister(user));
-      if ("token" in data.payload) {
-        window.localStorage.setItem("token", data.payload.token);
+      const {payload} = await dispatch(fetchRegister({user}));
+      const _payload = payload as RegisterTypes
+      console.log(_payload.accessToken, '_payload')
+      if (_payload.accessToken && "accessToken" in _payload) { /// похерил регистрацию, не видит me и не цыпляется за token
+        window.localStorage.setItem("token", _payload.accessToken);
       }
     }
   };
 
-  if (auth.data?.isActivated === false) {
+  console.log(window.localStorage.getItem('token'), 'aaaaaaaaaa')
+
+  if (auth.data !== null) {
     return (
       <StyledEngineProvider injectFirst>
         <Dialog
@@ -75,7 +84,7 @@ export const RegistrationPage = React.memo(() => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Письмо отправленно на почту, пожалуйста, подтвердите аккаунт.
+              Письмо отправленно на вашу почту, пожалуйста, подтвердите аккаунт.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

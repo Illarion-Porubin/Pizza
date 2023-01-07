@@ -1,4 +1,3 @@
-
 export type PizzaTypes = {
   _id: number;
   imageUrl: string;
@@ -25,16 +24,46 @@ export type CartTypes = {
   rating: number;
   category: number;
   identity: string;
-}
+};
+
+// export type UserTypes = {
+//   email?: string;
+//   name?: string;
+//   phone?: string;
+//   activationLink?: string;
+//   isActivated?: boolean;
+//   password?: string;
+//   publicId?: string;
+//   token?: string;
+//   color?: string;
+//   admin?: false;
+//   _id?: string;
+// };
 
 export type UserTypes = {
-  _id: string;
-  phone: string;
-  isActivated: boolean;
-  name: string;
+  // accessToken?: string;
+  // refreshToken?: string;
+  publicId?: string;
+  phone?: string;
   email: string;
-  admin: false;
-  publicId: string;
-  token: string;
-  color: string;
+  name?: string;
+  isActivated?: boolean;
+  password?: string;
+  color?: string;
+  id?: string;
+};
+
+export type RegisterTypes = {
+  accessToken?: string;
+  refreshToken?: string;
+  user: {
+    publicId?: string;
+    phone?: string;
+    email: string;
+    name?: string;
+    isActivated?: boolean;
+    password?: string;
+    color?: string;
+    id?: string;
+  };
 };

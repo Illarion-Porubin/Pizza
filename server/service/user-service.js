@@ -28,6 +28,7 @@ class UserService {
       name,
       activationLink,
     });
+    
     /// mailService если письмо не отправляется, то нужно подождать 2-3 дня, ограничение на отправку от гугла
     // await mailService.sendActivationMail(
     //   email,
@@ -37,30 +38,10 @@ class UserService {
     const userDto = new UserDto(user); // id, email, isActivated
     const tokens = tokenService.generateTokens({ ...userDto });
 
-    console.log(tokens, 'tokens<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
-
-  async update(email, name, phone, color, publicId) {
-    const user = await UserSchema.findOne({ email });
-    console.log(user)
-    if (!user) {
-      throw ApiError.BadRequest("Пользователь с таким email не найден");
-    }
-    await user.updateOne({email, name, phone, color, publicId})
-  }
-
-  async activate(activationLink) {
-    const user = await UserSchema.findOne({ activationLink });
-    if (!user) {
-      throw ApiError.BadRequest("Неккоректная ссылка активации");
-    }
-    user.isActivated = true;
-    await user.save();
-  }
-
+/////////////////////
   async login(email, password) {
     const user = await UserSchema.findOne({ email });
     if (!user) {
@@ -76,9 +57,25 @@ class UserService {
     
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     // return { ...tokens, user: userDto }; // токены и userDto;
-    
     const { ...userData } = user._doc;
-    return { ...userData, ...tokens};
+    return { ...tokens, user: userData };
+  }
+////////////////////
+  async update(email, name, phone, color, publicId) {
+    const user = await UserSchema.findOne({ email });
+    if (!user) {
+      throw ApiError.BadRequest("Пользователь с таким email не найден");
+    }
+    await user.updateOne({email, name, phone, color, publicId})
+  }
+
+  async activate(activationLink) {
+    const user = await UserSchema.findOne({ activationLink });
+    if (!user) {
+      throw ApiError.BadRequest("Неккоректная ссылка активации");
+    }
+    user.isActivated = true;
+    await user.save();
   }
 
   async me(req, res) {

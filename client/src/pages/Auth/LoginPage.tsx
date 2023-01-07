@@ -5,16 +5,16 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { Navigate, Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { useCustomSelector } from "../../hooks/store";
+import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import { fetchLogin } from "../../redux/slices/authSlice";
 import { StyledEngineProvider } from "@mui/material/styles";
 import s from "./AuthPage.module.scss";
+import { RegisterTypes, UserTypes } from "../../types/types";
 
 export const LoginPage: React.FC = () => {
   const isAuth = useCustomSelector(selectAuthData)
-  const dispatch = useDispatch();
+  const dispatch = useCustomDispatch();
 
   type FormValues = {
     email: string,
@@ -33,23 +33,25 @@ export const LoginPage: React.FC = () => {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<FormValues> = async (values: FormValues) => {
-    const data = await dispatch(fetchLogin(values));
-    if (!data.payload) {
+  const onSubmit: SubmitHandler<FormValues> = async (user: FormValues) => {
+    const {payload} = await dispatch(fetchLogin({user}));
+    const _payload = payload as RegisterTypes;
+    console.log(_payload.accessToken)
+    if (!_payload) {
       return alert("Не удалось авторизоваться");
     }
-    if (!data.payload.isActivated) {
+    if (!_payload.user.isActivated) {
       return alert("Пожалуйста, подтвердите аккаунт");
     } else {
-      if ("accessToken" in data.payload) {
-        window.localStorage.setItem("token", data.payload.accessToken);
+      if (_payload.accessToken && "accessToken" in _payload) {
+        window.localStorage.setItem("token", _payload.accessToken);
       }
     }
   };
 
   console.log(isAuth, "isAuth");
 
-  if (isAuth.data?.isActivated) {
+  if (isAuth.data) {
     return <Navigate to="/" />;
   }
 

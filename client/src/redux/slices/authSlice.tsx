@@ -1,24 +1,41 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserTypes } from "../../types/types";
+import { RegisterTypes } from "../../types/types";
 import axios from "../../axios";
 // import AuthService from "../../services/AuthService";
 // import { IUser } from "../../models/IUser";
 
-export const fetchRegister: any = createAsyncThunk(
-  "api/fetchRegister",
-  async (params: any) => {
-    const { data } = await axios.post("/api/register", params);
+export const fetchRegister = createAsyncThunk<RegisterTypes, RegisterTypes, { rejectValue: string }>(
+  "api/fetchRegister", async (params, { rejectWithValue }) => {
+  const { data }: {data: RegisterTypes} = await axios.post("/api/register", params); 
+  if (!data) {
+    return rejectWithValue("Server Error!");
+  }
+  return data;
+});
+
+export const fetchLogin = createAsyncThunk<RegisterTypes, RegisterTypes, { rejectValue: string }>(
+  "api/fetchLogin", async (params, { rejectWithValue }) => {
+    const { data }: {data: RegisterTypes} = await axios.post("/api/login", params);
+    if (!data) {
+      return rejectWithValue("Server Error!");
+    }
     return data;
   }
 );
 
-export const fetchLogin: any = createAsyncThunk(
-  "api/fetchLogin",
-  async (params: any) => {
-    const { data } = await axios.post("/api/login", params);
-    return data;
-  }
-);
+// type LoginTypes = {
+//   data: {
+//     accessToken:  string;
+//     refreshToken: string;
+//     user: {
+//       email: string;
+//       id: string;
+//       isActivated: boolean;
+//       name: string;
+//       phone: string;
+//     }
+//   }
+// }
 
 export const fetchAuthMe: any = createAsyncThunk(
   "api/fetchAuthMe",
@@ -53,16 +70,14 @@ export const fetchAvatar: any = createAsyncThunk(
 //   }
 // );
 
-
-
 export type AuthState = {
-  data: null | UserTypes;
-  status: string;
-};
+  data: RegisterTypes | null;
+  isLoading: "idle" | "loading" | "loaded" | "error";
+}
 
-const initialState: AuthState = {
+const initialState: AuthState  = {
   data: null,
-  status: "loading",
+  isLoading: "idle",
 };
 
 export const authSlice = createSlice({
@@ -75,45 +90,47 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    ///fetchRegister
-    .addCase(fetchRegister.pending, (state) => {
-      state.data = null;
-      state.status = "loading";
-    })
-    .addCase(fetchRegister.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.status = "loaded";
-    })
-    .addCase(fetchRegister.rejected, (state) => {
-      state.data = null;
-      state.status = "error";
-    })
-    ///fetchLogin
-    .addCase(fetchLogin.pending, (state) => {
-      state.data = null;
-      state.status = "loading";
-    })
-    .addCase(fetchLogin.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.status = "loaded";
-    })
-    .addCase(fetchLogin.rejected, (state) => {
-      state.data = null;
-      state.status = "error";
-    })
-    ///fetchAuthMe
-    .addCase(fetchAuthMe.pending, (state) => {
-      state.data = null;
-      state.status = "loading";
-    })
-    .addCase(fetchAuthMe.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.status = "loaded";
-    })
-    .addCase(fetchAuthMe.rejected, (state) => {
-      state.data = null;
-      state.status = "error";
-    })
+      ///fetchRegister
+      .addCase(fetchRegister.pending, (state) => {
+        state.data = null;
+        state.isLoading = "loading";
+      })
+      .addCase(fetchRegister.fulfilled, (state, action) => {
+        console.log(action.payload, `fetchRegister`)
+        state.data = action.payload;
+        state.isLoading = "loaded";
+      })
+      .addCase(fetchRegister.rejected, (state) => {
+        state.data = null;
+        state.isLoading = "error";
+      })
+      ///fetchLogin
+      .addCase(fetchLogin.pending, (state) => {
+        state.data = null;
+        state.isLoading = "loading";
+      })
+      .addCase(fetchLogin.fulfilled, (state, action) => {
+        console.log(action.payload, `fetchLogin`)
+        state.data = action.payload;
+        state.isLoading = "loaded";
+      })
+      .addCase(fetchLogin.rejected, (state) => {
+        state.data = null;
+        state.isLoading = "error";
+      })
+      ///fetchAuthMe
+      .addCase(fetchAuthMe.pending, (state) => {
+        state.data = null;
+        state.isLoading = "loading";
+      })
+      .addCase(fetchAuthMe.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.isLoading = "loaded";
+      })
+      .addCase(fetchAuthMe.rejected, (state) => {
+        state.data = null;
+        state.isLoading = "error";
+      });
     /////////////////
     // [fetchGoogle.pending]: (state) => {
     //   state.data = null;

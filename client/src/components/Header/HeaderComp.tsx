@@ -23,6 +23,8 @@ export const Header: React.FC = () => {
   const userAuth = useCustomSelector<AuthState>(selectAuthData);
 
   const dispatch = useDispatch()
+
+  console.log(userAuth, 'userAuth+++')
   
   const userLogout = () => {
     if(window.confirm(`Вы точно хотите выйти?`)){
@@ -30,7 +32,6 @@ export const Header: React.FC = () => {
       window.localStorage.removeItem('token')
     }
   }
-
 
   return (
     <div className={s.wrapper}>
@@ -51,7 +52,7 @@ export const Header: React.FC = () => {
             <Button>Кабинет</Button>
           </Link>
             <Link to="/login" className={s.header__user_wrapp}>
-              {userAuth.data?.isActivated ? (
+              {userAuth.data ? (
                 <Button onClick={() => userLogout()} className={s.userEnter}>Выйти</Button>
                 ) : (
                 <Button className={s.userEnter}>Войти</Button>

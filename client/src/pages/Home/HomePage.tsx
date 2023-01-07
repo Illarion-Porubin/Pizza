@@ -3,7 +3,7 @@ import { PizzasComp } from "../../components/Pizzas/PizzasComp";
 import { Categories } from "../../components/Categories/CategoriesComp";
 import { Sort } from "../../components/Sort/SortComp";
 import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
-import { selectCurrentData } from "../../redux/selectors";
+import { selectAuthData, selectCurrentData } from "../../redux/selectors";
 import { fetchPizzas, PizzaState } from "../../redux/slices/pizzaSlice";
 import { PizzaTypes } from "../../types/types";
 import { Pagination } from "../../components/Pagination/PaginationComp";
@@ -13,7 +13,8 @@ import s from "./HomePage.module.scss";
 
 export const HomePage: React.FC = () => {
   const pizzaState = useCustomSelector<PizzaState>(selectCurrentData);
-  console.log(pizzaState)
+  const isAuth = useCustomSelector(selectAuthData);
+  console.log(isAuth, 'isAuth')
   const dispatch = useCustomDispatch();
 
   React.useEffect(() => {
