@@ -123,7 +123,6 @@ export const pizzaSlice = createSlice({
       state.pages = 0;
       state.isLoading = 'error';
     })
-    ///Проверка на ошибки
     .addMatcher(isError, (state, action: PayloadAction<string>) => {
       state.error = action.type;
       state.isLoading = "error"

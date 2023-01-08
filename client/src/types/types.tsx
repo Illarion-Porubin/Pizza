@@ -26,44 +26,15 @@ export type CartTypes = {
   identity: string;
 };
 
-// export type UserTypes = {
-//   email?: string;
-//   name?: string;
-//   phone?: string;
-//   activationLink?: string;
-//   isActivated?: boolean;
-//   password?: string;
-//   publicId?: string;
-//   token?: string;
-//   color?: string;
-//   admin?: false;
-//   _id?: string;
-// };
-
 export type UserTypes = {
-  // accessToken?: string;
-  // refreshToken?: string;
+  accessToken?: string;
+  refreshToken?: string;
   publicId?: string;
   phone?: string;
-  email: string;
+  email?: string;
   name?: string;
   isActivated?: boolean;
   password?: string;
   color?: string;
   id?: string;
-};
-
-export type RegisterTypes = {
-  accessToken?: string;
-  refreshToken?: string;
-  user: {
-    publicId?: string;
-    phone?: string;
-    email: string;
-    name?: string;
-    isActivated?: boolean;
-    password?: string;
-    color?: string;
-    id?: string;
-  };
 };

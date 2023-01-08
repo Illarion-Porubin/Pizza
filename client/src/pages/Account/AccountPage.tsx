@@ -46,15 +46,15 @@ export const AccountPage: React.FC = () => {
     // if (userInfo.data) { // было userInfo.data.user (что стало?)
     //   setUserData(userInfo.data) // было userInfo.data.user (что стало?)
     // }
-    if (userInfo.data?.user.phone) {
-      setUserPhone(userInfo.data?.user.phone); // нужно выводить отдельно для работы ReactPhoneInput
+    if (userInfo.data?.phone) {
+      setUserPhone(userInfo.data?.phone); // нужно выводить отдельно для работы ReactPhoneInput
     }
   }, [
     // setValue,
     // userInfo.data?.name,
     // userInfo.data?.color,
     // userInfo.data?.email,
-    userInfo.data?.user.phone,
+    userInfo.data?.phone,
     userInfo.data
   ]);
 
@@ -74,7 +74,7 @@ export const AccountPage: React.FC = () => {
       color: userData?.color,
       publicId: userData?.publicId,
     };
-    dispatch<AuthState>(fetchUpdate(user));
+    dispatch(fetchUpdate(user));
   };
 
   const publickId = (id: string) => {
@@ -82,9 +82,9 @@ export const AccountPage: React.FC = () => {
   };
 
   const checDataUser: boolean =
-    userData?.color !== userInfo.data?.user.color ||
-    userData?.name !== userInfo.data?.user.name ||
-    (userPhone.length >= 11 && userPhone !== userInfo.data?.user.phone);
+    userData?.color !== userInfo.data?.color ||
+    userData?.name !== userInfo.data?.name ||
+    (userPhone.length >= 11 && userPhone !== userInfo.data?.phone);
 
   return (
     <>

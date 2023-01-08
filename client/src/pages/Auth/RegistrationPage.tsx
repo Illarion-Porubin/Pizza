@@ -17,7 +17,7 @@ import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { selectAuthData } from "../../redux/selectors";
 import s from "./AuthPage.module.scss";
 import ReactPhoneInput from "react-phone-input-material-ui";
-import { RegisterTypes, UserTypes } from "../../types/types";
+import { UserTypes } from "../../types/types";
 
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
@@ -60,9 +60,9 @@ export const RegistrationPage = React.memo(() => {
     if (phone.length < 11) {
       return alert("Номер слишком мал, укажите 11 символов");
     } else {
-      const {payload} = await dispatch(fetchRegister({user}));
-      const _payload = payload as RegisterTypes
-      console.log(_payload.accessToken, '_payload')
+      const {payload} = await dispatch(fetchRegister(user));
+      const _payload = payload as UserTypes
+      console.log(payload)
       if (_payload.accessToken && "accessToken" in _payload) { /// похерил регистрацию, не видит me и не цыпляется за token
         window.localStorage.setItem("token", _payload.accessToken);
       }

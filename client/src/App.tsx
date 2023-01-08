@@ -8,14 +8,14 @@ import { LoginPage } from "./pages/Auth/LoginPage";
 import { useEffect } from "react";
 import { fetchAuthMe } from "./redux/slices/authSlice";
 import { AccountPage } from "./pages/Account/AccountPage";
-import { useDispatch } from "react-redux";
+import { useCustomDispatch } from "./hooks/store";
 import s from "./scss/_app.module.scss";
 import "./scss/libs/_normalize.scss"
 
 
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useCustomDispatch();
   useEffect(() => {
     dispatch(fetchAuthMe())
   }, [dispatch])

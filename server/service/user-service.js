@@ -39,7 +39,7 @@ class UserService {
     const tokens = tokenService.generateTokens({ ...userDto });
 
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
-    return { ...tokens, user: userDto };
+    return { ...tokens, ...userDto };
   }
 /////////////////////
   async login(email, password) {
@@ -58,7 +58,7 @@ class UserService {
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     // return { ...tokens, user: userDto }; // токены и userDto;
     const { ...userData } = user._doc;
-    return { ...tokens, user: userData };
+    return { ...tokens, ...userData };
   }
 ////////////////////
   async update(email, name, phone, color, publicId) {

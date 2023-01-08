@@ -41,9 +41,9 @@ export const CartPage: React.FC = React.memo(() => {
   }, [open]);
 
   React.useEffect((): void => {
-    if (userInfo.data?.user.phone) {
+    if (userInfo.data?.phone) {
       // setUserData(userInfo.data);
-      setNumber(userInfo.data?.user.phone)
+      setNumber(userInfo.data?.phone)
     }
   }, [userInfo.data]);
 

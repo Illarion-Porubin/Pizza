@@ -1,21 +1,19 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { RegisterTypes } from "../../types/types";
+import { createSlice, createAsyncThunk, AnyAction, PayloadAction } from "@reduxjs/toolkit";
+import { UserTypes } from "../../types/types";
 import axios from "../../axios";
-// import AuthService from "../../services/AuthService";
-// import { IUser } from "../../models/IUser";
 
-export const fetchRegister = createAsyncThunk<RegisterTypes, RegisterTypes, { rejectValue: string }>(
+export const fetchRegister = createAsyncThunk<UserTypes, UserTypes, { rejectValue: string }>(
   "api/fetchRegister", async (params, { rejectWithValue }) => {
-  const { data }: {data: RegisterTypes} = await axios.post("/api/register", params); 
+  const { data }: {data: UserTypes} = await axios.post("/api/register", params); 
   if (!data) {
     return rejectWithValue("Server Error!");
   }
   return data;
 });
 
-export const fetchLogin = createAsyncThunk<RegisterTypes, RegisterTypes, { rejectValue: string }>(
+export const fetchLogin = createAsyncThunk<UserTypes, UserTypes, { rejectValue: string }>(
   "api/fetchLogin", async (params, { rejectWithValue }) => {
-    const { data }: {data: RegisterTypes} = await axios.post("/api/login", params);
+    const { data }: {data: UserTypes} = await axios.post("/api/login", params);
     if (!data) {
       return rejectWithValue("Server Error!");
     }
@@ -23,61 +21,37 @@ export const fetchLogin = createAsyncThunk<RegisterTypes, RegisterTypes, { rejec
   }
 );
 
-// type LoginTypes = {
-//   data: {
-//     accessToken:  string;
-//     refreshToken: string;
-//     user: {
-//       email: string;
-//       id: string;
-//       isActivated: boolean;
-//       name: string;
-//       phone: string;
-//     }
-//   }
-// }
-
-export const fetchAuthMe: any = createAsyncThunk(
-  "api/fetchAuthMe",
-  async () => {
-    const { data } = await axios.get("/api/me");
+export const fetchAuthMe = createAsyncThunk<UserTypes, void, { rejectValue: string }>(
+  "api/fetchAuthMe", async (_, { rejectWithValue }) => {
+    const { data }: {data: UserTypes} = await axios.get("/api/me");
+    if (!data) {
+      return rejectWithValue("Server Error!");
+    }
     return data;
   }
 );
 
-export const fetchUpdate: any = createAsyncThunk(
+export const fetchUpdate = createAsyncThunk<UserTypes, UserTypes, { rejectValue: string }>(
   "api/update",
-  async (params: any) => {
-    const { data } = await axios.put("/api/update", params);
+  async (params, { rejectWithValue }) => {
+    const { data }: {data: UserTypes} = await axios.put("/api/update", params);
+    if (!data) {
+      return rejectWithValue("Server Error!");
+    }
     return data;
   }
 );
-
-export const fetchAvatar: any = createAsyncThunk(
-  "api/avatar",
-  async (params: any) => {
-    console.log(params, "params");
-    const { data } = await axios.put("/api/avatar", params);
-    return data;
-  }
-);
-
-// export const fetchGoogle: any = createAsyncThunk(
-//   "api/fetchGoogle",
-//   async () => {
-//     const { data } = await axios.post("/api/google");
-//     return data;
-//   }
-// );
 
 export type AuthState = {
-  data: RegisterTypes | null;
+  data: UserTypes | null;
   isLoading: "idle" | "loading" | "loaded" | "error";
+  error: string | null;
 }
 
 const initialState: AuthState  = {
   data: null,
   isLoading: "idle",
+  error: null,
 };
 
 export const authSlice = createSlice({
@@ -130,23 +104,17 @@ export const authSlice = createSlice({
       .addCase(fetchAuthMe.rejected, (state) => {
         state.data = null;
         state.isLoading = "error";
-      });
-    /////////////////
-    // [fetchGoogle.pending]: (state) => {
-    //   state.data = null;
-    //   state.status = "loading";
-    // },
-    // [fetchGoogle.fulfilled]: (state, action) => {
-    //   state.data = action.payload;
-    //   state.status = "loaded";
-    // },
-    // [fetchGoogle.rejected]: (state) => {
-    //   state.data = null;
-    //   state.status = "error";
-    // },
+      })
+      .addMatcher(isError, (state, action: PayloadAction<string>) => {
+        state.error = action.type;
+        state.isLoading = "error"
+      })
   },
 });
 
 export default authSlice.reducer;
-
 export const { logout } = authSlice.actions;
+
+function isError(action: AnyAction) {
+  return action.type.endsWith('rejected');
+}

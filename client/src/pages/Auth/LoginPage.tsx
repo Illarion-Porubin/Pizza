@@ -10,7 +10,7 @@ import { selectAuthData } from "../../redux/selectors";
 import { fetchLogin } from "../../redux/slices/authSlice";
 import { StyledEngineProvider } from "@mui/material/styles";
 import s from "./AuthPage.module.scss";
-import { RegisterTypes, UserTypes } from "../../types/types";
+import { UserTypes } from "../../types/types";
 
 export const LoginPage: React.FC = () => {
   const isAuth = useCustomSelector(selectAuthData)
@@ -34,13 +34,12 @@ export const LoginPage: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (user: FormValues) => {
-    const {payload} = await dispatch(fetchLogin({user}));
-    const _payload = payload as RegisterTypes;
-    console.log(_payload.accessToken)
+    const {payload} = await dispatch(fetchLogin(user));
+    const _payload = payload as UserTypes;
     if (!_payload) {
       return alert("Не удалось авторизоваться");
     }
-    if (!_payload.user.isActivated) {
+    if (!_payload.isActivated) {
       return alert("Пожалуйста, подтвердите аккаунт");
     } else {
       if (_payload.accessToken && "accessToken" in _payload) {

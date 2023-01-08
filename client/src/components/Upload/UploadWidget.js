@@ -15,6 +15,8 @@ export const UploadWidget = ({ color, publickId }) => {
   const [avatar, setAvatar] = React.useState("");
   const [border, setBorder] = React.useState("");
 
+  console.log(avatar, 'avatar')
+
   const userAvatar = React.useMemo(() => {
     return avatar;
   }, [avatar]);
@@ -39,6 +41,7 @@ export const UploadWidget = ({ color, publickId }) => {
       function (error, result) {
         try {
           const publicId = result.info.public_id;
+          console.log(result.info.public_id, 'result.info.public_id')
           if (result.info.public_id) {
             setAvatar(publicId);
             publickId(publicId);
