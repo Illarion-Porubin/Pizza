@@ -17,15 +17,12 @@ type CurrentType = {
 }
 
 export const Header: React.FC = () => {
+  const dispatch = useDispatch()
   const cart = useCustomSelector(selectCartData)
   const totalPrice = cart.items?.reduce((sum: number, current: CurrentType) => sum + (current.price * current.pizzasCount), 0)
   const totalCount = cart.items?.reduce((sum: number, current: CurrentType) => sum + (current.pizzasCount), 0)
   const userAuth = useCustomSelector<AuthState>(selectAuthData);
 
-  const dispatch = useDispatch()
-
-  console.log(userAuth, 'userAuth+++')
-  
   const userLogout = () => {
     if(window.confirm(`Вы точно хотите выйти?`)){
       dispatch(authSlice.actions.logout())

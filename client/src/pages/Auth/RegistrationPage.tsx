@@ -19,9 +19,6 @@ import s from "./AuthPage.module.scss";
 import ReactPhoneInput from "react-phone-input-material-ui";
 import { UserTypes } from "../../types/types";
 
-// import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/style.css";
-
 export const RegistrationPage = React.memo(() => {
   const dispatch = useCustomDispatch();
   const auth = useCustomSelector(selectAuthData);

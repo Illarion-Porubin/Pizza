@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { fetchAuthMe } from "./redux/slices/authSlice";
 import { AccountPage } from "./pages/Account/AccountPage";
 import { useCustomDispatch } from "./hooks/store";
+import "react-phone-input-2/lib/style.css"; 
 import s from "./scss/_app.module.scss";
 import "./scss/libs/_normalize.scss"
 

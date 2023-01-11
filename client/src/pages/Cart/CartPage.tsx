@@ -20,7 +20,6 @@ import sb from "../../scss/components/_button.module.scss";
 import s from "./CartPage.module.scss";
 // import PhoneInput from "react-phone-input-2";
 import ReactPhoneInput from "react-phone-input-material-ui";
-import "react-phone-input-2/lib/style.css";
 import { AuthState } from "../../redux/slices/authSlice";
 
 

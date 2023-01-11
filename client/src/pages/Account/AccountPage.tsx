@@ -1,6 +1,5 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
-// import "react-phone-input-2/lib/style.css";
 
 import { useCustomDispatch, useCustomSelector } from "../../hooks/store";
 import { Button, Paper, TextField, Typography } from "@mui/material";
@@ -11,6 +10,7 @@ import { fetchUpdate } from "../../redux/slices/authSlice";
 import { AuthState } from "../../redux/slices/authSlice";
 import { UserTypes } from "../../types/types";
 import { useForm } from "react-hook-form";
+// import axios from "../../axios";
 
 import ReactPhoneInput from "react-phone-input-material-ui";
 import s from "./AccountPage.module.scss";
@@ -23,11 +23,9 @@ export const AccountPage: React.FC = () => {
   const [userData, setUserData] = React.useState<UserTypes | null>(null);
   const [userPhone, setUserPhone] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
+  const [checkData, setCheckData]  = React.useState<boolean>(false);
 
-
-  console.log(userInfo.data, 'userInfo<<<<<<<') // (что стало?)
-
-  const { handleSubmit, setValue } = useForm({
+  const { handleSubmit } = useForm({
     mode: "onChange",
   });
 
@@ -42,48 +40,41 @@ export const AccountPage: React.FC = () => {
     "black",
   ];
 
-  React.useEffect(() => {
-    // if (userInfo.data) { // было userInfo.data.user (что стало?)
-    //   setUserData(userInfo.data) // было userInfo.data.user (что стало?)
-    // }
-    if (userInfo.data?.phone) {
-      setUserPhone(userInfo.data?.phone); // нужно выводить отдельно для работы ReactPhoneInput
-    }
-  }, [
-    // setValue,
-    // userInfo.data?.name,
-    // userInfo.data?.color,
-    // userInfo.data?.email,
-    userInfo.data?.phone,
-    userInfo.data
-  ]);
-
-  type submitType = {
-    name: string | undefined;
-    phone: string | undefined;
-    color: string | undefined;
-    email: string | undefined;
-    publicId: string | undefined;
-  };
-
   const onSubmit = async () => {
-    const user: submitType = {
+    const user: UserTypes = {
       phone: userPhone,
       name: userData?.name,
       email: userData?.email,
       color: userData?.color,
       publicId: userData?.publicId,
     };
+
+    // axios({
+    //   method: 'delete',
+    //   url: 'https://api.cloudinary.com/v1_1/{{dnuwkgxym}}/:resource_type/destroy',
+    //   responseType: 'stream'
+    // })
+
+
     dispatch(fetchUpdate(user));
+    setCheckData((prev: boolean) => prev = !prev)
   };
 
-  const publickId = (id: string) => {
-    setUserData((prev: any) => prev = {...prev, imgId: id})
-  };
+  React.useEffect(() => {
+    if (userInfo.data) { // было userInfo.data.user (что стало?)
+      setUserData(userInfo.data) // было userInfo.data.user (что стало?)
+    }
+    if (userInfo.data?.phone) {
+      setUserPhone(userInfo.data?.phone); // нужно выводить отдельно для работы ReactPhoneInput
+    }
+  }, [userInfo.data?.phone, userInfo.data, checkData]);
+
+ 
 
   const checDataUser: boolean =
     userData?.color !== userInfo.data?.color ||
     userData?.name !== userInfo.data?.name ||
+    userData?.publicId !== userInfo.data?.publicId ||
     (userPhone.length >= 11 && userPhone !== userInfo.data?.phone);
 
   return (
@@ -95,7 +86,7 @@ export const AccountPage: React.FC = () => {
         <Stack direction="row" className={s.photo__wrap}>
           <UploadWidget
             color={userData?.color}
-            publickId={(e: string) => publickId(e)}
+            getPublicId={(e: string) => setUserData((prev: any) => prev = {...prev, publicId: e})}
           />
         </Stack>
         <div className={s.popup}>

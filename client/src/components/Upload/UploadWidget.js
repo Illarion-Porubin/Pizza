@@ -1,13 +1,14 @@
 import React from "react";
 //////////////////////////Cloudinary//////////////////////////////
-import { AdvancedImage } from "@cloudinary/react";
+import { AdvancedImage, placeholder } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { useDispatch } from "react-redux";
 import { selectAuthData } from "../../redux/selectors";
 import { useCustomSelector } from "../../hooks/store";
+
 import s from "./UploadWidget.module.scss";
 
-export const UploadWidget = ({ color, publickId }) => {
+export const UploadWidget = ({ color, getPublicId }) => {
   const dispath = useDispatch();
   const userAuth = useCustomSelector(selectAuthData);
   const cloudinaryRef = React.useRef();
@@ -15,7 +16,6 @@ export const UploadWidget = ({ color, publickId }) => {
   const [avatar, setAvatar] = React.useState("");
   const [border, setBorder] = React.useState("");
 
-  console.log(avatar, 'avatar')
 
   const userAvatar = React.useMemo(() => {
     return avatar;
@@ -41,12 +41,12 @@ export const UploadWidget = ({ color, publickId }) => {
       function (error, result) {
         try {
           const publicId = result.info.public_id;
-          console.log(result.info.public_id, 'result.info.public_id')
-          if (result.info.public_id) {
+          if (publicId) {
+            console.log(publicId, "<<<<<<<<<<<<<<<<<<<<<")
             setAvatar(publicId);
-            publickId(publicId);
+            getPublicId(publicId);
           }
-        } catch (error) {
+        } catch (e) {
           console.log(error);
         }
       }
@@ -60,18 +60,18 @@ export const UploadWidget = ({ color, publickId }) => {
     border,
     userAuth,
     color,
-    publickId,
+    getPublicId,
   ]);
 
-  const myImage = cld.image(userAvatar);
+  const myImage = cld.image(userAvatar).format('auto').quality('auto');
 
   return avatar ? (
     <>
       <AdvancedImage
         className={s.photo}
-        cldImg={myImage}
         onClick={() => widgetRef.current.open()}
         style={{ borderColor: border }}
+        cldImg={myImage} plugins={[placeholder({mode: 'vectorize'})]}
       />
     </>
   ) : (
