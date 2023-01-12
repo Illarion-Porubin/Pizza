@@ -6,7 +6,7 @@ import { Button, Paper, TextField, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { selectAuthData } from "../../redux/selectors";
 import { UploadWidget } from "../../components/Upload/UploadWidget";
-import { fetchUpdate } from "../../redux/slices/authSlice";
+import { fetchDeleteAvatar, fetchUpdate } from "../../redux/slices/authSlice";
 import { AuthState } from "../../redux/slices/authSlice";
 import { UserTypes } from "../../types/types";
 import { useForm } from "react-hook-form";
@@ -48,15 +48,10 @@ export const AccountPage: React.FC = () => {
       color: userData?.color,
       publicId: userData?.publicId,
     };
-
-    // axios({
-    //   method: 'delete',
-    //   url: 'https://api.cloudinary.com/v1_1/{{dnuwkgxym}}/:resource_type/destroy',
-    //   responseType: 'stream'
-    // })
-
-
-    dispatch(fetchUpdate(user));
+    dispatch(fetchDeleteAvatar(userInfo.data?.publicId))
+    setTimeout(() => {
+      dispatch(fetchUpdate(user));
+    }, 1000)    
     setCheckData((prev: boolean) => prev = !prev)
   };
 
@@ -76,6 +71,8 @@ export const AccountPage: React.FC = () => {
     userData?.name !== userInfo.data?.name ||
     userData?.publicId !== userInfo.data?.publicId ||
     (userPhone.length >= 11 && userPhone !== userInfo.data?.phone);
+
+
 
   return (
     <>

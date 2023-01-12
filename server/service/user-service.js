@@ -62,7 +62,6 @@ class UserService {
   }
 ////////////////////
   async update(email, name, phone, color, publicId) {
-    console.log(email, name, phone, color, publicId, '<<<<<<<<<')
     const user = await UserSchema.findOne({ email });
     if (!user) {
       throw ApiError.BadRequest("Пользователь с таким email не найден");

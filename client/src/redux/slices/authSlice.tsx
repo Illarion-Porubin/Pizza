@@ -32,9 +32,20 @@ export const fetchAuthMe = createAsyncThunk<UserTypes, void, { rejectValue: stri
 );
 
 export const fetchUpdate = createAsyncThunk<UserTypes, UserTypes, { rejectValue: string }>(
-  "api/update",
+  "api/fetchUpdate",
   async (params, { rejectWithValue }) => {
     const { data }: {data: UserTypes} = await axios.put("/api/update", params);
+    if (!data) {
+      return rejectWithValue("Server Error!");
+    }
+    return data;
+  }
+);
+
+export const fetchDeleteAvatar = createAsyncThunk<any, any, { rejectValue: string }>(
+  "api/fetchDeleteAvatar",
+  async (id, { rejectWithValue }) => {
+    const { data }: {data: any} = await axios.delete("/api/avatar/" + id);
     if (!data) {
       return rejectWithValue("Server Error!");
     }
@@ -105,6 +116,7 @@ export const authSlice = createSlice({
         state.data = null;
         state.isLoading = "error";
       })
+      ///catch errors
       .addMatcher(isError, (state, action: PayloadAction<string>) => {
         state.error = action.type;
         state.isLoading = "error"

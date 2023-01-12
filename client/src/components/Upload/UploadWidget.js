@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 //////////////////////////Cloudinary//////////////////////////////
 import { AdvancedImage, placeholder } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { useDispatch } from "react-redux";
 import { selectAuthData } from "../../redux/selectors";
 import { useCustomSelector } from "../../hooks/store";
+
 
 import s from "./UploadWidget.module.scss";
 
@@ -26,23 +27,25 @@ export const UploadWidget = ({ color, getPublicId }) => {
       cloudName: "dnuwkgxym",
     },
   });
-
-  React.useEffect(() => {
-    if (!avatar && userAuth?.data?.publicId) {
-      setAvatar(userAuth?.data?.publicId);
-    }
-    setBorder(color);
+  
+  const upload = useCallback(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
       {
         cloudName: "dnuwkgxym",
         uploadPreset: "qsce39om",
-      },
+        sources: [
+          "local",
+          "camera",
+          "google_drive",
+          "url"
+        ],
+      }, 
       function (error, result) {
         try {
+          console.log(result.info)
           const publicId = result.info.public_id;
           if (publicId) {
-            console.log(publicId, "<<<<<<<<<<<<<<<<<<<<<")
             setAvatar(publicId);
             getPublicId(publicId);
           }
@@ -50,7 +53,15 @@ export const UploadWidget = ({ color, getPublicId }) => {
           console.log(error);
         }
       }
-    );
+    )
+    widgetRef.current.open()
+  },[getPublicId])
+
+  React.useEffect(() => {
+    if (!avatar && userAuth?.data?.publicId) {
+      setAvatar(userAuth?.data?.publicId);
+    }
+    setBorder(color);
   }, [
     dispath,
     userAuth?.data?.publicId,
@@ -65,11 +76,11 @@ export const UploadWidget = ({ color, getPublicId }) => {
 
   const myImage = cld.image(userAvatar).format('auto').quality('auto');
 
-  return avatar ? (
+  return avatar ? (  
     <>
       <AdvancedImage
         className={s.photo}
-        onClick={() => widgetRef.current.open()}
+        onClick={() => upload()}
         style={{ borderColor: border }}
         cldImg={myImage} plugins={[placeholder({mode: 'vectorize'})]}
       />

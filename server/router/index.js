@@ -7,6 +7,7 @@ const authMiddleware = require("../middlewares/auth-middleware");
 const pizzaController = require("../controllers/pizza-controller");
 const cartController = require("../controllers/cart-controller");
 const validations = require("../validations/validations");
+const cloudinaryController = require("../controllers/cloudinary-controller");
 const passport = require("passport");
 const checkAuth = require("./checkAuth")
 
@@ -55,7 +56,6 @@ router.post("/login", userController.login);
 router.post("/logout", userController.logout);
 router.post("/register", userController.registration);
 router.put("/update", userController.update);
-
 router.get("/activate/:link", userController.activate);
 router.get("/refresh", userController.refresh);
 router.get("/users", authMiddleware, userController.getUsers);
@@ -71,5 +71,8 @@ router.post("/pizza", validations.create, pizzaController.createPizza);
 ///////////////sort/////////////
 router.get("/sort/:value", pizzaController.sort);
 router.get("/search/:value", pizzaController.search);
+///////////////cloudinary/////////////
+router.delete("/avatar/:id", cloudinaryController.delete)
+
 
 module.exports = router;

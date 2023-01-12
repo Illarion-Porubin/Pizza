@@ -8,7 +8,6 @@ class CartService {
       totolPrice: newOrder.items.reduce((sum, current) => sum += current.pizzasCount * current.price, 0),
       items: [...newOrder.items]
     });
-    console.log(newUserOrder, '<<<<<<<<<<<<<<<<<<')
     return await newUserOrder.save();
   }
 }
