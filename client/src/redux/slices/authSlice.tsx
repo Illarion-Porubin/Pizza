@@ -24,6 +24,7 @@ export const fetchLogin = createAsyncThunk<UserTypes, UserTypes, { rejectValue: 
 export const fetchAuthMe = createAsyncThunk<UserTypes, void, { rejectValue: string }>(
   "api/fetchAuthMe", async (_, { rejectWithValue }) => {
     const { data }: {data: UserTypes} = await axios.get("/api/me");
+    console.log(data, 'ddddd')
     if (!data) {
       return rejectWithValue("Server Error!");
     }

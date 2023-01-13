@@ -6,11 +6,10 @@ import { Button, Paper, TextField, Typography } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { selectAuthData } from "../../redux/selectors";
 import { UploadWidget } from "../../components/Upload/UploadWidget";
-import { fetchDeleteAvatar, fetchUpdate } from "../../redux/slices/authSlice";
+import { fetchUpdate, fetchAuthMe } from "../../redux/slices/authSlice";
 import { AuthState } from "../../redux/slices/authSlice";
 import { UserTypes } from "../../types/types";
 import { useForm } from "react-hook-form";
-// import axios from "../../axios";
 
 import ReactPhoneInput from "react-phone-input-material-ui";
 import s from "./AccountPage.module.scss";
@@ -46,33 +45,33 @@ export const AccountPage: React.FC = () => {
       name: userData?.name,
       email: userData?.email,
       color: userData?.color,
-      publicId: userData?.publicId,
     };
-    dispatch(fetchDeleteAvatar(userInfo.data?.publicId))
+    dispatch(fetchUpdate(user)); 
     setTimeout(() => {
-      dispatch(fetchUpdate(user));
-    }, 1000)    
+      dispatch(fetchAuthMe()); 
+    }, 100)
     setCheckData((prev: boolean) => prev = !prev)
   };
 
-  React.useEffect(() => {
+
+
+  React.useEffect(() => {  
+    console.log(userInfo.data)
     if (userInfo.data) { // было userInfo.data.user (что стало?)
       setUserData(userInfo.data) // было userInfo.data.user (что стало?)
     }
+
     if (userInfo.data?.phone) {
       setUserPhone(userInfo.data?.phone); // нужно выводить отдельно для работы ReactPhoneInput
-    }
+    }  
   }, [userInfo.data?.phone, userInfo.data, checkData]);
 
- 
 
   const checDataUser: boolean =
     userData?.color !== userInfo.data?.color ||
     userData?.name !== userInfo.data?.name ||
     userData?.publicId !== userInfo.data?.publicId ||
     (userPhone.length >= 11 && userPhone !== userInfo.data?.phone);
-
-
 
   return (
     <>
@@ -83,7 +82,6 @@ export const AccountPage: React.FC = () => {
         <Stack direction="row" className={s.photo__wrap}>
           <UploadWidget
             color={userData?.color}
-            getPublicId={(e: string) => setUserData((prev: any) => prev = {...prev, publicId: e})}
           />
         </Stack>
         <div className={s.popup}>
@@ -96,7 +94,7 @@ export const AccountPage: React.FC = () => {
           </div>
           <div className={s.popup__block}>
             <ul className={open ? s.popup__color_open : s.popup__color}>
-              {colorArray.map((color, index: number) => (
+              {colorArray.map((color) => (
                 <li
                   key={color}
                   className={s.popup__colors}

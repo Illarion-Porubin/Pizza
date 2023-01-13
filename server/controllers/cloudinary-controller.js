@@ -11,6 +11,8 @@ cloudinary.config({
 
 class CloudinaryController {
     async delete(req, res) {
+        console.log(true)
+        console.log(req.params.id)
         try {
             if(req) {
                 cloudinary.uploader.destroy(req.params.id).then(result=>console.log(result));

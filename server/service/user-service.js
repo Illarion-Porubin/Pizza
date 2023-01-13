@@ -61,8 +61,9 @@ class UserService {
     return { ...tokens, ...userData };
   }
 ////////////////////
-  async update(email, name, phone, color, publicId) {
-    const user = await UserSchema.findOne({ email });
+  async update(data) {
+    const { email, name, phone, color, publicId } = data;
+    const user = await UserSchema.findOne({email});
     if (!user) {
       throw ApiError.BadRequest("Пользователь с таким email не найден");
     }

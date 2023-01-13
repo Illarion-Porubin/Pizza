@@ -32,8 +32,7 @@ class UserController {
 
   async update(req, res, next) {
     try {
-      const { email, name, phone, color, publicId } = req.body;
-      const userData = await userService.update(email, name, phone, color, publicId);
+      const userData = await userService.update(req.body);
       return res.json(userData);
     } catch (e) {
       next(e);
@@ -102,7 +101,7 @@ class UserController {
   async getMe(req, res, next) {
     try {
       const me = await userService.me(req, res);
-      // console.log(me, 'getMe')
+      console.log(me, 'getMe')
       return res.json(me);
     } catch (e) {
       next(e);

@@ -207,7 +207,7 @@ export const CartPage: React.FC = React.memo(() => {
                           sx={{ mt: 3, mb: 0 }}
                         >
                           Продолжая, вы соглашаетесь со сбором и обработкой
-                          персональных данных и{" "}
+                          персональных данных и {" "}
                           <Link to="#">пользовательским соглашением.</Link>
                         </DialogContentText>
                       </DialogContent>
