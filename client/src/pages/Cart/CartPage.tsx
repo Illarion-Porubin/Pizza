@@ -21,6 +21,10 @@ import s from "./CartPage.module.scss";
 // import PhoneInput from "react-phone-input-2";
 import ReactPhoneInput from "react-phone-input-material-ui";
 import { AuthState } from "../../redux/slices/authSlice";
+import confetti from "canvas-confetti";
+
+
+
 
 
 export const CartPage: React.FC = React.memo(() => {
@@ -30,10 +34,27 @@ export const CartPage: React.FC = React.memo(() => {
   const [number, setNumber] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
 
-  // const [userData, setUserData] = React.useState<UserType | null>(null);
-
-  console.log(cart, 'cart')
-
+  /////////////////////////////confetti////////////////////////////////
+  let duration = 3 * 1000;
+  let animationEnd = Date.now() + duration;
+  let defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+  function randomInRange(min: number, max: number) {
+    return Math.random() * (max - min) + min;
+  }
+  const addConfetti = () => {
+    let interval: any = setInterval(function() {
+      let timeLeft = animationEnd - Date.now();
+  
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+  
+      let particleCount = 50 * (timeLeft / duration);
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+  } 
+  /////////////////////////////confetti/////////////////////////////////
 
   const openForm = React.useMemo<boolean>(() => {
     return open;
@@ -41,14 +62,12 @@ export const CartPage: React.FC = React.memo(() => {
 
   React.useEffect((): void => {
     if (userInfo.data?.phone) {
-      // setUserData(userInfo.data);
       setNumber(userInfo.data?.phone)
     }
   }, [userInfo.data]);
 
   const totalPrice = cart.items?.reduce((sum: number, current: CartTypes) => sum + current.price * current.pizzasCount, 0);
   const totalCount = cart.items?.reduce((sum: number, current: CartTypes) => sum + current.pizzasCount, 0);
-
   const onClickClear = () => {
     if (window.confirm("Очистить корзину?")) {
       dispatch(cartSlice.actions.clearItems());
@@ -57,6 +76,7 @@ export const CartPage: React.FC = React.memo(() => {
 
   const createOrder = () => {
     const order = {phone: number, items: cart.items};
+    addConfetti()
     setOpen(false);
     dispatch(fetchOrder(order))
     dispatch(cartSlice.actions.clearItems());
