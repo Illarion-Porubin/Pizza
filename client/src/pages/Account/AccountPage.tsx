@@ -101,7 +101,6 @@ export const AccountPage: React.FC = () => {
                   style={{ backgroundColor: color }}
                   onClick={() => setUserData((prev: any) => prev = {...prev, color})}
                 >
-                  ㅤ
                 </li>
               ))}
             </ul>
