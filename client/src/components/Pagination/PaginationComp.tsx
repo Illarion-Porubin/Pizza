@@ -7,13 +7,12 @@ import { PizzaState } from "../../redux/slices/pizzaSlice";
 import s from './PaginationComp.module.scss';
 
 export const Pagination: React.FC = () => {
-  const [page, setPage] = React.useState<number>(0)
+  const [page, setPage] = React.useState<number | null>(null)
   const pizzaState = useCustomSelector<PizzaState>(selectCurrentData);
   const dispatch = useCustomDispatch()
 
-
   React.useEffect(() => {
-    if(page) {
+    if(page !== null) {
       dispatch(fetchPaginationPizzas(page))
     }
   }, [dispatch, page])
@@ -30,8 +29,7 @@ export const Pagination: React.FC = () => {
       onPageChange={(e: PageType) => 
         setPage(e.selected)
       }
-      pageRangeDisplayed={2}
-      pageCount={pizzaState.isLoading === "loaded" ? pizzaState.pages : 0}
+      pageCount={pizzaState.pages ? pizzaState.pages : 0  }
       previousLabel="<"
       renderOnZeroPageCount={null || undefined}
     />

@@ -7,7 +7,7 @@ const validations = require("../validations/validations");
 
 class PizzaController {
   //////////////////////Pizzas////////////////////////////////
-  async getPizzas(req, res, next) {
+  async getPizzas(req, res) {
     try {
       const page = req.query.p || 0;
       const pizzas = await pizzaService.getAllPizzas(page);

@@ -140,7 +140,7 @@ export const RegistrationPage = React.memo(() => {
             />
 
             <ReactPhoneInput
-              error={Boolean(errors.phone?.message)}
+              // error={Boolean(errors.phone?.message)}
               inputClass={s.input__phone}
               containerClass={s.input__conteiner}
               value={phone}
