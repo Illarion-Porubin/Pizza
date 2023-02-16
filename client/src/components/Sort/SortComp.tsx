@@ -28,15 +28,9 @@ export const Sort: React.FC<Props> = () => {
     setOpen(false);
   };
 
-  type PopupClick = MouseEvent & {
-    path: Node[];
-  }
-
   const handleClickOutside = React.useCallback((event: MouseEvent) => {
-    const _event = event as PopupClick;
-    console.log(sortRef.current, event.target, '_event')
-    if (sortRef.current && !_event.path.includes(sortRef.current)) {
-      console.log(_event.path.includes(sortRef.current), `qqqq`)
+    console.log(sortRef.current && event.composedPath().includes(sortRef.current), 'sortRef')
+    if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
       setOpen(false);
     }
   },[]);
