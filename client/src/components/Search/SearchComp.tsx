@@ -1,47 +1,30 @@
 import React from "react";
 import { useCustomDispatch } from "../../hooks/store";
 import { fetchSearchPizzas } from "../../redux/slices/pizzaSlice";
+import useDebounce from "../../hooks/useDebounce";
 import s from "./SearchComp.module.scss";
 
 export const Search: React.FC = () => {
   const dispatch = useCustomDispatch();
-  const [searchPizza, setSearchPizza] = React.useState<string>(``);
+  const [value, setValue] = React.useState<string>(``)
   const search = React.useRef<HTMLInputElement>(null)
+  const debounce = useDebounce(value, 400)
+
+  const clearSearch = () => {
+    setValue(``);
+    if(search.current){
+      search.current.focus();
+    }
+  }
 
   React.useEffect(() => {
-    if(searchPizza !== null) {
-      dispatch(fetchSearchPizzas(searchPizza));
+    if(debounce) {
+      dispatch(fetchSearchPizzas(debounce));
     }
     else {
       dispatch(fetchSearchPizzas(``));
     }
-  }, [searchPizza, dispatch]);
-
-  // const debounce = (fn: Function, ms: number) => {
-  //   let timeout: NodeJS.Timeout;
-  //   return function() {
-  //     const fnCall = function(this: any) {
-  //       const context = this;
-  //       console.log(context, arguments)
-  //       return fn.apply(context, arguments)
-  //     }
-  //     clearTimeout(timeout)
-  //     timeout = setTimeout(fnCall, ms)
-  //   }
-  // }
-
-  let changeText = React.useCallback(((e: React.ChangeEvent<HTMLInputElement>) => {
-    return setSearchPizza(e.target.value)
-  }), []) 
-
-  // changeText = debounce(changeText, 0)
-
-  const clearSearch = () => {
-    setSearchPizza(``)
-    if(search.current){
-      search.current.focus()
-    }
-  }
+  }, [dispatch, debounce]);
 
   return (
     <div className={s.search_wrap}>
@@ -56,10 +39,10 @@ export const Search: React.FC = () => {
       </svg>
       <input
         ref={search}
-        onChange={changeText}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
         className={s.search}
         placeholder="Поиск пиццы..."
-        value={searchPizza}
+        value={value}
       />
       <svg 
         className={s.cross} 
